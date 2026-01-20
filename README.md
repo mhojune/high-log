@@ -1,73 +1,54 @@
-# React + TypeScript + Vite
+# high-log
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+AI 기반 대학입시 면접 준비 서비스
 
-Currently, two official plugins are available:
+## 1. 서비스 개요
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+### 1.1 서비스 명
 
-## React Compiler
+AI 기반 대학입시 면접 준비 서비스
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### 1.2 서비스 목적
 
-## Expanding the ESLint configuration
+생활기록부(생기부)를 기반으로 맞춤형 면접 예상 질문을 생성하고 AI와 실전 면접 연습을 통해 대학입시 면접을 효과적으로 준비할 수 있도록 지원
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 1.3 서비스 특장점
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- **시공간 제약 없는 면접 연습**: 텍스트/음성 모드 지원으로 언제 어디서나 면접 준비 가능
+- **개인 맞춤형 질문 생성**: 생기부 분석을 통한 실전형 예상 질문 자동 생성
+- **세분화된 면접 연습**: 면접 유형별(종합/교과/학교자체), 평가 요소별(인성/전공적합성/교직적성) 맞춤 연습
+- **체계적인 피드백**: 종합 결과 및 상세 분석 제공
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## 2. Getting Started
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+### 2.1. Installation
+
+프로젝트를 로컬에서 실행하려면 다음 단계를 따르세요.
+
+1.  저장소를 클론합니다.
+    ```bash
+    git clone https://github.com/mhojune/high-log.git
+    ```
+2.  프로젝트 디렉토리로 이동합니다.
+    ```bash
+    cd high-log
+    ```
+3.  의존성을 설치합니다.
+    ```bash
+    npm install
+    ```
+
+### 2.2. Running the application
+
+개발 서버를 시작하려면 다음 명령을 실행하세요.
+
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+브라우저에서 `http://localhost:5173` (또는 Vite가 지정하는 다른 포트)을 열어 애플리케이션을 확인하세요.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## 3. Documentation
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+- [Styling Guide](./docs/styling.md)
+- [Routing Guide](./docs/routing.md)
