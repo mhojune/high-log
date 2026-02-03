@@ -41,6 +41,111 @@ const theme = {
       '08': '#FFDCDC',
     }
   },
+  typography : {
+    display: {
+      'D0': {
+        fontSize: '40px',
+        fontWeight: '700',
+        lineHeight: '60px',
+      },
+    },
+    head: {
+      'H0': {
+        fontSize: '36px',
+        fontWeight: '800',
+        lineHeight: '54px',
+      },
+      'H1': {
+        fontSize: '36px',
+        fontWeight: '700',
+        lineHeight: '36px',
+      },
+      'H2': {
+        fontSize: '32px',
+        fontWeight: '700',
+        lineHeight: '48px',
+      },
+      'H3': {
+        fontSize: '28px',
+        fontWeight: '600',
+        lineHeight: '42px',
+      },
+      'H4': {
+        fontSize: '24px',
+        fontWeight: '600',
+        lineHeight: '36px',
+      },
+    },
+    body: {
+      'XL': {
+        fontSize: '24px',
+        fontWeight: '400',
+        lineHeight: '36px',
+      },
+      'L0': {
+        fontSize: '20px',
+        fontWeight: '400',
+        lineHeight: '30px',
+      },
+      'L1': {
+        fontSize: '20px',
+        fontWeight: '500',
+        lineHeight: '30px',
+      },
+      'L2': {
+        fontSize: '20px',
+        fontWeight: '700',
+        lineHeight: '30px',
+      },
+      'M0': {
+        fontSize: '16px',
+        fontWeight: '400',
+        lineHeight: '24px',
+      },
+      'M1': {
+        fontSize: '14px',
+        fontWeight: '400',
+        lineHeight: '21px',
+      },
+      'M2': {
+        fontSize: '14px',
+        fontWeight: '700',
+        lineHeight: '21px',
+      },
+      'S0': {
+        fontSize: '16px',
+        fontWeight: '400',
+        lineHeight: '24px',
+      },
+      'S1': {
+        fontSize: '16px',
+        fontWeight: '500',
+        lineHeight: '24px',
+      },
+      'S2': {
+        fontSize: '16px',
+        fontWeight: '600',
+        lineHeight: '24px',
+      },
+      'XS1': {
+        fontSize: '14px',
+        fontWeight: '400',
+        lineHeight: '21px',
+      },
+      'XS2': {
+        fontSize: '14px',
+        fontWeight: '600',
+        lineHeight: '21px',
+      },
+    },
+    caption: {
+      'C0': {
+        fontSize: '12px',
+        fontWeight: '500',
+        lineHeight: '18px',
+      },
+    },
+  },
 };
 
 export default theme;
