@@ -4,13 +4,11 @@ import { Link as RouterLink } from "react-router-dom";
 export const FooterContainer = styled.footer`
   width: 100%;
   background-color: ${({ theme }) => theme.colors.secondary["03"]};
-  padding: 80px 0;
 `;
 
 export const FooterContent = styled.div`
-  max-width: 1440px;
   margin: 0 auto;
-  padding: 32px 20px;
+  padding: 80px 120px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
@@ -19,7 +17,7 @@ export const FooterContent = styled.div`
 export const LeftSection = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 `;
 
 export const LogoWrapper = styled.div`
@@ -42,7 +40,7 @@ export const RightSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 12px;
+  gap: 16px;
 `;
 
 export const SocialIcons = styled.div`
