@@ -8,7 +8,7 @@ export const FooterContainer = styled.footer`
 
 export const FooterContent = styled.div`
   margin: 0 auto;
-  padding: 80px 120px;
+  padding: 81px 121px 97px 119px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
