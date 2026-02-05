@@ -98,19 +98,19 @@ const theme = {
         lineHeight: '30px',
       },
       'M0': {
-        fontSize: '16px',
+        fontSize: '18px',
         fontWeight: '400',
-        lineHeight: '24px',
+        lineHeight: '27px',
       },
       'M1': {
-        fontSize: '14px',
-        fontWeight: '400',
-        lineHeight: '21px',
+        fontSize: '18px',
+        fontWeight: '500',
+        lineHeight: '27px',
       },
       'M2': {
-        fontSize: '14px',
+        fontSize: '18px',
         fontWeight: '700',
-        lineHeight: '21px',
+        lineHeight: '27px',
       },
       'S0': {
         fontSize: '16px',
