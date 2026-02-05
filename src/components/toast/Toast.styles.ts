@@ -19,11 +19,6 @@ export const ToastContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.grayScale["02"]}CC;
   border-radius: 3px;
   border: 0.5px solid ${({ theme }) => theme.colors.secondary["07"]};
-
-  @media (max-width: 1240px) {
-    width: calc(100% - 40px);
-    max-width: 1200px;
-  }
 `;
 
 export const Content = styled.div`
@@ -64,7 +59,6 @@ export const CloseButton = styled.button`
   justify-content: center;
   flex-shrink: 0;
   box-sizing: border-box;
-  transition: opacity 0.2s;
 
   & svg {
     width: 24px;
@@ -73,9 +67,5 @@ export const CloseButton = styled.button`
 
   & svg path {
     stroke: ${({ theme }) => theme.colors.grayScale["10"]};
-  }
-
-  &:hover {
-    opacity: 0.7;
   }
 `;

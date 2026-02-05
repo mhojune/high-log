@@ -19,14 +19,8 @@ export const ModalContainer = styled.div`
   background-color: ${({ theme }) => theme.colors.secondary["09"]};
   border-radius: 4px;
   border: 0.5px solid ${({ theme }) => theme.colors.secondary["07"]};
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
-
-  @media (max-width: 600px) {
-    width: calc(100% - 40px);
-    max-width: 580px;
-  }
 `;
 
 export const Content = styled.div`
@@ -42,10 +36,6 @@ export const TitleWrapper = styled.div`
   flex-direction: column;
   gap: 8px;
   align-items: center;
-
-  @media (max-width: 600px) {
-    padding: 32px 0;
-  }
 `;
 
 export const MainTitle = styled.h2`
@@ -65,10 +55,6 @@ export const ButtonContainer = styled.div`
   gap: 0;
   margin-top: auto;
   padding: 0;
-
-  @media (max-width: 600px) {
-    flex-direction: column;
-  }
 `;
 
 export const LeftButton = styled.button`
@@ -84,23 +70,10 @@ export const LeftButton = styled.button`
   cursor: pointer;
   border-radius: 0;
   border-bottom-left-radius: 4px;
-  transition: background-color 0.2s;
   white-space: nowrap;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.grayScale["09"]};
-  }
-
-  @media (max-width: 600px) {
-    width: 100%;
-    border-radius: 0;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-    border-right: none;
-  }
 `;
 
 export const RightButton = styled.button`
@@ -115,20 +88,8 @@ export const RightButton = styled.button`
   cursor: pointer;
   border-radius: 0;
   border-bottom-right-radius: 4px;
-  transition: background-color 0.2s;
   white-space: nowrap;
   display: flex;
   align-items: center;
   justify-content: center;
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.grayScale["09"]};
-  }
-
-  @media (max-width: 600px) {
-    width: 100%;
-    border-radius: 0;
-    border-bottom-left-radius: 4px;
-    border-bottom-right-radius: 4px;
-  }
 `;
