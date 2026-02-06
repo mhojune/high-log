@@ -6,7 +6,7 @@ export const AcodianIconContainer = styled.div<{type:string}>`
   justify-content: center;
   width: 48px;
   height: 48px;
-  cursor: pointer;
+  cursor: ${({ type }) => (type === "disabled" ? "not-allowed" : "pointer")};
 
   transition: transform 0.4s ease-in-out;
   transform: ${({ type }) => (type === "default" ? 'rotate(0deg)' : 'rotate(180deg)')};
