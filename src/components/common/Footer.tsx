@@ -1,4 +1,4 @@
-import * as S from "./Footer.styles";
+import * as S from "@/components/common/Footer.styles";
 import Vector from "@/assets/icons/Vector.svg?react";
 import Blog from "@/assets/icons/Blog.svg?react";
 import Youtube from "@/assets/icons/Youtube.svg?react";
