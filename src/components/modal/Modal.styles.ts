@@ -17,7 +17,7 @@ export const ModalContainer = styled.div`
   width: 580px;
   min-height: 338px;
   background-color: ${({ theme }) => theme.colors.secondary["09"]};
-  border-radius: 4px;
+  border-radius: 16px;
   border: 0.5px solid ${({ theme }) => theme.colors.secondary["07"]};
   display: flex;
   flex-direction: column;
@@ -69,7 +69,7 @@ export const LeftButton = styled.button`
   padding: 29px 0;
   cursor: pointer;
   border-radius: 0;
-  border-bottom-left-radius: 4px;
+  border-bottom-left-radius: 16px;
   white-space: nowrap;
   display: flex;
   align-items: center;
@@ -87,7 +87,7 @@ export const RightButton = styled.button`
   padding: 29px 0;
   cursor: pointer;
   border-radius: 0;
-  border-bottom-right-radius: 4px;
+  border-bottom-right-radius: 16px;
   white-space: nowrap;
   display: flex;
   align-items: center;

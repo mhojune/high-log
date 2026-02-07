@@ -17,7 +17,7 @@ export const ToastContainer = styled.div`
   width: 1200px;
   height: 58px;
   background-color: ${({ theme }) => theme.colors.grayScale["02"]}CC;
-  border-radius: 3px;
+  border-radius: 12px;
   border: 0.5px solid ${({ theme }) => theme.colors.secondary["07"]};
 `;
 

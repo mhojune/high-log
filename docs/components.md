@@ -8,7 +8,9 @@
 3. [Button](#button)
 4. [Acodian](#acodian)
 5. [Favorite](#favorite)
-6. [Footer](#footer)
+6. [Tab](#tab)
+7. [Label](#label)
+8. [Footer](#footer)
 
 ---
 
@@ -193,6 +195,63 @@ import Favorite from "@/components/favorite/Favorite";
 | --- | --- | --- | --- |
 | `type` | `string` | 아이콘 상태 (`"default"` \| `"select"`) | Yes |
 | `onClick` | `() => void` | 클릭 이벤트 핸들러 | Yes |
+
+---
+
+## Tab <a name="tab"></a>
+
+로그인/회원가입 상태를 전환하는 탭 컴포넌트입니다.
+
+### 사용 방법
+
+```typescript
+import { useState } from "react";
+import Tab from "@/components/tab/Tab";
+
+function MyComponent() {
+  const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
+
+  return (
+    <Tab 
+      activeTab={activeTab} 
+      onTabChange={setActiveTab} 
+    />
+  );
+}
+```
+
+### Props
+
+| Prop 이름 | 타입 | 설명 | 필수 여부 |
+| --- | --- | --- | --- |
+| `activeTab` | `"login" \| "signup"` | 현재 활성화된 탭 | Yes |
+| `onTabChange` | `(tab: "login" \| "signup") => void` | 탭 변경 핸들러 | Yes |
+
+---
+
+## Label <a name="label"></a>
+
+상태나 레벨을 표시하는 라벨 컴포넌트입니다. 다양한 타입에 따라 색상이 자동으로 적용됩니다.
+
+### 사용 방법
+
+```typescript
+import Label from "@/components/label/Label";
+
+// API에서 받은 영어 값 사용 (자동으로 한글로 변환)
+<Label type="basic" />
+<Label type="intermediate" />
+<Label type="advanced" />
+<Label type="good" />
+<Label type="normal" />
+<Label type="improve" />
+```
+
+### Props
+
+| Prop 이름 | 타입 | 설명 | 필수 여부 |
+| --- | --- | --- | --- |
+| `type` | `"basic" \| "intermediate" \| "advanced" \| "good" \| "normal" \| "improve"` | 라벨 타입 (영어, API에서 받은 값 사용 가능) | Yes |
 
 ---
 
