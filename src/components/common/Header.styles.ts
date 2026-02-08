@@ -25,6 +25,23 @@ export const NavBox = styled.div`
     gap: 24px;
 `;
 
+export const NavItemWrapper = styled.div`
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+`;
+
+export const PopupPositioner = styled.div`
+    position: absolute;
+    top: 65px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
+    min-width: max-content;
+`;
+
 export const NavTitle = styled.p<{$activeTab: boolean}>`
     ${({theme, $activeTab}) => $activeTab ? theme.typography.body.L2 : theme.typography.body.L1};
     color: ${({theme, $activeTab}) => $activeTab ? theme.colors.primary["00"] : theme.colors.grayScale["00"]};
