@@ -46,6 +46,7 @@ export const NavTitle = styled.p<{$activeTab: boolean}>`
     ${({theme, $activeTab}) => $activeTab ? theme.typography.body.L2 : theme.typography.body.L1};
     color: ${({theme, $activeTab}) => $activeTab ? theme.colors.primary["00"] : theme.colors.grayScale["00"]};
     cursor: pointer;
+    white-space: nowraps;
 `;
 
 export const UnLoggedInWrapper = styled.div`
