@@ -4,6 +4,7 @@ import ArrowRight from "@/assets/icons/arrow_right.svg?react"
 import User from "@/assets/icons/circle_user.svg?react"
 import { NAV_LIST } from "@/constants/Header/NAV_LIST"
 import { useState } from "react"
+import { Link } from "react-router-dom"
 
 export default function Header() {
     const isLoggedIn = 0 // 임시 로그인 로직 
@@ -18,7 +19,7 @@ export default function Header() {
     return (
         <S.HeaderContainer>
             <S.LogoNavWrapper>
-                <Logo />
+                <Link to="/home"><Logo /></Link>
                 <S.NavBox>
                     {NAV_LIST.map((item) => {
                         return (

@@ -6,12 +6,10 @@ import router from './router/Router';
 import GlobalStyle from './styles/GlobalStyle';
 import StyleReset from './styles/StyleReset';
 import theme from './styles/theme';
-import Header from './components/common/Header';
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider theme={theme}>
-      <Header />
       <StyleReset />
       <GlobalStyle />
       <RouterProvider router={router} />
