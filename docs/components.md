@@ -12,6 +12,9 @@
 7. [Label](#label)
 8. [Footer](#footer)
 9. [Header](#header)
+10. [ListFilter](#list-filter)
+11. [SearchFilter](#search-filter)
+12. [ListPopUp](#list-popup)
 
 ---
 
@@ -281,6 +284,10 @@ function Layout() {
 
 애플리케이션의 전역 헤더 컴포넌트입니다. 로고, 네비게이션 메뉴, 로그인 상태에 따른 UI를 포함합니다.
 
+| Prop 이름 | 타입 | 설명 | 필수 여부 |
+| --- | --- | --- | --- |
+| _없음_ | | Header 컴포넌트는 현재 직접적인 Props를 받지 않습니다. 내부 상태 및 전역 상태(예: 로그인 여부)에 따라 동작합니다. | |
+
 ### 사용 방법
 
 ```typescript
@@ -292,6 +299,29 @@ function App() {
       <Header />
       {/* 나머지 페이지 콘텐츠 */}
     </div>
+```
+
+## ListFilter <a name="list-filter"></a>
+
+필터 아이콘, 입력 필드, 그리고 목록 팝업을 포함하는 복합 필터 컴포넌트입니다. 
+입력 필드에 텍스트를 입력하고 엔터를 누르면 목록에 추가되며, 화살표 아이콘을 통해 목록을 토글할 수 있습니다.
+
+### 사용 방법
+
+```typescript
+import { useState } from "react";
+import ListFilter from "@/components/filter/ListFilter";
+
+function MyComponent() {
+  const [filterText, setFilterText] = useState("");
+
+  return (
+    <ListFilter
+      text={filterText}
+      setText={setFilterText}
+      placeholder="필터 검색..."
+      onClick={() => console.log("Filter icon clicked")}
+    />
   );
 }
 ```
@@ -300,4 +330,74 @@ function App() {
 
 | Prop 이름 | 타입 | 설명 | 필수 여부 |
 | --- | --- | --- | --- |
-| _없음_ | | Header 컴포넌트는 현재 직접적인 Props를 받지 않습니다. 내부 상태 및 전역 상태(예: 로그인 여부)에 따라 동작합니다. | |
+| `text` | `string` | 입력 필드의 현재 값 | Yes |
+| `setText` | `(text: string) => void` | 입력 값 변경 핸들러 | Yes |
+| `placeholder` | `string` | 입력 필드 플레이스홀더 | Yes |
+| `onClick` | `() => void` | 필터 아이콘 클릭 핸들러 | Yes |
+| `fileId` | `number` | 파일 ID (선택 사항) | No |
+
+---
+
+## SearchFilter <a name="search-filter"></a>
+
+검색 아이콘과 입력 필드를 포함하는 단순 검색 필터 컴포넌트입니다.
+
+### 사용 방법
+
+```typescript
+import { useState } from "react";
+import SearchFilter from "@/components/filter/SearchFilter";
+
+function MyComponent() {
+  const [searchText, setSearchText] = useState("");
+
+  return (
+    <SearchFilter
+      text={searchText}
+      setText={setSearchText}
+      placeholder="검색어 입력..."
+      onClick={() => console.log("Search icon clicked")}
+    />
+  );
+}
+```
+
+### Props
+
+| Prop 이름 | 타입 | 설명 | 필수 여부 |
+| --- | --- | --- | --- |
+| `text` | `string` | 입력 필드의 현재 값 | Yes |
+| `setText` | `(text: string) => void` | 입력 값 변경 핸들러 | Yes |
+| `placeholder` | `string` | 입력 필드 플레이스홀더 | Yes |
+| `onClick` | `() => void` | 검색 아이콘 클릭 핸들러 | Yes |
+
+---
+
+## ListPopUp <a name="list-popup"></a>
+
+데이터 목록을 표시하고 선택할 수 있는 팝업 컴포넌트입니다. 주로 `ListFilter` 내부에서 사용됩니다.
+
+### 사용 방법
+
+```typescript
+import ListPopUp from "@/components/filter/ListPopUp";
+
+const data = [
+  { fileId: 1, fileName: "File 1" },
+  { fileId: 2, fileName: "File 2" }
+];
+
+<ListPopUp
+  data={data}
+  onSelect={(fileName) => console.log(fileName)}
+  isLoading={false}
+/>
+```
+
+### Props
+
+| Prop 이름 | 타입 | 설명 | 필수 여부 |
+| --- | --- | --- | --- |
+| `data` | `{ fileId: number; fileName: string; }[]` | 표시할 데이터 목록 | Yes |
+| `onSelect` | `(fileName: string) => void` | 항목 선택 핸들러 | Yes |
+| `isLoading` | `boolean` | 로딩 상태 표시 여부 | No |
