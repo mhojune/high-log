@@ -15,6 +15,10 @@
 10. [ListFilter](#list-filter)
 11. [SearchFilter](#search-filter)
 12. [ListPopUp](#list-popup)
+13. [CheckBox](#checkbox)
+14. [DefaultInput](#default-input)
+15. [DropDown](#dropdown)
+16. [RadioBox](#radiobox)
 
 ---
 
@@ -401,3 +405,140 @@ const data = [
 | `data` | `{ fileId: number; fileName: string; }[]` | 표시할 데이터 목록 | Yes |
 | `onSelect` | `(fileName: string) => void` | 항목 선택 핸들러 | Yes |
 | `isLoading` | `boolean` | 로딩 상태 표시 여부 | No |
+
+---
+
+## CheckBox <a name="checkbox"></a>
+
+체크박스 컴포넌트입니다.
+
+### 사용 방법
+
+```typescript
+import { useState } from "react";
+import CheckBox from "@/components/input/CheckBox";
+
+function MyComponent() {
+  const [isChecked, setIsChecked] = useState(false);
+
+  return (
+    <CheckBox
+      isChecked={isChecked}
+      onClick={() => setIsChecked(!isChecked)}
+    />
+  );
+}
+```
+
+### Props
+
+| Prop 이름 | 타입 | 설명 | 필수 여부 |
+| --- | --- | --- | --- |
+| `isChecked` | `boolean` | 체크 여부 | Yes |
+| `onClick` | `() => void` | 클릭 핸들러 | Yes |
+
+---
+
+## DefaultInput <a name="default-input"></a>
+
+기본적인 텍스트 입력 컴포넌트입니다. 우측의 X 버튼을 통해 내용을 초기화할 수 있습니다.
+
+### 사용 방법
+
+```typescript
+import { useState } from "react";
+import DefaultInput from "@/components/input/DefaultInput";
+
+function MyComponent() {
+  const [text, setText] = useState("");
+
+  return (
+    <DefaultInput
+      text={text}
+      setText={setText}
+      placeholder="텍스트를 입력하세요"
+      onClick={() => {}} // 필수 prop이지만 현재 내부 구현에서는 사용되지 않음
+    />
+  );
+}
+```
+
+### Props
+
+| Prop 이름 | 타입 | 설명 | 필수 여부 |
+| --- | --- | --- | --- |
+| `text` | `string` | 입력된 텍스트 값 | Yes |
+| `setText` | `(text: string) => void` | 텍스트 변경 핸들러 | Yes |
+| `placeholder` | `string` | 플레이스홀더 텍스트 | Yes |
+| `onClick` | `() => void` | 클릭 핸들러 (현재 미사용) | Yes |
+
+---
+
+## DropDown <a name="dropdown"></a>
+
+드롭다운 선택 컴포넌트입니다. 검색 기능(isEditable)을 지원합니다.
+
+### 사용 방법
+
+```typescript
+import { useState } from "react";
+import DropDown from "@/components/input/DropDown";
+
+function MyComponent() {
+  const [value, setValue] = useState("");
+  const options = ["Option 1", "Option 2", "Option 3"];
+
+  return (
+    <DropDown
+      width="300px"
+      options={options}
+      value={value}
+      setValue={setValue}
+      placeholder="옵션을 선택하세요"
+      isEditable={false}
+    />
+  );
+}
+```
+
+### Props
+
+| Prop 이름 | 타입 | 설명 | 필수 여부 |
+| --- | --- | --- | --- |
+| `width` | `string` | 컴포넌트 너비 (기본값: "907px") | No |
+| `options` | `string[]` | 선택 가능한 옵션 목록 | Yes |
+| `value` | `string` | 현재 선택된 값 | Yes |
+| `setValue` | `(value: string) => void` | 값 변경 핸들러 | Yes |
+| `placeholder` | `string` | 플레이스홀더 텍스트 (기본값: "Select an option") | No |
+| `isEditable` | `boolean` | 텍스트 입력 및 필터링 가능 여부 (기본값: false) | No |
+
+---
+
+## RadioBox <a name="radiobox"></a>
+
+라디오 버튼 컴포넌트입니다.
+
+### 사용 방법
+
+```typescript
+import { useState } from "react";
+import RadioBox from "@/components/input/RadioBox";
+
+function MyComponent() {
+  const [isChecked, setIsChecked] = useState(false);
+
+  return (
+    <RadioBox
+      isChecked={isChecked}
+      onClick={() => setIsChecked(!isChecked)}
+    />
+  );
+}
+```
+
+### Props
+
+| Prop 이름 | 타입 | 설명 | 필수 여부 |
+| --- | --- | --- | --- |
+| `isChecked` | `boolean` | 선택 여부 | Yes |
+| `onClick` | `() => void` | 클릭 핸들러 | Yes |
