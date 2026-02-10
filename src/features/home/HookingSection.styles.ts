@@ -2,7 +2,7 @@ import styled from "styled-components";
 import Hooking_img from "@/assets/images/hooking.png";
 import { Link } from "react-router-dom";
 
-export const HookingSectionContainer = styled.div`
+export const HookingSectionContainer = styled.section`
     width: 1440px;
     height: 644px;
     display: flex;
@@ -40,7 +40,7 @@ export const HookingTextMain = styled.p`
     white-space: pre-wrap;
 `;
 
-export const HookingTextSubBox = styled.p`
+export const HookingTextSubBox = styled.div`
     display: flex;
     flex-direction: column;
 `;
