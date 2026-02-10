@@ -1,48 +1,8 @@
 import * as S from "@/features/home/HookingSection.styles";
-import QUESTION_STAT from "@/assets/images/question_stat.svg";
-import USERS_STAT from "@/assets/images/users_stat.svg";
-import PRACTICE_STAT from "@/assets/images/practice_stat.svg";
 import FIRECRACKER from "@/assets/images/firecracker.png";
 import CHEVRON_RIGHT from "@/assets/icons/chevron_right.svg?react";
 import { useEffect, useState } from "react";
-
-interface StatData {
-  questionCount: number;
-  userCount: number;
-  practiceCount: number;
-}
-
-interface StatConfigItem {
-  id: number;
-  label: string;
-  key: keyof StatData;
-  img: string;
-  unit: string;
-}
-
-const STAT_CONFIG: StatConfigItem[] = [
-  {
-    id: 1,
-    label: "생성된 질문",
-    key: "questionCount",
-    img: QUESTION_STAT,
-    unit: "건",
-  },
-  {
-    id: 2,
-    label: "이용자 수",
-    key: "userCount",
-    img: USERS_STAT,
-    unit: "명",
-  },
-  {
-    id: 3,
-    label: "누적 면접 연습",
-    key: "practiceCount",
-    img: PRACTICE_STAT,
-    unit: "건",
-  },
-];
+import { STAT_CONFIG, type StatData } from "@/constants/home";
 
 export default function HookingSection() {
   const [stats, setStats] = useState<StatData>({

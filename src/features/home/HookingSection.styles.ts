@@ -3,7 +3,7 @@ import Hooking_img from "@/assets/images/hooking.png";
 import { Link } from "react-router-dom";
 
 export const HookingSectionContainer = styled.section`
-    width: 1440px;
+    width: 100%;
     height: 644px;
     display: flex;
     gap: 27px;
