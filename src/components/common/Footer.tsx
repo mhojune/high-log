@@ -20,7 +20,7 @@ export default function Footer() {
           <S.TextParagraph>
             <S.Link to="/privacy">개인정보 처리방침</S.Link>
             {" | "}
-            <S.Link to="">이용약관</S.Link>
+            <S.Link to="/term">이용약관</S.Link>
           </S.TextParagraph>
         </S.LeftSection>
         <S.RightSection>

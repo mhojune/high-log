@@ -10,6 +10,7 @@ import RecordManagement from '@/pages/recordManagement';
 import MyPage from '@/pages/myPage';
 import Support from '@/pages/support';
 import Privacy from '@/pages/privacy';
+import Term from '@/pages/term';
 
 const router = createBrowserRouter([
   {
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: '/privacy',
         element: <Privacy />,
+      },
+      {
+        path: '/term',
+        element: <Term />,
       },
       {
         path: 'signup',
