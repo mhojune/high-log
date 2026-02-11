@@ -1,4 +1,4 @@
-import * as S from '@/pages/Home/Home.styles';
+import * as S from '@/pages/home/Home.styles';
 import HookingSection from '@/features/home/HookingSection';
 import DifferentSection from '@/features/home/DifferentSection';
 import InfoSection from '@/features/home/InfoSection';

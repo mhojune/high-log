@@ -1,14 +1,15 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from '@/App';
-import Home from '@/pages/Home';
-import SignUp from '@/pages/SignUp';
-import Login from '@/pages/Login';
-import Guide from '@/pages/Guide';
-import InterviewQuestions from '@/pages/InterviewQuestions';
-import InterviewPractice from '@/pages/InterviewPractice';
-import RecordManagement from '@/pages/RecordManagement';
-import MyPage from '@/pages/MyPage';
-import Support from '@/pages/Support';
+import Home from '@/pages/home';
+import SignUp from '@/pages/signUp';
+import Login from '@/pages/login';
+import Guide from '@/pages/guide';
+import InterviewQuestions from '@/pages/interviewQuestions';
+import InterviewPractice from '@/pages/interviewPractice';
+import RecordManagement from '@/pages/recordManagement';
+import MyPage from '@/pages/myPage';
+import Support from '@/pages/support';
+import Privacy from '@/pages/privacy';
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />,
+      },
+      {
+        path: '/privacy',
+        element: <Privacy />,
       },
       {
         path: 'signup',
