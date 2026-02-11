@@ -2,6 +2,7 @@ import * as S from '@/pages/Home/Home.styles';
 import HookingSection from '@/features/home/HookingSection';
 import DifferentSection from '@/features/home/DifferentSection';
 import InfoSection from '@/features/home/InfoSection';
+import AutoScrollCardSection from '@/features/home/AutoScrollCardSection';
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <HookingSection />
       <DifferentSection />
       <InfoSection />
+      <AutoScrollCardSection />
     </S.Container>
   );
 };
