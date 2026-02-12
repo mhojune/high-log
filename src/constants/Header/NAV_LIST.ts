@@ -25,7 +25,7 @@ export const NAV_LIST = [
     {
         id: 4,
         title: "생기부 관리",
-        path: "/record/management",
+        path: "/record_management",
     },
     {
         id: 5,

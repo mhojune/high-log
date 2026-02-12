@@ -3,6 +3,7 @@ import { Link as RouterLink } from "react-router-dom";
 
 export const FooterContainer = styled.footer`
   width: 100%;
+  min-width: 1440px;
   background-color: ${({ theme }) => theme.colors.secondary["03"]};
 `;
 

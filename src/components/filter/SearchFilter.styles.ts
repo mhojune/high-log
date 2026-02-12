@@ -25,5 +25,5 @@ export const Title = styled.input`
     outline: none;
     background-color: ${({theme}) => theme.colors.grayScale["09"]};;
     color: ${({theme}) => theme.colors.grayScale["00"]};
-    max-width: 240px;
+    width: 100%;
 `;

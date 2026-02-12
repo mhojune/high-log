@@ -1,6 +1,10 @@
 import * as S from "@/components/title/Title.styles"
 
-export default function Title(text:string) {
+interface TitleProps {
+    text: string
+}
+
+export default function Title({text}:TitleProps) {
     return (
         <S.TitleContainer>
             <S.Quote />
