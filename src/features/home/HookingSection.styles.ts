@@ -4,7 +4,6 @@ import { Link } from "react-router-dom";
 
 export const HookingSectionContainer = styled.section`
     width: 100%;
-    min-width: 1440px;
     height: max(644px, 44.72vw);
     display: flex;
     gap: max(27px, 1.875vw);
@@ -21,11 +20,6 @@ export const HookingTextWrapper = styled.div`
     background-image: url(${Hooking_img}); 
     background-size: cover;
     overflow: hidden;
-
-    @media (max-width: 1440px) {
-        width: 987px; /* 1440px 이하에서는 width를 100%로 설정 */
-        height: 457px;
-    }
 `;
 
 export const HookingTextBox = styled.div`
