@@ -1,11 +1,11 @@
-import * as S from "./EmptyState.styles";
-import { ReactNode } from "react";
+import type { ReactNode  } from "react";
+import * as S from "@/components/common/EmptyState/EmptyState.styles";
 
 interface EmptyStateProps {
-    icon: ReactNode;
+    icon: ReactSVGElement;
     title: string;
     subtitle: string;
-    children?: ReactNode; // For optional button
+    children?: ReactNode; 
 }
 
 export default function EmptyState({ icon, title, subtitle, children }: EmptyStateProps) {
