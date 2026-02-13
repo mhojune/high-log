@@ -9,37 +9,18 @@ import EmptyState from "@/components/common/EmptyState/EmptyState";
 import SEARCH_NONE from "@/assets/icons/search_x.svg?react";
 import FILE_NONE from "@/assets/icons/file_x.svg?react"
 import { useNavigate } from "react-router-dom"
-
-interface ReportProps {
-    id: number;
-    title: string;
-    targetSchool: string;
-    targetMajor: string;
-    status: string;
-    createdAt: string;
-}
-
-// const DUMMY_DATA: ReportProps[] = [];
-
-const DUMMY_DATA: ReportProps[] = Array.from({ length: 32 }, (_, i) => ({
-    id: i + 1,
-    title: `202${4 - Math.floor(i / 10)}학년도 ${1 + (i % 2)}학기 생기부 - ${i + 1}`,
-    targetSchool: "서울대학교",
-    targetMajor: "컴퓨터공학부",
-    status: "작성 완료",
-    createdAt: `202${5 - Math.floor(i / 10)}.03.${String((i % 12) + 1).padStart(2, '0')}`
-}));
+import { RECORDS_DUMMY_DATA } from "@/constants/records"; 
 
 const ITEMS_PER_PAGE = 7;
 
 export default function StudentReport() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
     const [inputText, setInputText] = useState<string>(""); 
     const [searchQuery, setSearchQuery] = useState<string>(""); 
     const [currentPage, setCurrentPage] = useState<number>(1);
 
     const filteredData = useMemo(() => {
-        return DUMMY_DATA.filter(item => item.title.includes(searchQuery));
+        return RECORDS_DUMMY_DATA.filter(item => item.title.includes(searchQuery));
     }, [searchQuery]);
 
     const totalItems = filteredData.length;
@@ -55,10 +36,14 @@ export default function StudentReport() {
         setCurrentPage(1); 
     };
 
+    const handleCardClick = (id: number) => {
+        navigate(`/record_management/${id}`);
+    };
+
     return (
         <S.StudentReportContainer>
             <Title text="생기부 관리"/>
-            {DUMMY_DATA.length > 0 ? (
+            {RECORDS_DUMMY_DATA.length > 0 ? (
                 <S.SearchListWrapper>
                     <S.SearchBlock>
                         <S.TotalCount>총 {totalItems}개</S.TotalCount>
@@ -69,13 +54,17 @@ export default function StudentReport() {
                                 placeholder="생기부 제목을 입력해주세요" 
                                 onClick={handleSearchClick} 
                             />
-                            <DefaultButton width={166} type="primary" text="생기부 추가하기" onClick={() => navigate("/record_management/upload")}/>
+                            <DefaultButton width={166} type="primary" text="생기부 추가하기" onClick={() => navigate("upload")} />
                         </S.SearchBox>
                     </S.SearchBlock>
                     <S.ListBox>
                         {currentData.length > 0 ? (
                             currentData.map((item) => (
-                                <RecordCard key={item.id} text={item.title}/>
+                                <RecordCard 
+                                    key={item.id} 
+                                    text={item.title}
+                                    onClick={() => handleCardClick(item.id)}
+                                />
                             ))
                         ) : (
                             <S.EmptyListWrapper>
@@ -101,7 +90,7 @@ export default function StudentReport() {
                         title="아직 등록된 생활 기록부가 없어요"
                         subtitle="생기부를 추가하고 나에게 딱 맞는 질문을 받아보세요"
                     >
-                         <DefaultButton width={174} type="primary" text="생기부 추가하기" onClick={() => navigate("/record_management/upload")}/>
+                         <DefaultButton width={174} type="primary" text="생기부 추가하기" onClick={() => navigate("upload")}/>
                     </EmptyState>
                 </S.EmptyReportWrapper>
             )}

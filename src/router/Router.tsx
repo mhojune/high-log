@@ -12,6 +12,7 @@ import Privacy from '@/pages/privacy';
 import Term from '@/pages/term';
 import RecordManagement from '@/pages/recordManagement';
 import RecordUpload from '@/pages/recordManagement/upload';
+import RecordDetail from '@/pages/recordManagement/detail';
 
 const router = createBrowserRouter([
   {
@@ -57,6 +58,10 @@ const router = createBrowserRouter([
       {
         path: 'record_management/upload',
         element: <RecordUpload />
+      },
+      {
+        path: 'record_management/:id',
+        element: <RecordDetail />
       },
       {
         path: 'mypage',

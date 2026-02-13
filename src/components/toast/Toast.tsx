@@ -17,7 +17,6 @@ export default function Toast({ message, onClose, isOpen }: ToastProps) {
   };
 
   return (
-    <S.Overlay onClick={onClose}>
       <S.ToastContainer onClick={handleToastClick}>
         <S.Content>
           <S.IconWrapper>
@@ -29,6 +28,5 @@ export default function Toast({ message, onClose, isOpen }: ToastProps) {
           </S.CloseButton>
         </S.Content>
       </S.ToastContainer>
-    </S.Overlay>
   );
 }

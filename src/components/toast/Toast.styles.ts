@@ -1,24 +1,13 @@
 import styled from "styled-components";
 
-export const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: ${({ theme }) => theme.colors.grayScale["00"]}66;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-`;
-
 export const ToastContainer = styled.div`
   width: 1200px;
   height: 58px;
-  background-color: ${({ theme }) => theme.colors.grayScale["02"]}CC;
+  background-color: ${({ theme }) => theme.colors.grayScale["02"]};
   border-radius: 12px;
   border: 0.5px solid ${({ theme }) => theme.colors.secondary["07"]};
+  position: fixed;
+  bottom: 100px;
 `;
 
 export const Content = styled.div`
