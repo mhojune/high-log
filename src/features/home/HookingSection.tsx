@@ -77,7 +77,10 @@ export default function HookingSection() {
             <S.HookingEventTextSub>받기</S.HookingEventTextSub>
           </S.HookingEventText>
           <S.HookingEventImg src={FIRECRACKER} />
-          <CHEVRON_RIGHT width={48} height={48} stroke="#D4D9F9" />
+          <CHEVRON_RIGHT
+            style={{ width: "max(48px, 3.33vw)", height: "max(48px, 3.33vw)" }}
+            stroke="#D4D9F9"
+          />
         </S.HookingEventCard>
       </S.HookingCardWrapper>
     </S.HookingSectionContainer>
