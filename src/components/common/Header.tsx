@@ -66,7 +66,7 @@ export default function Header() {
                 </S.LoggedInWrapper>
             ) : 
             (
-                <S.UnLoggedInWrapper onClick={() => {}}>
+                <S.UnLoggedInWrapper onClick={() => handleNavClick(-1, '/auth', false)}>
                     <S.UnLoggedInBox>
                         <S.UnLoggedInTitle>시작하기</S.UnLoggedInTitle>
                         <ArrowRight width={16} height={16} stroke="#F0F0F3" />
