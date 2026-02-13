@@ -5,7 +5,6 @@ interface DefaultInputProps {
     text: string;
     setText: (text:string) => void;
     placeholder: string;
-    onClick: () => void;
 }
 
 export default function DefaultInput({text, setText, placeholder}:DefaultInputProps) {

@@ -8,6 +8,7 @@ import Pagination from "@/components/common/Pagination/Pagination";
 import EmptyState from "@/components/common/EmptyState/EmptyState";
 import SEARCH_NONE from "@/assets/icons/search_x.svg?react";
 import FILE_NONE from "@/assets/icons/file_x.svg?react"
+import { useNavigate } from "react-router-dom"
 
 interface ReportProps {
     id: number;
@@ -32,6 +33,7 @@ const DUMMY_DATA: ReportProps[] = Array.from({ length: 32 }, (_, i) => ({
 const ITEMS_PER_PAGE = 7;
 
 export default function StudentReport() {
+    const navigate = useNavigate()
     const [inputText, setInputText] = useState<string>(""); 
     const [searchQuery, setSearchQuery] = useState<string>(""); 
     const [currentPage, setCurrentPage] = useState<number>(1);
@@ -67,7 +69,7 @@ export default function StudentReport() {
                                 placeholder="생기부 제목을 입력해주세요" 
                                 onClick={handleSearchClick} 
                             />
-                            <DefaultButton width={166} type="primary" text="생기부 추가하기" />
+                            <DefaultButton width={166} type="primary" text="생기부 추가하기" onClick={() => navigate("/record_management/upload")}/>
                         </S.SearchBox>
                     </S.SearchBlock>
                     <S.ListBox>
@@ -99,7 +101,7 @@ export default function StudentReport() {
                         title="아직 등록된 생활 기록부가 없어요"
                         subtitle="생기부를 추가하고 나에게 딱 맞는 질문을 받아보세요"
                     >
-                         <DefaultButton width={174} type="primary" text="생기부 추가하기" />
+                         <DefaultButton width={174} type="primary" text="생기부 추가하기" onClick={() => navigate("/record_management/upload")}/>
                     </EmptyState>
                 </S.EmptyReportWrapper>
             )}

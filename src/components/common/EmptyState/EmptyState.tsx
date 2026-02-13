@@ -3,8 +3,8 @@ import * as S from "@/components/common/EmptyState/EmptyState.styles";
 
 interface EmptyStateProps {
     icon: ReactNode;
-    title: string;
-    subtitle: string;
+    title?: string;
+    subtitle?: string;
     children?: ReactNode; 
 }
 
