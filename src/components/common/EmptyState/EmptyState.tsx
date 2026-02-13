@@ -2,7 +2,7 @@ import type { ReactNode  } from "react";
 import * as S from "@/components/common/EmptyState/EmptyState.styles";
 
 interface EmptyStateProps {
-    icon: ReactSVGElement;
+    icon: ReactNode;
     title: string;
     subtitle: string;
     children?: ReactNode; 
