@@ -1,8 +1,8 @@
 import { createBrowserRouter } from 'react-router-dom';
 import App from '@/App';
 import Home from '@/pages/home';
-import SignUp from '@/pages/signUp';
-import Login from '@/pages/login';
+import AuthPage from '@/pages/authPage';
+import FindPasswordPage from '@/pages/authPage/findPasswordPage';
 import Guide from '@/pages/guide';
 import InterviewQuestions from '@/pages/interviewQuestions';
 import InterviewPractice from '@/pages/interviewPractice';
@@ -30,12 +30,12 @@ const router = createBrowserRouter([
         element: <Term />,
       },
       {
-        path: 'signup',
-        element: <SignUp />,
+        path: 'auth',
+        element: <AuthPage />,
       },
       {
-        path: 'login',
-        element: <Login />,
+        path: 'auth/find-password',
+        element: <FindPasswordPage />,
       },
       {
         path: 'guide',
