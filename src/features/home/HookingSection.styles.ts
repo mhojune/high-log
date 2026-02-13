@@ -74,7 +74,6 @@ export const HookingCardStatBox = styled.div`
     align-items: flex-start;
     gap: max(8px, 0.56vw);
     border-radius: max(16px, 1.11vw);
-    background-color: #F8F8FA;
 `;
 
 export const HookingCardStat = styled.div`
