@@ -5,7 +5,7 @@ import SearchFilter from "@/components/filter/SearchFilter"
 import { DefaultButton } from "@/components/button/Button"
 import RecordCard from "@/components/card/RecordCard"
 import Pagination from "@/components/common/Pagination/Pagination";
-import EmptyState from "@/components/common/EmptyState/EmptyState";
+import EmptyState from "@/components/common/emptyState/EmptyState";
 import SEARCH_NONE from "@/assets/icons/search_x.svg?react";
 import FILE_NONE from "@/assets/icons/file_x.svg?react"
 import { useNavigate } from "react-router-dom"

@@ -1,5 +1,5 @@
 import type { ReactNode  } from "react";
-import * as S from "@/components/common/EmptyState/EmptyState.styles";
+import * as S from "@/components/common/emptyState/EmptyState.styles";
 
 interface EmptyStateProps {
     icon: ReactNode;

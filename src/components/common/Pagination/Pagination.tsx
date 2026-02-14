@@ -1,4 +1,4 @@
-import * as S from "./Pagination.styles";
+import * as S from "@/components/common/pagination/Pagination.styles";
 import CHEVRON_LEFT from "@/assets/icons/chevron_left.svg?react";
 import CHEVRON_RIGHT from "@/assets/icons/chevron_right.svg?react";
 import CHEVRONS_LEFT from "@/assets/icons/chevrons_left.svg?react";
