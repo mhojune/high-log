@@ -4,7 +4,7 @@ import { useState, useMemo } from "react"
 import SearchFilter from "@/components/filter/SearchFilter"
 import { DefaultButton } from "@/components/button/Button"
 import RecordCard from "@/components/card/RecordCard"
-import Pagination from "@/components/common/Pagination/Pagination";
+import Pagination from "@/components/common/pagination/Pagination";
 import EmptyState from "@/components/common/emptyState/EmptyState";
 import SEARCH_NONE from "@/assets/icons/search_x.svg?react";
 import FILE_NONE from "@/assets/icons/file_x.svg?react"
