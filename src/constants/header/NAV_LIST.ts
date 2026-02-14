@@ -7,10 +7,10 @@ export const NAV_LIST = [
     {
         id: 2,
         title: "면접 질문",
-        path: "/interview/questions",
+        path: "/question",
         sub_list: [
-            { title: "질문 생성", path: "/interview/questions/create" }, 
-            { title: "질문 보관함", path: "/interview/questions/storage" }
+            { title: "질문 생성", path: "/question" }, 
+            { title: "질문 보관함", path: "/question/storage" }
         ]
     },
     {

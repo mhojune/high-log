@@ -30,7 +30,6 @@ export default function QuestionCard({
   answerCriteriaText,
   onAnswerButtonClick,
 }: QuestionCardProps) {
-
   const [isAnswerRevealed, setIsAnswerRevealed] = useState(false);
 
   const handleAnswerButtonClick = () => {
@@ -49,12 +48,10 @@ export default function QuestionCard({
         </S.QuestionCardLeft>
         <Favorite type={favoriteType} onClick={onFavoriteClick || (() => {})} />
       </S.QuestionCardTop>
-      
+
       <S.QuestionCardBottom>
         <S.QuestionCardContent>
-          {passage && (
-            <S.Passage>{passage}</S.Passage>
-          )}
+          {passage && <S.Passage>{passage}</S.Passage>}
           <S.QuestionCardDetailsSection>
             <S.QuestionCardDetailsLeft>
               <S.QuestionPurposeRow>
@@ -78,9 +75,7 @@ export default function QuestionCard({
           {isAnswerRevealed && answerText && (
             <>
               <S.Divider />
-              <S.AnswerContent>
-                {answerText}
-              </S.AnswerContent>
+              <S.AnswerContent>{answerText}</S.AnswerContent>
               {answerCriteriaText && (
                 <S.AnswerCriteriaBox>
                   <S.AnswerCriteriaHeader>

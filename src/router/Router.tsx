@@ -4,7 +4,10 @@ import Home from '@/pages/home';
 import AuthPage from '@/pages/authPage';
 import FindPasswordPage from '@/pages/authPage/findPasswordPage';
 import Guide from '@/pages/guide';
-import InterviewQuestions from '@/pages/interviewQuestions';
+import CreateQuestions from '@/pages/interviewQuestions/createQuestions';
+import LoadingQuestions from '@/pages/interviewQuestions/loadingQuestions';
+import ShowQuestions from '@/pages/interviewQuestions/showQuestions';
+import SaveQuestions from '@/pages/interviewQuestions/saveQuestions';
 import InterviewPractice from '@/pages/interviewPractice';
 import MyPage from '@/pages/myPage';
 import Support from '@/pages/support';
@@ -16,7 +19,7 @@ import RecordDetail from '@/pages/recordManagement/detail';
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <App />,
     children: [
       {
@@ -24,31 +27,43 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: '/privacy',
+        path: "/privacy",
         element: <Privacy />,
       },
       {
-        path: '/term',
+        path: "/term",
         element: <Term />,
       },
       {
-        path: 'auth',
+        path: "auth",
         element: <AuthPage />,
       },
       {
-        path: 'auth/find-password',
+        path: "auth/find-password",
         element: <FindPasswordPage />,
       },
       {
-        path: 'guide',
+        path: "guide",
         element: <Guide />,
       },
       {
-        path: 'interview/questions',
-        element: <InterviewQuestions />,
+        path: "question",
+        element: <CreateQuestions />,
       },
       {
-        path: 'interview/practice',
+        path: "question/loading",
+        element: <LoadingQuestions />,
+      },
+      {
+        path: "question/show",
+        element: <ShowQuestions />,
+      },
+      {
+        path: "question/storage",
+        element: <SaveQuestions />,
+      },
+      {
+        path: "interview/practice",
         element: <InterviewPractice />,
       },
       {
@@ -64,11 +79,19 @@ const router = createBrowserRouter([
         element: <RecordDetail />
       },
       {
-        path: 'mypage',
+        path: 'record_management/upload',
+        element: <RecordUpload />
+      },
+      {
+        path: 'record_management/:id',
+        element: <RecordDetail />
+      },
+      {
+        path: "mypage",
         element: <MyPage />,
       },
       {
-        path: 'support',
+        path: "support",
         element: <Support />,
       },
     ],
