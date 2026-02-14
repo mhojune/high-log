@@ -95,7 +95,7 @@ export default function RecordDetail() {
                         <S.QuestionBox>
                             {initialRecord.questions.map((item) => {
                                 return (
-                                    <RecordCard text={item.question} key={item.id}/>
+                                    <RecordCard text={item.question} key={item.id} onClick={() => {navigate(`/record_detail/${id}/question_list`)}}/>
                                 )
                             })}
                         </S.QuestionBox>
