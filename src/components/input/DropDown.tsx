@@ -53,7 +53,7 @@ export default function DropDown({
     }, [options, value, isEditable]);
 
     return (
-        <S.Container width={width}>
+        <S.Container width={width} isOpen={isOpen}>
             <S.InputWrapper onClick={handleInputClick}>
                 <S.Input
                     value={value}

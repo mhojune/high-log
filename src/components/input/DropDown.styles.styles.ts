@@ -1,13 +1,13 @@
 import styled from "styled-components";
 
-export const Container = styled.div<{ width: string }>`
+export const Container = styled.div<{ width: string; isOpen?: boolean }>`
     display: flex;
     flex-direction: column;
     width: ${({ width }) => width};
-    border-radius: 8px;
+    border-radius: ${({ isOpen }) => (isOpen ? "8px 8px 0 0" : "8px")};
     padding: 8px 16px;
     background-color: ${({theme}) => theme.colors.grayScale["09"]};
-    transition: all 0.2s ease-in-out;
+    position: relative;
 `;
 
 export const InputWrapper = styled.div`
@@ -18,6 +18,7 @@ export const InputWrapper = styled.div`
 `;
 
 export const Input = styled.input`
+    width: 100%;
     ${({theme}) => theme.typography.body.M0};
     border: none;
     outline: none;
@@ -57,6 +58,14 @@ export const List = styled.ul`
     &::-webkit-scrollbar {
         display: none; 
     }
+    position: absolute;
+    top: 100%;
+    left: 0;
+    z-index: 100;
+    background-color: ${({theme}) => theme.colors.grayScale["09"]};
+    border-radius: 0 0 8px 8px;
+    padding: 0 16px 8px 16px;
+    box-sizing: border-box;
 `;
 
 export const ListItem = styled.li`
