@@ -17,6 +17,7 @@ import RecordManagement from '@/pages/recordManagement';
 import RecordUpload from '@/pages/recordManagement/upload';
 import RecordDetail from '@/pages/recordManagement/detail';
 import InterviewResult from '@/pages/interviewPractice/interviewResult';
+import QuestionsList from '@/pages/recordManagement/detail/questionsList';
 
 const router = createBrowserRouter([
   {
@@ -82,6 +83,10 @@ const router = createBrowserRouter([
       {
         path: 'record_management/:id',
         element: <RecordDetail />
+      },
+      {
+        path: 'record_detail/:id/question_list',
+        element: <QuestionsList />
       },
       {
         path: "mypage",
