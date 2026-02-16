@@ -10,7 +10,11 @@ interface Message {
     text: string;
 }
 
-export default function PracticeStep2() {
+interface PracticeStep2Props {
+    onNext: () => void;
+}
+
+export default function PracticeStep2({ onNext }: PracticeStep2Props) {
     const [text, setText] = useState<string>("")
     const [timeLeft, setTimeLeft] = useState<number>(600); 
     const [messages, setMessages] = useState<Message[]>([
@@ -88,7 +92,7 @@ export default function PracticeStep2() {
                         <DefaultButton width={100} type="secondary" text="임시 저장" onClick={handleSendMessage} />
                     </S.AnswerButtonBox>
                 </S.PracticeWrapper>
-                <DefaultButton width={78} type="primary" text="완료" onClick={() => {}} />
+                <DefaultButton width={78} type="primary" text="완료" onClick={onNext} />
             </S.PracticeStep2Container>
         </S.PageContainer>
     )
