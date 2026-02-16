@@ -3,6 +3,7 @@ import Title from "@/components/title/Title";
 import * as S from "@/features/interviewPractice/PracticeStep3.styles";
 import { useState } from "react";
 import CheckIcon from "@/assets/icons/check.svg?react";
+import { useNavigate } from "react-router-dom";
 
 interface FeedbackItem {
     id: number;
@@ -34,6 +35,7 @@ const FEEDBACK_LIST: FeedbackItem[] = [
 ]
 
 export default function PracticeStep3() {
+    const navigate = useNavigate();
     const [checkedItems, setCheckedItems] = useState<number[]>([]);
 
     const handleCheck = (id: number) => {
@@ -48,7 +50,7 @@ export default function PracticeStep3() {
             <S.Step3Wrapper>
                 <S.TitleBox>
                     <S.Title>피드백 체크리스트</S.Title>
-                    <DefaultButton width={78} type="primary" text="저장" onClick={() => {}} />
+                    <DefaultButton width={78} type="primary" text="저장" onClick={() => {navigate("/interview/result")}} />
                 </S.TitleBox>
                 <S.FeedBackList>
                     {FEEDBACK_LIST.map((item) => (
