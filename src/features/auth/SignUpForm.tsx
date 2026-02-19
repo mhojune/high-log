@@ -6,9 +6,12 @@ import { SIGN_UP_AGREEMENT_ITEMS } from "@/constants/auth";
 import * as S from "@/features/auth/SignUpForm.styles";
 
 interface SignUpFormProps {
+  onSendVerificationCode?: (email: string) => void;
+  onVerifyCode?: (email: string, verificationCode: string) => void;
   onSubmit: (data: {
     name: string;
     email: string;
+    verificationCode: string;
     password: string;
     passwordConfirm: string;
     agreements: {
@@ -19,10 +22,15 @@ interface SignUpFormProps {
   }) => void;
 }
 
-export default function SignUpForm({ onSubmit }: SignUpFormProps) {
+export default function SignUpForm({
+  onSendVerificationCode,
+  onVerifyCode,
+  onSubmit,
+}: SignUpFormProps) {
   const navigate = useNavigate();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
+  const [verificationCode, setVerificationCode] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [agreements, setAgreements] = useState({
@@ -40,6 +48,7 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
     onSubmit({
       name,
       email,
+      verificationCode,
       password,
       passwordConfirm,
       agreements,
@@ -63,15 +72,48 @@ export default function SignUpForm({ onSubmit }: SignUpFormProps) {
         </S.FieldWrapper>
         <S.FieldWrapper $gap={7}>
           <S.Label htmlFor="email">이메일</S.Label>
-          <S.AuthInput
-            id="email"
-            type="email"
-            placeholder="honggildong@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
+          <S.EmailInputRow>
+            <S.AuthInput
+              id="email"
+              type="email"
+              placeholder="honggildong@example.com"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <S.OpenModalButton
+              type="button"
+              onClick={() =>
+                email.trim() && onSendVerificationCode?.(email.trim())
+              }
+            >
+              인증번호 받기
+            </S.OpenModalButton>
+          </S.EmailInputRow>
         </S.FieldWrapper>
+        <S.VerifyCodeFieldWrapper $gap={5}>
+          <S.Label htmlFor="verificationCode">인증번호</S.Label>
+          <S.EmailInputRow>
+            <S.AuthInput
+              id="verificationCode"
+              type="text"
+              placeholder="이메일로 받은 인증번호를 입력해주세요"
+              value={verificationCode}
+              onChange={(e) => setVerificationCode(e.target.value)}
+              required
+            />
+            <S.OpenModalButton
+              type="button"
+              onClick={() =>
+                email.trim() &&
+                verificationCode.trim() &&
+                onVerifyCode?.(email.trim(), verificationCode.trim())
+              }
+            >
+              인증번호 확인
+            </S.OpenModalButton>
+          </S.EmailInputRow>
+        </S.VerifyCodeFieldWrapper>
         <S.FieldWrapper $gap={5}>
           <S.Label htmlFor="password">비밀번호</S.Label>
           <PasswordInput

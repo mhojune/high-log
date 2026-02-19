@@ -1,5 +1,6 @@
 import { useState } from "react";
 import EyeIcon from "@/assets/icons/eye.svg?react";
+import EyeClosedIcon from "@/assets/icons/eye_closed.svg?react";
 import * as S from "./PasswordInput.styles";
 
 interface PasswordInputProps
@@ -33,7 +34,11 @@ export default function PasswordInput({
         onClick={() => setIsVisible((prev) => !prev)}
         aria-label={isVisible ? "비밀번호 숨기기" : "비밀번호 보기"}
       >
-        <EyeIcon width={22} height={17} stroke="#8A8D92" />
+        {isVisible ? (
+          <EyeClosedIcon width={22} height={16} stroke="#8A8D92" />
+        ) : (
+          <EyeIcon width={22} height={17} stroke="#8A8D92" />
+        )}
       </S.EyeButton>
     </S.Wrapper>
   );

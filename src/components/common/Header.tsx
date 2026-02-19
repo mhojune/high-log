@@ -6,9 +6,10 @@ import { NAV_LIST } from "@/constants/header/NAV_LIST"
 import { useState } from "react"
 import { Link, useLocation, useNavigate } from "react-router-dom"
 import NavPopUp from "./NavPopUp"
+import { useAuth } from "@/contexts/AuthContext"
 
 export default function Header() {
-    const isLoggedIn = 0 // 임시 로그인 로직 
+    const { isAuthenticated } = useAuth()
     const [openDropdownId, setOpenDropdownId] = useState<number | null>(null);
     const location = useLocation();
     const navigate = useNavigate();
@@ -58,9 +59,9 @@ export default function Header() {
                     })}
                 </S.NavBox>
             </S.LogoNavWrapper>
-            {isLoggedIn ? 
+            {isAuthenticated ? 
             (
-                <S.LoggedInWrapper onClick={() => {}}>
+                <S.LoggedInWrapper onClick={() => navigate("/mypage")}>
                     <User width={24} height={24} fill="none" stroke="#394ECA" />
                     <S.LoggedInTitle>마이페이지</S.LoggedInTitle>
                 </S.LoggedInWrapper>

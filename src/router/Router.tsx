@@ -3,6 +3,7 @@ import App from '@/App';
 import Home from '@/pages/home';
 import AuthPage from '@/pages/authPage';
 import FindPasswordPage from '@/pages/authPage/findPasswordPage';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 import Guide from '@/pages/guide';
 import CreateQuestions from '@/pages/interviewQuestions/createQuestions';
 import LoadingQuestions from '@/pages/interviewQuestions/loadingQuestions';
@@ -80,7 +81,11 @@ const router = createBrowserRouter([
       },
       {
         path: "mypage",
-        element: <MyPage />,
+        element: (
+          <ProtectedRoute>
+            <MyPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: "support",

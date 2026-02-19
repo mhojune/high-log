@@ -1,3 +1,13 @@
+/** 비밀번호 정책: 최소 8자 이상, 영문 대소문자, 숫자, 특수문자 조합 */
+export function isValidPassword(password: string): boolean {
+  if (password.length < 8) return false;
+  const hasUpper = /[A-Z]/.test(password);
+  const hasLower = /[a-z]/.test(password);
+  const hasNumber = /\d/.test(password);
+  const hasSpecial = new RegExp("[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]").test(password);
+  return hasUpper && hasLower && hasNumber && hasSpecial;
+}
+
 export const AUTH_DESCRIPTION = {
   headings: ["내 생기부로 면접 질문을 만들고", "연습까지 한번에"],
   sampleButtonText: "샘플 결과 보기",

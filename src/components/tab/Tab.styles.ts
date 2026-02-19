@@ -8,18 +8,18 @@ export const TabContainer = styled.div`
   overflow: hidden;
 `;
 
-export const TabItem = styled.button<{ isActive: boolean }>`
+export const TabItem = styled.button<{ $isActive: boolean }>`
   width: 179px;
   height: 43px;
   padding: 8px 66px;
   box-sizing: border-box;
   ${({ theme }) => theme.typography.body.M2}
-  background-color: ${({ theme, isActive }) =>
-    isActive
+  background-color: ${({ theme, $isActive }) =>
+    $isActive
       ? theme.colors.secondary["08"]
       : theme.colors.grayScale["08"]};
-  color: ${({ theme, isActive }) =>
-    isActive
+  color: ${({ theme, $isActive }) =>
+    $isActive
       ? theme.colors.secondary["05"]
       : theme.colors.grayScale["05"]};
   border: none;

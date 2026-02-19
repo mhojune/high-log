@@ -52,6 +52,36 @@ export const AuthInput = styled.input`
   }
 `;
 
+export const EmailInputRow = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  input {
+    flex: 1;
+    min-width: 0;
+  }
+`;
+
+export const OpenModalButton = styled.button.attrs({ type: "button" })`
+  min-width: 89px;
+  padding: 8px 6.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: none;
+  border-radius: 8px;
+  background-color: ${({ theme }) => theme.colors.secondary["08"]};
+  color: ${({ theme }) => theme.colors.secondary["05"]};
+  ${({ theme }) => theme.typography.body.XS2};
+  cursor: pointer;
+  flex-shrink: 0;
+`;
+
+export const VerifyCodeFieldWrapper = styled(FieldWrapper)`
+  margin-bottom: 0;
+`;
+
 export const CheckboxSection = styled.div`
   margin-top: 22px;
 `;

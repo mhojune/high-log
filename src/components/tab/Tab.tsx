@@ -8,10 +8,10 @@ interface TabProps {
 export default function Tab({ activeTab, onTabChange }: TabProps) {
   return (
     <S.TabContainer>
-      <S.TabItem isActive={activeTab === "login"} onClick={() => onTabChange("login")}>
+      <S.TabItem $isActive={activeTab === "login"} onClick={() => onTabChange("login")}>
         로그인
       </S.TabItem>
-      <S.TabItem isActive={activeTab === "signup"} onClick={() => onTabChange("signup")}>
+      <S.TabItem $isActive={activeTab === "signup"} onClick={() => onTabChange("signup")}>
         회원가입
       </S.TabItem>
     </S.TabContainer>
