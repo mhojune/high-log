@@ -19,6 +19,7 @@ import RecordUpload from "@/pages/recordManagement/upload";
 import RecordDetail from "@/pages/recordManagement/detail";
 import InterviewResult from "@/pages/interviewPractice/interviewResult";
 import QuestionsList from "@/pages/recordManagement/detail/questionsList";
+import SupportDetail from "@/pages/support/detail";
 
 const router = createBrowserRouter([
   {
@@ -116,6 +117,10 @@ const router = createBrowserRouter([
       {
         path: "support",
         element: <Support />,
+      },
+      {
+        path: "support/:id",
+        element: <SupportDetail />,
       },
     ],
   },

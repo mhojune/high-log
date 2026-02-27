@@ -14,6 +14,6 @@ export const SupportWrapper = styled.div`
   display: flex;
   width: 1200px;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: center;
   gap: 48px;
 `;
