@@ -8,6 +8,7 @@ export const SupportContainer = styled.div`
   justify-content: center;
   padding-top: 96px;
   padding-bottom: 96px;
+  background-color: ${({ theme }) => theme.colors.grayScale["10"]};
 `;
 
 export const SupportWrapper = styled.div`

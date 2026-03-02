@@ -48,6 +48,7 @@ export const ContentBox = styled.div`
   padding: 80px;
   flex-direction: column;
   align-self: stretch;
+  background-color: ${({ theme }) => theme.colors.grayScale["11"]};
 `;
 
 export const ContentText = styled.span`
