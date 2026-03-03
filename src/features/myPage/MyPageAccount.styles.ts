@@ -51,7 +51,5 @@ export const AccountFieldInput = styled.input`
 export const AccountButtonGroup = styled.div`
   display: flex;
   gap: 10px;
-  margin-top: 136px;
-  margin-left: 22px;
-  margin-bottom: 30px;
+  margin: 136px 0 30px 22px;
 `;
