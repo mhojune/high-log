@@ -1,4 +1,4 @@
-import { createGlobalStyle } from 'styled-components';
+import { createGlobalStyle } from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   *, *::before, *::after {
@@ -7,7 +7,7 @@ const GlobalStyle = createGlobalStyle`
 
   body {
     margin: 0;
-    padding: 0;
+    padding: 80px 0 0 0 !important;
     font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
       'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
       sans-serif;

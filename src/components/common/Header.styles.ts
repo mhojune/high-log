@@ -9,6 +9,11 @@ export const HeaderContainer = styled.div`
   align-items: center;
   border-bottom: 2px solid ${({ theme }) => theme.colors.secondary["08"]};
   background-color: ${({ theme }) => theme.colors.grayScale["11"]};
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
 `;
 
 export const LogoNavWrapper = styled.div`

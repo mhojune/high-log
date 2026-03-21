@@ -20,6 +20,7 @@ import RecordDetail from "@/pages/recordManagement/detail";
 import InterviewResult from "@/pages/interviewPractice/interviewResult";
 import QuestionsList from "@/pages/recordManagement/detail/questionsList";
 import SupportDetail from "@/pages/support/detail";
+import Faq from "@/pages/faq";
 
 const router = createBrowserRouter([
   {
@@ -121,6 +122,10 @@ const router = createBrowserRouter([
       {
         path: "support/:id",
         element: <SupportDetail />,
+      },
+      {
+        path: "faq",
+        element: <Faq />,
       },
     ],
   },

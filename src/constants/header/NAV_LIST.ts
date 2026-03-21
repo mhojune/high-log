@@ -35,7 +35,7 @@ export const NAV_LIST = [
     path: "/support",
     sub_list: [
       { title: "공지사항", path: "/support" },
-      { title: "FAQ", path: "/support/faq" },
+      { title: "FAQ", path: "/faq" },
     ],
   },
 ];
