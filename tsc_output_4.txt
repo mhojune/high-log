@@ -1,4 +1,0 @@
-src/pages/recordManagement/detail/index.tsx(12,1): error TS6133: 'EmptyState' is declared but its value is never read.
-src/pages/recordManagement/detail/index.tsx(13,1): error TS6133: 'FILE_NONE' is declared but its value is never read.
-src/pages/recordManagement/detail/index.tsx(35,23): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'RecordDetail'.
-  Type 'undefined' is not assignable to type 'RecordDetail'.
