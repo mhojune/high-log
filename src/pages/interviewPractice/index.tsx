@@ -10,6 +10,8 @@ export default function InterviewPractice() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<
     "Easy" | "Normal" | "Hard" | null
   >(null);
+  const [selectedUniv, setSelectedUniv] = useState<string>("");
+  const [selectedDepartment, setSelectedDepartment] = useState<string>("");
   const [selectedMode, setSelectedMode] = useState<"text" | "voice" | null>(
     null,
   );
@@ -17,10 +19,14 @@ export default function InterviewPractice() {
   const handleSettingsComplete = (
     recordId: number,
     difficulty: "Easy" | "Normal" | "Hard",
+    univ: string,
+    department: string,
     mode: "text" | "voice",
   ) => {
     setSelectedRecordId(recordId);
     setSelectedDifficulty(difficulty);
+    setSelectedUniv(univ);
+    setSelectedDepartment(department);
     setSelectedMode(mode);
     setStep(2);
   };
@@ -34,6 +40,8 @@ export default function InterviewPractice() {
           onNext={() => setStep(3)}
           recordId={selectedRecordId}
           difficulty={selectedDifficulty}
+          univ={selectedUniv}
+          department={selectedDepartment}
           mode={selectedMode}
         />
       ) : (

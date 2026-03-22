@@ -5,13 +5,18 @@ import Title from "@/components/title/Title";
 import * as S from "@/features/interviewPractice/PracticeStep1.styles";
 import { useState, useMemo } from "react";
 import { useRecordList } from "@/api/record/useRecordListApi";
+import {
+  SCHOOL_OPTIONS,
+  getDepartmentOptionsForSchool,
+} from "@/constants/schoolDepartments";
 
 interface PracticeStep1Props {
   onSettingsComplete: (
     recordId: number,
     difficulty: "Easy" | "Normal" | "Hard",
+    univ: string,
+    department: string,
     mode: "text" | "voice",
-    // initialResponse: InterviewChatResponse // Removed
   ) => void;
 }
 
@@ -20,6 +25,8 @@ export default function PracticeStep1({
 }: PracticeStep1Props) {
   const [report, setReport] = useState<string>("");
   const [level, setLevel] = useState<string>("");
+  const [univ, setUniv] = useState<string>("");
+  const [department, setDepartment] = useState<string>("");
   const [mode, setMode] = useState<string>("텍스트");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalMessage, setModalMessage] = useState({
@@ -42,19 +49,33 @@ export default function PracticeStep1({
     }));
   }, [recordListData]);
 
+  const departmentOptions = useMemo(
+    () => getDepartmentOptionsForSchool(univ),
+    [univ],
+  );
+
   const levelOptions = [
     { label: "기본", value: "Easy" },
     { label: "심화", value: "Normal" },
     { label: "압박", value: "Hard" },
   ];
-  const modeOptions = [{ label: "텍스트", value: "text" }];
+  const modeOptions = [
+    { label: "텍스트", value: "text" },
+    { label: "음성", value: "audio" },
+  ];
 
   const handleStart = () => {
     const selectedReport = reportOptions.find((opt) => opt.label === report);
     const selectedLevel = levelOptions.find((opt) => opt.label === level);
     const selectedMode = modeOptions.find((opt) => opt.label === mode); // Should always be "텍스트"
 
-    if (!selectedReport || !selectedLevel || !selectedMode) {
+    if (
+      !selectedReport ||
+      !selectedLevel ||
+      !selectedMode ||
+      !univ ||
+      !department
+    ) {
       setModalMessage({
         mainTitle: "선택하지 않은 항목이 있어요",
         subTitle: "필수 항목을 선택한 뒤 다시 시작해 주세요",
@@ -66,6 +87,9 @@ export default function PracticeStep1({
     onSettingsComplete(
       selectedReport.value,
       selectedLevel.value as "Easy" | "Normal" | "Hard",
+      univ,
+      department,
+
       selectedMode.value as "text" | "voice",
     );
   };
@@ -132,6 +156,36 @@ export default function PracticeStep1({
                     placeholder="난이도를 설정해 주세요"
                     value={level}
                     setValue={setLevel}
+                  />
+                </S.DropDownWrapper>
+              </S.TitleSelect>
+            </S.TopBox>
+            <S.TopBox>
+              <S.TitleSelect>
+                <S.Title>지원하는 학교</S.Title>
+                <S.DropDownWrapper>
+                  <DropDown
+                    width="340px"
+                    options={SCHOOL_OPTIONS}
+                    placeholder="대학교를 선택해 주세요"
+                    value={univ}
+                    setValue={(value) => {
+                      setUniv(value);
+                      setDepartment("");
+                    }}
+                  />
+                </S.DropDownWrapper>
+              </S.TitleSelect>
+              <S.TitleSelect>
+                <S.Title>학과</S.Title>
+                <S.DropDownWrapper>
+                  <DropDown
+                    width="340px"
+                    options={departmentOptions}
+                    placeholder="학과를 선택해 주세요"
+                    value={department}
+                    setValue={setDepartment}
+                    disabled={!univ}
                   />
                 </S.DropDownWrapper>
               </S.TitleSelect>
