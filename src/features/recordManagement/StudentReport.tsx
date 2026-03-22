@@ -1,6 +1,6 @@
 import * as S from "@/features/recordManagement/StudentReport.styles";
 import Title from "@/components/title/Title";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import SearchFilter from "@/components/filter/SearchFilter";
 import { DefaultButton } from "@/components/button/Button";
 import RecordCard from "@/components/card/RecordCard";
@@ -8,17 +8,28 @@ import Pagination from "@/components/common/pagination/Pagination";
 import EmptyState from "@/components/common/emptyState/EmptyState";
 import SEARCH_NONE from "@/assets/icons/search_x.svg?react";
 import FILE_NONE from "@/assets/icons/file_x.svg?react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useRecordList } from "@/api/record/useRecordListApi";
 import type { RecordItem } from "@/api/record/recordTypes";
+import DisplayModal from "./DisplayModal";
 
 const ITEMS_PER_PAGE = 7;
 
 export default function StudentReport() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const uploadComplete = location.state?.upload_complete;
   const [inputText, setInputText] = useState<string>("");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [currentPage, setCurrentPage] = useState<number>(1);
+
+  useEffect(() => {
+    if (uploadComplete) {
+      navigate(location.pathname, { replace: true, state: {} });
+    }
+  }, [uploadComplete, navigate, location.pathname]);
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(!!uploadComplete);
 
   const { data, isLoading } = useRecordList();
   const recordList = useMemo(() => {
@@ -128,6 +139,7 @@ export default function StudentReport() {
           </EmptyState>
         </S.EmptyReportWrapper>
       )}
+      {isModalOpen && <DisplayModal setIsModalOpen={setIsModalOpen} />}
     </S.StudentReportContainer>
   );
 }
