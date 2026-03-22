@@ -15,7 +15,7 @@ export const useDeleteRecord = () => {
   return useMutation<void, Error, number>({
     mutationFn: (recordId: number) => deleteRecord(recordId),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["recordList"] });
+      queryClient.invalidateQueries({ queryKey: ["records"] });
     },
   });
 };

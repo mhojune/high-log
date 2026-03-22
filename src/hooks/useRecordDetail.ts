@@ -16,7 +16,7 @@ export function useRecordDetail(initialRecord: RecordDetail) {
   const [text, setText] = useState<string>(initialRecord.title);
   const [isChecked, setIsChecked] = useState<boolean>(true);
   const [fileStatus, setFileStatus] = useState<
-    "idle" | "completed" | "disabled"
+    "idle" | "uploading" | "completed" | "disabled"
   >(initialRecord.status === "READY" ? "completed" : "idle");
   const [uploadedFileName, setUploadedFileName] = useState<string>(
     initialRecord.title,
@@ -47,15 +47,16 @@ export function useRecordDetail(initialRecord: RecordDetail) {
     }
 
     try {
-      // 기존 파일 삭제
-      await deleteRecordAsync(recordId);
+      setFileStatus("uploading");
 
-      // 새로운 파일 업로드
       await uploadRecordAsync({
         file: newFile,
         title: text,
       });
 
+      await deleteRecordAsync(recordId);
+
+      setFileStatus("completed");
       setToastMessage("새로운 파일로 교체되었습니다.");
       setIsToastOpen(true);
 
@@ -64,8 +65,9 @@ export function useRecordDetail(initialRecord: RecordDetail) {
         navigate("/record_management");
       }, 1500);
     } catch (e) {
+      setFileStatus("idle");
       const errorMessage = e instanceof Error ? e.message : "알 수 없는 오류";
-      setToastMessage(`저장 실패: ${errorMessage}`);
+      setToastMessage(`저장 실패: ${errorMessage} (기존 생기부는 유지됩니다)`);
       setIsToastOpen(true);
     }
   }, [recordId, text, newFile, deleteRecordAsync, uploadRecordAsync, navigate]);

@@ -34,6 +34,7 @@ function RecordDetailContent({ record }: { record: RecordDetailType }) {
     handleToastClose,
     navigate,
     handleFileSelect,
+    isUploading,
   } = useRecordDetail(record);
 
   const initialQuestion = record.questionSets?.length || 0;
@@ -57,7 +58,7 @@ function RecordDetailContent({ record }: { record: RecordDetailType }) {
                       />
                       <DefaultButton
                         width={72}
-                        type="secondary"
+                        type={isUploading ? "disabled" : "secondary"}
                         text="저장"
                         onClick={handleSave}
                       />
