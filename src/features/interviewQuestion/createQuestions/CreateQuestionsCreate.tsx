@@ -7,19 +7,33 @@ import CreateQuestionFormBox, {
 import Title from "@/components/title/Title";
 import Modal from "@/components/modal/Modal";
 import type { CreateQuestionFormData } from "@/features/interviewQuestion/types/createQuestion";
+import { useAuth } from "@/contexts/AuthContext";
 
-interface CreateQuestionsCreateProps {
-  onBack?: () => void;
-}
-
-export default function CreateQuestionsCreate({
-  onBack,
-}: CreateQuestionsCreateProps) {
+export default function CreateQuestionsCreate() {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const formRef = useRef<CreateQuestionFormBoxRef>(null);
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
   const [hasContent, setHasContent] = useState(false);
   const pendingActionRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      setIsLoginModalOpen(true);
+    } else {
+      setIsLoginModalOpen(false);
+    }
+  }, [isAuthenticated]);
+
+  const handleCloseLoginModal = () => {
+    setIsLoginModalOpen(false);
+  };
+
+  const handleLoginClick = () => {
+    setIsLoginModalOpen(false);
+    navigate("/auth");
+  };
 
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
@@ -72,7 +86,17 @@ export default function CreateQuestionsCreate({
         ref={formRef}
         onSubmit={handleSubmit}
         onFormStateChange={setHasContent}
-        onBackToMain={onBack}
+        onBackToMain={() => navigate("/")}
+      />
+      <Modal
+        isOpen={isLoginModalOpen}
+        onClose={handleCloseLoginModal}
+        mainTitle="로그인 후 사용해주세요"
+        subTitle="로그인이 필요한 서비스 입니다"
+        leftButtonText="닫기"
+        rightButtonText="로그인 하기"
+        onLeftButtonClick={handleCloseLoginModal}
+        onRightButtonClick={handleLoginClick}
       />
       <Modal
         isOpen={isLeaveModalOpen}

@@ -3,11 +3,17 @@ import { useNavigate } from "react-router-dom";
 import * as S from "@/features/interviewQuestion/createQuestionFormBox/CreateQuestionFormBox.styles";
 import { DefaultButton } from "@/components/button/Button";
 import XIcon from "@/assets/icons/x.svg?react";
+import CircleQuestionMark from "@/assets/icons/circle_question_mark.svg?react";
 import DropDown from "@/components/input/DropDown";
 import RadioBox from "@/components/input/RadioBox";
 import Modal from "@/components/modal/Modal";
 import type { CreateQuestionFormData } from "@/features/interviewQuestion/types/createQuestion";
 import { useRecordList } from "@/api/record/useRecordListApi";
+import { useAuth } from "@/contexts/AuthContext";
+import {
+  SCHOOL_OPTIONS,
+  getDepartmentOptionsForSchool,
+} from "@/constants/schoolDepartments";
 
 export interface CreateQuestionFormBoxRef {
   hasContent: () => boolean;
@@ -22,16 +28,6 @@ const APPLICATION_TYPE_OPTIONS = [
   "학교 자체 전형",
 ];
 
-const SCHOOL_OPTIONS = ["서울대학교", "연세대학교", "고려대학교", "카이스트", "포스텍"];
-
-const DEPARTMENT_OPTIONS = [
-  "컴퓨터공학과",
-  "전자공학과",
-  "기계공학과",
-  "경영학과",
-  "의예과",
-];
-
 interface CreateQuestionFormBoxProps {
   onSubmit: (data: CreateQuestionFormData) => void;
   onFormStateChange?: (hasContent: boolean) => void;
@@ -41,16 +37,15 @@ interface CreateQuestionFormBoxProps {
 const CreateQuestionFormBox = forwardRef<
   CreateQuestionFormBoxRef,
   CreateQuestionFormBoxProps
->(function CreateQuestionFormBox(
-  { onSubmit, onFormStateChange, onBackToMain },
-  ref
-) {
+>(function CreateQuestionFormBox({ onSubmit, onFormStateChange, onBackToMain }, ref) {
   const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   const [title, setTitle] = useState("");
   const [school, setSchool] = useState("");
   const [department, setDepartment] = useState("");
   const [applicationType, setApplicationType] = useState("");
   const [schoolRecord, setSchoolRecord] = useState("");
+  const [isSchoolRecordHintOpen, setIsSchoolRecordHintOpen] = useState(false);
 
   const handleTitleChange = (value: string) => {
     setTitle(value);
@@ -62,14 +57,17 @@ const CreateQuestionFormBox = forwardRef<
 
   const handleSchoolChange = (value: string) => {
     setSchool(value);
-    if (!value) setDepartment("");
+    setDepartment("");
   };
 
-  const { data: recordListData, isSuccess: isRecordsSuccess } = useRecordList();
+  const { data: recordListData, isSuccess: isRecordsSuccess } = useRecordList({
+    enabled: isAuthenticated,
+  });
   const records = recordListData?.records ?? [];
   const recordOptions = records.map((r) => r.title);
-  const isNoRecordsModalOpen =
-    isRecordsSuccess && records.length === 0;
+  const isNoRecordsModalOpen = isRecordsSuccess && records.length === 0;
+
+  const departmentOptions = getDepartmentOptionsForSchool(school);
 
   const hasContent = !!(title || school || department || applicationType || schoolRecord);
 
@@ -150,7 +148,7 @@ const CreateQuestionFormBox = forwardRef<
               <S.FormFieldRowLabel>학과</S.FormFieldRowLabel>
               <DropDown
                 width="340px"
-                options={DEPARTMENT_OPTIONS}
+                options={departmentOptions}
                 value={department}
                 setValue={setDepartment}
                 placeholder="학과를 입력해 주세요"
@@ -195,7 +193,49 @@ const CreateQuestionFormBox = forwardRef<
           </S.ApplicationTypeSection>
         </S.FormFieldGroup>
       </S.FormFieldGroups>
-      <S.FormBoxSubTitle>학교 생활 기록부를 선택해주세요</S.FormBoxSubTitle>
+      <S.FormBoxSubTitleRow>
+        <S.FormBoxSubTitle>학교 생활 기록부를 선택해주세요</S.FormBoxSubTitle>
+        <S.SchoolRecordHintWrapper>
+          <S.SchoolRecordHintPopoverCluster
+            $open={isSchoolRecordHintOpen}
+            role="presentation"
+          >
+            <S.SchoolRecordHintPopover role="tooltip">
+              <S.SchoolRecordHintPopoverLead>
+                생기부 관리 페이지에서 파일을 업로드 해보세요
+              </S.SchoolRecordHintPopoverLead>
+              <S.SchoolRecordHintPopoverSub>
+                등록한 생기부는 언제든 면접 질문 생성에 사용할 수 있어요
+              </S.SchoolRecordHintPopoverSub>
+              <S.SchoolRecordHintPopoverButtonRow>
+                <S.SchoolRecordHintPopoverButtonWrap>
+                  <DefaultButton
+                    width={108}
+                    type="secondary"
+                    text="업로드하러 가기"
+                    onClick={() => {
+                      setIsSchoolRecordHintOpen(false);
+                      navigate("/record_management");
+                    }}
+                  />
+                </S.SchoolRecordHintPopoverButtonWrap>
+              </S.SchoolRecordHintPopoverButtonRow>
+            </S.SchoolRecordHintPopover>
+            <S.SchoolRecordHintPopoverArrowRow>
+              <S.SchoolRecordHintPopoverArrow aria-hidden />
+            </S.SchoolRecordHintPopoverArrowRow>
+          </S.SchoolRecordHintPopoverCluster>
+          <S.SchoolRecordHint
+            aria-expanded={isSchoolRecordHintOpen}
+            onClick={() => setIsSchoolRecordHintOpen((prev) => !prev)}
+          >
+            <S.SchoolRecordHintIcon aria-hidden>
+              <CircleQuestionMark />
+            </S.SchoolRecordHintIcon>
+            <S.SchoolRecordHintText>원하는 생기부가 없나요?</S.SchoolRecordHintText>
+          </S.SchoolRecordHint>
+        </S.SchoolRecordHintWrapper>
+      </S.FormBoxSubTitleRow>
       <S.SchoolRecordRow>
         <S.FormFieldRowLabel>생기부 선택</S.FormFieldRowLabel>
         <S.SchoolRecordDropDownWrapper>

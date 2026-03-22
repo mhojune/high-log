@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "build:schools": "node scripts/build-school-departments.mjs",
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "husky"
@@ -38,6 +39,7 @@
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4",
+    "xlsx": "^0.18.5",
     "vite-plugin-svgr": "^4.5.0"
   }
 }
