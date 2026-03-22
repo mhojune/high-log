@@ -1,5 +1,0 @@
-src/api/record/recordDetailApi.ts(1,10): error TS2305: Module '"../client"' has no exported member 'client'.
-src/api/record/recordDetailApi.ts(2,10): error TS1484: 'RecordDetail' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
-src/api/record/useRecordDetailApi.ts(3,10): error TS1484: 'RecordDetail' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
-src/hooks/useRecordDetail.ts(4,1): error TS6133: 'RecordDetail' is declared but its value is never read.
-src/hooks/useRecordDetail.ts(4,10): error TS1484: 'RecordDetail' is a type and must be imported using a type-only import when 'verbatimModuleSyntax' is enabled.
