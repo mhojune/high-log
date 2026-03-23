@@ -56,6 +56,18 @@ export const NavTitle = styled.p<{ $activeTab: boolean }>`
   white-space: nowrap;
 `;
 
+export const LoggedInContainer = styled.div`
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+`;
+
+export const LineColumn = styled.div`
+  width: 1px;
+  height: 24px;
+  background-color: #a5b8f1;
+`;
+
 export const LoggedInWrapper = styled.div`
   display: flex;
   padding: 8px 16px;

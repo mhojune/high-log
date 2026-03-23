@@ -1,6 +1,7 @@
 import * as S from "@/components/common/Header.styles";
 import Logo from "@/assets/images/logo.svg?react";
 import ArrowRight from "@/assets/icons/arrow_right.svg?react";
+import CIRCLE_USER from "@/assets/icons/circle_user.svg?react";
 import { NAV_LIST } from "@/constants/header/NAV_LIST";
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -63,14 +64,23 @@ export default function Header() {
         </S.NavBox>
       </S.LogoNavWrapper>
       {isAuthenticated ? (
-        <S.LoggedInWrapper
-          onClick={() => navigate("/record_management/upload")}
-        >
-          <S.LoggedInBox>
-            <S.LoggedInTitle>생기부 올리기</S.LoggedInTitle>
-            <ArrowRight width={16} height={16} stroke="#F0F0F3" />
-          </S.LoggedInBox>
-        </S.LoggedInWrapper>
+        <S.LoggedInContainer>
+          <S.LoggedInWrapper
+            onClick={() => navigate("/record_management/upload")}
+          >
+            <S.LoggedInBox>
+              <S.LoggedInTitle>생기부 올리기</S.LoggedInTitle>
+              <ArrowRight width={16} height={16} stroke="#F0F0F3" />
+            </S.LoggedInBox>
+          </S.LoggedInWrapper>
+          <S.LineColumn />
+          <CIRCLE_USER
+            width={24}
+            height={24}
+            onClick={() => navigate("/mypage")}
+            style={{ cursor: "pointer" }}
+          />
+        </S.LoggedInContainer>
       ) : (
         <S.LoggedInWrapper onClick={() => handleNavClick(-1, "/auth", false)}>
           <S.LoggedInBox>
