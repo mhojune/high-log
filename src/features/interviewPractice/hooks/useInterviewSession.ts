@@ -10,6 +10,8 @@ const INITIAL_QUESTION = "자기소개 해주세요.";
 interface UseInterviewSessionParams {
   recordId: number;
   difficulty: "Easy" | "Normal" | "Hard";
+  univ: string;
+  department: string;
 }
 
 interface ModalMessage {
@@ -46,6 +48,8 @@ const getErrorMessage = (error: unknown): string | null => {
 export default function useInterviewSession({
   recordId,
   difficulty,
+  univ,
+  department,
 }: UseInterviewSessionParams) {
   const [text, setText] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([
@@ -168,6 +172,8 @@ export default function useInterviewSession({
       mutateInitialize({
         record_id: recordId,
         difficulty,
+        target_university: univ,
+        target_department: department,
         first_answer: userMessage.text,
         response_time: responseTimer,
       });

@@ -11,6 +11,8 @@ interface PracticeStep2Props {
   onNext: () => void;
   recordId: number | null;
   difficulty: "Easy" | "Normal" | "Hard" | null;
+  univ: string;
+  department: string;
   mode: "text" | "voice" | null;
 }
 
@@ -18,6 +20,8 @@ export default function PracticeStep2({
   onNext,
   recordId,
   difficulty,
+  univ,
+  department,
   mode,
 }: PracticeStep2Props) {
   const {
@@ -36,9 +40,11 @@ export default function PracticeStep2({
   } = useInterviewSession({
     recordId: recordId ?? 0,
     difficulty: difficulty ?? "Easy",
+    univ,
+    department,
   });
 
-  if (!recordId || !difficulty || !mode) {
+  if (!recordId || !difficulty || !mode || !univ || !department) {
     return (
       <S.PageContainer>
         <Title text="면접 연습" />
