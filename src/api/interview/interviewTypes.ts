@@ -3,8 +3,6 @@ export interface InterviewInitializeRequest {
   difficulty: "Easy" | "Normal" | "Hard";
   target_university: string;
   target_department: string;
-  first_answer: string;
-  response_time: number;
 }
 
 export interface InterviewChatRequest {
@@ -15,5 +13,5 @@ export interface InterviewChatRequest {
 export interface InterviewChatResponse {
   next_question: string;
   is_finished: boolean;
-  thread_id?: string;
+  session_id: string;
 }

@@ -24,12 +24,16 @@ export default function PracticeStep2({
   department,
   mode,
 }: PracticeStep2Props) {
+  const isInterviewConfigReady =
+    !!recordId && !!difficulty && !!mode && !!univ && !!department;
+
   const {
     text,
     setText,
     messages,
     isInterviewFinished,
     responseTimer,
+    isSessionReady,
     isPending,
     isModalOpen,
     modalMessage,
@@ -42,9 +46,10 @@ export default function PracticeStep2({
     difficulty: difficulty ?? "Easy",
     univ,
     department,
+    enabled: isInterviewConfigReady,
   });
 
-  if (!recordId || !difficulty || !mode || !univ || !department) {
+  if (!isInterviewConfigReady) {
     return (
       <S.PageContainer>
         <Title text="면접 연습" />
@@ -76,6 +81,7 @@ export default function PracticeStep2({
             text={text}
             setText={setText}
             isPending={isPending}
+            isSessionReady={isSessionReady}
             isInterviewFinished={isInterviewFinished}
             onSend={handleSendMessage}
           />

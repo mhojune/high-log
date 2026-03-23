@@ -5,6 +5,7 @@ interface PracticeStep2AnswerInputProps {
   text: string;
   setText: (value: string) => void;
   isPending: boolean;
+  isSessionReady: boolean;
   isInterviewFinished: boolean;
   onSend: () => void;
 }
@@ -13,10 +14,12 @@ export default function PracticeStep2AnswerInput({
   text,
   setText,
   isPending,
+  isSessionReady,
   isInterviewFinished,
   onSend,
 }: PracticeStep2AnswerInputProps) {
-  const isSendDisabled = isPending || isInterviewFinished || !text.trim();
+  const isSendDisabled =
+    isPending || isInterviewFinished || !isSessionReady || !text.trim();
 
   return (
     <S.AnswerButtonBox>
@@ -29,14 +32,14 @@ export default function PracticeStep2AnswerInput({
               ? "면접이 종료되었습니다."
               : "여기에 답변을 작성하세요..."
           }
-          onKeyDown={(e) => e.key === "Enter" && onSend()}
-          disabled={isPending || isInterviewFinished}
+          onKeyDown={(e) => e.key === "Enter" && !isSendDisabled && onSend()}
+          disabled={isInterviewFinished}
         />
       </S.AnswerBox>
       <DefaultButton
         width={100}
         type={isSendDisabled ? "disabled" : "primary"}
-        text={isPending ? "전송 중..." : "전송"}
+        text={isPending ? "전송 중..." : isSessionReady ? "전송" : "준비 중..."}
         onClick={isSendDisabled ? undefined : onSend}
       />
     </S.AnswerButtonBox>
