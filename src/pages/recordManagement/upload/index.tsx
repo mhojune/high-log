@@ -44,7 +44,7 @@ export default function RecordUpload() {
         title: text,
         onProgress: setVectorizeProgress,
       });
-      navigate("/record_management");
+      navigate("/record_management", { state: { upload_complete: true } });
     } catch (err) {
       setSubmitError(parseApiError(err).message);
     }
