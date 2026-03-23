@@ -8,7 +8,7 @@ import type {
 export async function initializeInterviewText(
   request: InterviewInitializeRequest,
 ): Promise<InterviewChatResponse> {
-  return apiClient<InterviewChatResponse>("/ai/interview/initialize/text", {
+  return apiClient<InterviewChatResponse>("/ai/interview/start", {
     method: "POST",
     body: JSON.stringify(request),
   });
