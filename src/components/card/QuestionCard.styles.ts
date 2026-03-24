@@ -1,12 +1,12 @@
 import styled from "styled-components";
 
 export const QuestionCardContainer = styled.div`
-  width: 1200px;
+  width: 100%;
 `;
 
 export const QuestionCardTop = styled.div`
   width: 100%;
-  height: 84px;
+  min-height: 84px;
   background-color: ${({ theme }) => theme.colors.secondary["09"]};
   border: 0.5px solid ${({ theme }) => theme.colors.secondary["07"]};
   border-top-left-radius: 12px;
@@ -14,20 +14,26 @@ export const QuestionCardTop = styled.div`
   border-bottom: 0.5px solid ${({ theme }) => theme.colors.secondary["07"]};
   padding: 18px 24px;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   box-sizing: border-box;
 `;
 
 export const QuestionCardLeft = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 32px;
+  flex: 1;
+  min-width: 0;
+  padding-right: 24px;
 `;
 
 export const QuestionCardText = styled.p`
   ${({ theme }) => theme.typography.head.H4};
   color: ${({ theme }) => theme.colors.grayScale["00"]};
+  flex: 1;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 `;
 
 export const QuestionCardBottom = styled.div`
@@ -69,44 +75,61 @@ export const QuestionCardDetailsLeft = styled.div`
   flex-direction: column;
   gap: 0;
   flex: 1;
+  min-width: 0;
+  padding-right: 24px;
 `;
 
 export const QuestionCardDetailsRight = styled.div`
   display: flex;
   align-items: flex-start;
   margin-top: 11px;
+  flex-shrink: 0;
 `;
 
 export const QuestionPurposeRow = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 36px;
+  min-width: 0;
 `;
 
 export const QuestionPurposeLabel = styled.span`
   ${({ theme }) => theme.typography.body.M0};
   color: ${({ theme }) => theme.colors.grayScale["04"]};
+  flex-shrink: 0;
+  white-space: nowrap;
 `;
 
 export const QuestionPurposeText = styled.span`
   ${({ theme }) => theme.typography.body.M1};
   color: ${({ theme }) => theme.colors.grayScale["02"]};
+  flex: 1;
+  min-width: 0;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 `;
 
 export const AnswerPointRow = styled.div`
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 20px;
+  min-width: 0;
 `;
 
 export const AnswerPointLabel = styled.span`
   ${({ theme }) => theme.typography.body.M0};
   color: ${({ theme }) => theme.colors.grayScale["04"]};
+  flex-shrink: 0;
+  white-space: nowrap;
 `;
 
 export const AnswerPointText = styled.span`
   ${({ theme }) => theme.typography.body.M1};
   color: ${({ theme }) => theme.colors.grayScale["02"]};
+  flex: 1;
+  min-width: 0;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 `;
 
 export const Divider = styled.div`

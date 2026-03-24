@@ -1,7 +1,7 @@
 import { tokenStorage } from "@/lib/tokenStorage";
 import { invokeAuthFailure } from "@/lib/authFailureCallback";
 
-export const BASE_URL = "https://onedaypocket.shop";
+export const BASE_URL = import.meta.env.VITE_API_URL;
 
 export interface ApiError {
   code: string;
@@ -56,16 +56,12 @@ async function handleResponse<T>(response: Response): Promise<T> {
 
 async function refreshAndRetry<T>(
   endpoint: string,
-  init: RequestInit
+  init: RequestInit,
 ): Promise<T> {
   const refreshToken = tokenStorage.getRefreshToken();
   if (!refreshToken) {
     invokeAuthFailure();
-    throw new ApiErrorException(
-      "UNAUTHORIZED",
-      "다시 로그인해 주세요.",
-      401
-    );
+    throw new ApiErrorException("UNAUTHORIZED", "다시 로그인해 주세요.", 401);
   }
 
   const refreshRes = await fetch(`${BASE_URL}/api/auth/refresh`, {
@@ -81,7 +77,7 @@ async function refreshAndRetry<T>(
     throw new ApiErrorException(
       (data as { code?: string }).code ?? "UNAUTHORIZED",
       (data as { message?: string }).message ?? "다시 로그인해 주세요.",
-      401
+      401,
     );
   }
 
@@ -104,11 +100,10 @@ async function refreshAndRetry<T>(
 
 export async function apiClient<T>(
   endpoint: string,
-  options: RequestInit & { accessToken?: string } = {}
+  options: RequestInit & { accessToken?: string } = {},
 ): Promise<T> {
   const { accessToken: explicitToken, ...init } = options;
-  const accessToken =
-    explicitToken ?? tokenStorage.getAccessToken();
+  const accessToken = explicitToken ?? tokenStorage.getAccessToken();
 
   const headers: HeadersInit = {
     "Content-Type": "application/json",
@@ -116,7 +111,8 @@ export async function apiClient<T>(
   };
 
   if (accessToken) {
-    (headers as Record<string, string>)["Authorization"] = `Bearer ${accessToken}`;
+    (headers as Record<string, string>)["Authorization"] =
+      `Bearer ${accessToken}`;
   }
 
   const response = await fetch(`${BASE_URL}${endpoint}`, {

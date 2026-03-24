@@ -126,3 +126,8 @@ export const CheckSubTitle = styled.p`
     ${({theme}) => theme.typography.body.S0};
     color: ${({theme}) => theme.colors.grayScale["02"]};
 `;
+
+export const ErrorText = styled.p`
+    ${({theme}) => theme.typography.body.S0};
+    color: ${({theme}) => theme.colors.labelColor["06"]};
+`;

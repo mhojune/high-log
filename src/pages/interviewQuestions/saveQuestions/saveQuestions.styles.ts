@@ -39,3 +39,10 @@ export const Title = styled.h1`
   ${({ theme }) => theme.typography.head.H0};
   margin: 0;
 `;
+
+export const LoadingWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+`;

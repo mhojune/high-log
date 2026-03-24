@@ -2,12 +2,12 @@ import styled from "styled-components";
 
 type StyleType = "default" | "intermediate" | "advanced";
 
-export const LabelContainer = styled.span<{ styleType: StyleType }>`
+export const LabelContainer = styled.span<{ $styleType: StyleType }>`
   width: 57px;
   height: 29px;
   padding: 4px 16px;
   box-sizing: border-box;
-  border: 1px solid ${({ styleType, theme }) => {
+  border: 1px solid ${({ $styleType: styleType, theme }) => {
     switch (styleType) {
       case "default":
         return theme.colors.labelColor["01"];
@@ -18,7 +18,7 @@ export const LabelContainer = styled.span<{ styleType: StyleType }>`
     }
   }};
   border-radius: 999px;
-  background-color: ${({ styleType, theme }) => {
+  background-color: ${({ $styleType: styleType, theme }) => {
     switch (styleType) {
       case "default":
         return theme.colors.labelColor["02"];
@@ -28,7 +28,7 @@ export const LabelContainer = styled.span<{ styleType: StyleType }>`
         return theme.colors.labelColor["08"];
     }
   }};
-  color: ${({ styleType, theme }) => {
+  color: ${({ $styleType: styleType, theme }) => {
     switch (styleType) {
       case "default":
         return theme.colors.labelColor["00"];

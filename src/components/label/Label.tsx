@@ -26,5 +26,5 @@ export default function Label({ type }: LabelProps) {
     return "advanced"; // "advanced" || "improve"
   };
 
-  return <S.LabelContainer styleType={getStyleType(type)}>{getText(type)}</S.LabelContainer>;
+  return <S.LabelContainer $styleType={getStyleType(type)}>{getText(type)}</S.LabelContainer>;
 }

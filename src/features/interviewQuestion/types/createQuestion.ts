@@ -4,4 +4,5 @@ export interface CreateQuestionFormData {
   department: string;
   applicationType: string;
   schoolRecord: string;
+  recordId: number;
 }
