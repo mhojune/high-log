@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AuthDescription from "@/features/auth/AuthDescription";
 import LoginForm from "@/features/auth/LoginForm";
 import SignUpForm from "@/features/auth/SignUpForm";
@@ -28,9 +28,10 @@ export default function AuthPage() {
   const { mutateAsync: confirmEmail } = useConfirmEmail();
   const { mutateAsync: signUp } = useSignUp();
 
-  useEffect(() => {
-    if (activeTab === "login") setIsEmailVerified(false);
-  }, [activeTab]);
+  const handleTabChange = (tab: AuthMode) => {
+    setActiveTab(tab);
+    if (tab === "login") setIsEmailVerified(false);
+  };
 
   const showModal = (
     main: string,
@@ -167,7 +168,7 @@ export default function AuthPage() {
     setModalOpen(false);
     if (switchToLoginOnClose) {
       setSwitchToLoginOnClose(false);
-      setActiveTab("login");
+      handleTabChange("login");
     }
   };
 
@@ -180,7 +181,7 @@ export default function AuthPage() {
         <S.FormFrame>
           <S.FormFrameContent>
             <S.TabWrapper>
-              <Tab activeTab={activeTab} onTabChange={setActiveTab} />
+              <Tab activeTab={activeTab} onTabChange={handleTabChange} />
             </S.TabWrapper>
             {activeTab === "login" ? (
               <LoginForm onSubmit={handleLoginSubmit} />
