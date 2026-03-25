@@ -69,7 +69,7 @@ export default function HookingSection() {
           ))}
         </S.HookingCardStatBox>
 
-        <S.HookingEventCard to="/signup">
+        <S.HookingEventCard to="/auth">
           <S.HookingEventText>
             회원가입
             <S.HookingEventTextSub>{`하고\n`}</S.HookingEventTextSub>
