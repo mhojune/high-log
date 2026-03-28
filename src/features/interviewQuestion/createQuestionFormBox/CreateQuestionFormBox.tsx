@@ -5,6 +5,7 @@ import { DefaultButton } from "@/components/button/Button";
 import XIcon from "@/assets/icons/x.svg?react";
 import CircleQuestionMark from "@/assets/icons/circle_question_mark.svg?react";
 import DropDown from "@/components/input/DropDown";
+import FilterableFieldSelect from "@/features/interviewQuestion/createQuestionFormBox/FilterableFieldSelect";
 import RadioBox from "@/components/input/RadioBox";
 import Modal from "@/components/modal/Modal";
 import type { CreateQuestionFormData } from "@/features/interviewQuestion/types/createQuestion";
@@ -135,7 +136,7 @@ const CreateQuestionFormBox = forwardRef<
           <S.SchoolDepartmentRow>
             <S.DropDownGroup>
               <S.FormFieldRowLabel>지원하는 학교</S.FormFieldRowLabel>
-              <DropDown
+              <FilterableFieldSelect
                 width="340px"
                 options={SCHOOL_OPTIONS}
                 value={school}
@@ -146,7 +147,7 @@ const CreateQuestionFormBox = forwardRef<
             </S.DropDownGroup>
             <S.DropDownGroup>
               <S.FormFieldRowLabel>학과</S.FormFieldRowLabel>
-              <DropDown
+              <FilterableFieldSelect
                 width="340px"
                 options={departmentOptions}
                 value={department}
@@ -215,7 +216,7 @@ const CreateQuestionFormBox = forwardRef<
                     text="업로드하러 가기"
                     onClick={() => {
                       setIsSchoolRecordHintOpen(false);
-                      navigate("/record_management");
+                      navigate("/record_management/upload");
                     }}
                   />
                 </S.SchoolRecordHintPopoverButtonWrap>
@@ -264,7 +265,7 @@ const CreateQuestionFormBox = forwardRef<
         leftButtonText="닫기"
         rightButtonText="업로드 하기"
         onLeftButtonClick={() => onBackToMain?.()}
-        onRightButtonClick={() => navigate("/record_management")}
+        onRightButtonClick={() => navigate("/record_management/upload")}
       />
     </S.CreateFormBox>
   );

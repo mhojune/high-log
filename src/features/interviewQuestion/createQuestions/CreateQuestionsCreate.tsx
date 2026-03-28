@@ -1,5 +1,5 @@
 import { useRef, useState, useEffect } from "react";
-import { useNavigate, useBlocker } from "react-router-dom";
+import { useNavigate, useBlocker, Navigate } from "react-router-dom";
 import * as S from "@/features/interviewQuestion/createQuestions/CreateQuestions.styles";
 import CreateQuestionFormBox, {
   type CreateQuestionFormBoxRef,
@@ -11,29 +11,11 @@ import { useAuth } from "@/contexts/AuthContext";
 
 export default function CreateQuestionsCreate() {
   const navigate = useNavigate();
-  const { isAuthenticated } = useAuth();
-  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const { isAuthenticated, isLoading } = useAuth();
   const formRef = useRef<CreateQuestionFormBoxRef>(null);
   const [isLeaveModalOpen, setIsLeaveModalOpen] = useState(false);
   const [hasContent, setHasContent] = useState(false);
   const pendingActionRef = useRef<(() => void) | null>(null);
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      setIsLoginModalOpen(true);
-    } else {
-      setIsLoginModalOpen(false);
-    }
-  }, [isAuthenticated]);
-
-  const handleCloseLoginModal = () => {
-    setIsLoginModalOpen(false);
-  };
-
-  const handleLoginClick = () => {
-    setIsLoginModalOpen(false);
-    navigate("/auth");
-  };
 
   const blocker = useBlocker(
     ({ currentLocation, nextLocation }) =>
@@ -72,6 +54,13 @@ export default function CreateQuestionsCreate() {
     navigate("/question/loading", { state: data });
   };
 
+  if (isLoading) {
+    return null;
+  }
+  if (!isAuthenticated) {
+    return <Navigate to="/auth" replace />;
+  }
+
   return (
     <S.ContentWrapper>
       <S.CreateHeaderSection>
@@ -87,16 +76,6 @@ export default function CreateQuestionsCreate() {
         onSubmit={handleSubmit}
         onFormStateChange={setHasContent}
         onBackToMain={() => navigate("/")}
-      />
-      <Modal
-        isOpen={isLoginModalOpen}
-        onClose={handleCloseLoginModal}
-        mainTitle="로그인 후 사용해주세요"
-        subTitle="로그인이 필요한 서비스 입니다"
-        leftButtonText="닫기"
-        rightButtonText="로그인 하기"
-        onLeftButtonClick={handleCloseLoginModal}
-        onRightButtonClick={handleLoginClick}
       />
       <Modal
         isOpen={isLeaveModalOpen}

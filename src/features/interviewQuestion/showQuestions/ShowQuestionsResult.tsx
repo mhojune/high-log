@@ -96,7 +96,7 @@ export default function ShowQuestionsResult() {
     isLoading: isQuestionsLoading,
   } = useQuestionList(setId); // category 제외 - 전체 조회 (디버깅용)
 
-  const toggleBookmark = useToggleBookmark(setId, activeTab.category);
+  const toggleBookmark = useToggleBookmark(setId, "all");
 
   useEffect(() => {
     if (!recordId || !title) {
