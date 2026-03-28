@@ -33,6 +33,8 @@ function RecordDetailContent({ record }: { record: RecordDetailType }) {
     handleModalClose,
     handleToastClose,
     navigate,
+    handleFileSelect,
+    isUploading,
   } = useRecordDetail(record);
 
   const initialQuestion = record.questionSets?.length || 0;
@@ -56,7 +58,7 @@ function RecordDetailContent({ record }: { record: RecordDetailType }) {
                       />
                       <DefaultButton
                         width={72}
-                        type="secondary"
+                        type={isUploading ? "disabled" : "secondary"}
                         text="저장"
                         onClick={handleSave}
                       />
@@ -90,9 +92,7 @@ function RecordDetailContent({ record }: { record: RecordDetailType }) {
               status={initialQuestion > 0 ? "disabled" : fileStatus}
               fileName={uploadedFileName}
               onRemove={handleFileRemove}
-              onFileSelect={() =>
-                console.log("File re-upload/replace logic if needed")
-              }
+              onFileSelect={handleFileSelect}
             />
             <UnderBarButton
               text={"해당 생기부 삭제하기"}

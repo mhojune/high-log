@@ -10,6 +10,7 @@ import LoadingQuestions from "@/pages/interviewQuestions/loadingQuestions";
 import ShowQuestions from "@/pages/interviewQuestions/showQuestions";
 import SaveQuestions from "@/pages/interviewQuestions/saveQuestions";
 import InterviewPractice from "@/pages/interviewPractice";
+import InterviewStorage from "@/pages/interviewPractice/storage";
 import MyPage from "@/pages/myPage";
 import Support from "@/pages/support";
 import Privacy from "@/pages/privacy";
@@ -20,6 +21,7 @@ import RecordDetail from "@/pages/recordManagement/detail";
 import InterviewResult from "@/pages/interviewPractice/interviewResult";
 import QuestionsList from "@/pages/recordManagement/detail/questionsList";
 import SupportDetail from "@/pages/support/detail";
+import Faq from "@/pages/faq";
 
 const router = createBrowserRouter([
   {
@@ -75,6 +77,14 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "interview/practice/storage",
+        element: (
+          <ProtectedRoute>
+            <InterviewStorage />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: "interview/result",
         element: <InterviewResult />,
       },
@@ -121,6 +131,10 @@ const router = createBrowserRouter([
       {
         path: "support/:id",
         element: <SupportDetail />,
+      },
+      {
+        path: "faq",
+        element: <Faq />,
       },
     ],
   },

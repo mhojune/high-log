@@ -57,19 +57,17 @@ export async function registerRecordAndStream(
 
   const reader = response.body?.getReader();
   if (!reader) {
-    throw new ApiErrorException(
-      "STREAM_ERROR",
-      "스트림을 읽을 수 없습니다.",
-    );
+    throw new ApiErrorException("STREAM_ERROR", "스트림을 읽을 수 없습니다.");
   }
 
   const decoder = new TextDecoder();
   let buffer = "";
+  let isCompleted = false;
 
   try {
     while (true) {
       const { done, value } = await reader.read();
-      
+
       if (value) {
         buffer += decoder.decode(value, { stream: true });
       }
@@ -83,7 +81,9 @@ export async function registerRecordAndStream(
 
       while (eventEndIndex !== -1) {
         const eventText = buffer.slice(0, eventEndIndex).trim();
-        buffer = buffer.slice(eventEndIndex + (buffer[eventEndIndex + 1] === "\n" ? 2 : 1));
+        buffer = buffer.slice(
+          eventEndIndex + (buffer[eventEndIndex + 1] === "\n" ? 2 : 1),
+        );
 
         if (eventText.startsWith("data:")) {
           try {
@@ -97,11 +97,25 @@ export async function registerRecordAndStream(
             }
             const event = JSON.parse(json) as RegisterRecordSSEEvent;
             console.log("[SSE Event]", event);
-            onProgress?.(event.progress);
+            if (typeof event.progress === "number") {
+              onProgress?.(event.progress);
+            }
+
+            if (event.type === "error") {
+              throw new ApiErrorException(
+                "REGISTER_FAILED",
+                event.message ?? "생기부 처리 중 오류가 발생했습니다.",
+              );
+            }
+
             if (event.type === "complete") {
+              isCompleted = true;
               return;
             }
           } catch (err) {
+            if (err instanceof ApiErrorException) {
+              throw err;
+            }
             console.error("[SSE Parse Error]", err, "Raw:", eventText);
           }
         }
@@ -122,12 +136,26 @@ export async function registerRecordAndStream(
               if (json) {
                 const event = JSON.parse(json) as RegisterRecordSSEEvent;
                 console.log("[SSE Final Event]", event);
-                onProgress?.(event.progress);
+                if (typeof event.progress === "number") {
+                  onProgress?.(event.progress);
+                }
+
+                if (event.type === "error") {
+                  throw new ApiErrorException(
+                    "REGISTER_FAILED",
+                    event.message ?? "생기부 처리 중 오류가 발생했습니다.",
+                  );
+                }
+
                 if (event.type === "complete") {
+                  isCompleted = true;
                   return;
                 }
               }
             } catch (err) {
+              if (err instanceof ApiErrorException) {
+                throw err;
+              }
               console.error("[SSE Final Parse Error]", err, "Raw:", trimmed);
             }
           }
@@ -135,11 +163,23 @@ export async function registerRecordAndStream(
         break;
       }
     }
+
+    if (!isCompleted) {
+      throw new ApiErrorException(
+        "REGISTER_INCOMPLETE",
+        "생기부 생성이 완료되지 않았습니다. 잠시 후 다시 시도해 주세요.",
+      );
+    }
   } catch (err) {
     console.error("[SSE Stream Error]", err);
+    if (err instanceof ApiErrorException) {
+      throw err;
+    }
     throw new ApiErrorException(
       "STREAM_ERROR",
-      err instanceof Error ? err.message : "스트림 읽기 중 오류가 발생했습니다.",
+      err instanceof Error
+        ? err.message
+        : "스트림 읽기 중 오류가 발생했습니다.",
     );
   } finally {
     reader.releaseLock();

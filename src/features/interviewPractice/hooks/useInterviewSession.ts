@@ -10,6 +10,9 @@ const INITIAL_QUESTION = "자기소개 해주세요.";
 interface UseInterviewSessionParams {
   recordId: number;
   difficulty: "Easy" | "Normal" | "Hard";
+  univ: string;
+  department: string;
+  enabled: boolean;
 }
 
 interface ModalMessage {
@@ -46,12 +49,13 @@ const getErrorMessage = (error: unknown): string | null => {
 export default function useInterviewSession({
   recordId,
   difficulty,
+  univ,
+  department,
+  enabled,
 }: UseInterviewSessionParams) {
   const [text, setText] = useState<string>("");
-  const [messages, setMessages] = useState<Message[]>([
-    { id: 1, sender: "AI", text: INITIAL_QUESTION },
-  ]);
-  const [threadId, setThreadId] = useState<string | null>(null);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [sessionId, setSessionId] = useState<string | null>(null);
   const [isInterviewFinished, setIsInterviewFinished] =
     useState<boolean>(false);
   const [responseTimer, setResponseTimer] = useState<number>(0);
@@ -62,6 +66,7 @@ export default function useInterviewSession({
   });
 
   const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const hasInitializedRef = useRef(false);
 
   const stopTimer = useCallback(() => {
     if (timerIntervalRef.current) {
@@ -91,20 +96,23 @@ export default function useInterviewSession({
   const { mutate: mutateInitialize, isPending: isInitializePending } =
     useInitializeInterviewText({
       onSuccess: (data) => {
-        if (!data.thread_id) {
+        if (!data.session_id) {
           setModalMessage({
             mainTitle: "면접 시작 실패",
-            subTitle: "thread_id를 받지 못해 면접을 진행할 수 없습니다.",
+            subTitle: "session_id를 받지 못해 면접을 진행할 수 없습니다.",
           });
           setIsModalOpen(true);
           stopTimer();
           return;
         }
 
-        setThreadId(data.thread_id);
-        setMessages((prev) => [
-          ...prev,
-          { id: prev.length + 1, sender: "AI", text: data.next_question },
+        setSessionId(data.session_id);
+        setMessages([
+          {
+            id: 1,
+            sender: "AI",
+            text: data.next_question || INITIAL_QUESTION,
+          },
         ]);
         setIsInterviewFinished(data.is_finished);
 
@@ -145,12 +153,25 @@ export default function useInterviewSession({
   );
 
   useEffect(() => {
-    startTimer();
+    if (!enabled || hasInitializedRef.current) {
+      return;
+    }
+
+    hasInitializedRef.current = true;
+    mutateInitialize({
+      record_id: recordId,
+      difficulty,
+      target_university: univ,
+      target_department: department,
+    });
+  }, [department, difficulty, enabled, mutateInitialize, recordId, univ]);
+
+  useEffect(() => {
     return stopTimer;
-  }, [startTimer, stopTimer]);
+  }, [stopTimer]);
 
   const handleSendMessage = () => {
-    if (!text.trim() || isInterviewFinished) {
+    if (!text.trim() || isInterviewFinished || !sessionId) {
       return;
     }
 
@@ -164,18 +185,8 @@ export default function useInterviewSession({
     setText("");
     stopTimer();
 
-    if (!threadId) {
-      mutateInitialize({
-        record_id: recordId,
-        difficulty,
-        first_answer: userMessage.text,
-        response_time: responseTimer,
-      });
-      return;
-    }
-
     mutateChat({
-      threadId,
+      sessionId,
       request: {
         answer: userMessage.text,
         response_time: responseTimer,
@@ -195,6 +206,7 @@ export default function useInterviewSession({
     messages,
     isInterviewFinished,
     responseTimer,
+    isSessionReady: !!sessionId,
     isPending: isInitializePending || isChatPending,
     isModalOpen,
     modalMessage,

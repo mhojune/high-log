@@ -15,7 +15,6 @@ export const AUTH_DESCRIPTION = {
 
 export interface AuthFeatureBlock {
   title: string;
-  description: string;
 }
 
 export interface SignUpAgreementItem {
@@ -32,16 +31,7 @@ export const SIGN_UP_AGREEMENT_ITEMS: SignUpAgreementItem[] = [
 ];
 
 export const AUTH_FEATURE_BLOCKS: AuthFeatureBlock[] = [
-  {
-    title: "질문 자동 생성",
-    description: "세특/창체/동아리/진로/독서/수상에서 2~5개 질문 묶음 생성",
-  },
-  {
-    title: "답변 포인트 제공",
-    description: "STAR 구조 + 근거/수치화 기준으로 답변 방향을 제시",
-  },
-  {
-    title: "면접 연습 기록",
-    description: "세션별 평균 시간/구조 점수/복습 포인트를 저장",
-  },
+  { title: "질문 자동 생성" },
+  { title: "답변 포인트 제공" },
+  { title: "면접 연습 기록" },
 ];

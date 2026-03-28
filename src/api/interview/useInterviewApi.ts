@@ -30,15 +30,16 @@ export function useChatInterviewText(
   options?: UseMutationOptions<
     InterviewChatResponse,
     Error,
-    { threadId: string; request: InterviewChatRequest }
+    { sessionId: string; request: InterviewChatRequest }
   >,
 ): UseMutationResult<
   InterviewChatResponse,
   Error,
-  { threadId: string; request: InterviewChatRequest }
+  { sessionId: string; request: InterviewChatRequest }
 > {
   return useMutation({
-    mutationFn: ({ threadId, request }) => chatInterviewText(threadId, request),
+    mutationFn: ({ sessionId, request }) =>
+      chatInterviewText(sessionId, request),
     ...options,
   });
 }

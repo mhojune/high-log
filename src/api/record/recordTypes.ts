@@ -22,8 +22,9 @@ export interface CreateRecordRequest {
 }
 
 export interface RegisterRecordSSEEvent {
-  type: "processing" | "complete";
+  type: "processing" | "complete" | "error";
   progress: number;
+  message?: string;
 }
 
 export interface QuestionSet {

@@ -8,18 +8,18 @@ import type {
 export async function initializeInterviewText(
   request: InterviewInitializeRequest,
 ): Promise<InterviewChatResponse> {
-  return apiClient<InterviewChatResponse>("/ai/interview/initialize/text", {
+  return apiClient<InterviewChatResponse>("/ai/interview/start", {
     method: "POST",
     body: JSON.stringify(request),
   });
 }
 
 export async function chatInterviewText(
-  threadId: string,
+  session_id: string,
   request: InterviewChatRequest,
 ): Promise<InterviewChatResponse> {
   return apiClient<InterviewChatResponse>(
-    `/ai/interview/chat/text/${threadId}`,
+    `/ai/interview/chat/text/${session_id}`,
     {
       method: "POST",
       body: JSON.stringify(request),

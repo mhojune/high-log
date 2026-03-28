@@ -11,6 +11,8 @@ interface PracticeStep2Props {
   onNext: () => void;
   recordId: number | null;
   difficulty: "Easy" | "Normal" | "Hard" | null;
+  univ: string;
+  department: string;
   mode: "text" | "voice" | null;
 }
 
@@ -18,14 +20,20 @@ export default function PracticeStep2({
   onNext,
   recordId,
   difficulty,
+  univ,
+  department,
   mode,
 }: PracticeStep2Props) {
+  const isInterviewConfigReady =
+    !!recordId && !!difficulty && !!mode && !!univ && !!department;
+
   const {
     text,
     setText,
     messages,
     isInterviewFinished,
     responseTimer,
+    isSessionReady,
     isPending,
     isModalOpen,
     modalMessage,
@@ -36,9 +44,12 @@ export default function PracticeStep2({
   } = useInterviewSession({
     recordId: recordId ?? 0,
     difficulty: difficulty ?? "Easy",
+    univ,
+    department,
+    enabled: isInterviewConfigReady,
   });
 
-  if (!recordId || !difficulty || !mode) {
+  if (!isInterviewConfigReady) {
     return (
       <S.PageContainer>
         <Title text="면접 연습" />
@@ -70,6 +81,7 @@ export default function PracticeStep2({
             text={text}
             setText={setText}
             isPending={isPending}
+            isSessionReady={isSessionReady}
             isInterviewFinished={isInterviewFinished}
             onSend={handleSendMessage}
           />
