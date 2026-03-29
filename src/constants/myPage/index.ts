@@ -8,10 +8,11 @@ export const MY_PAGE_TABS: { id: MyPageTabId; label: string }[] = [
   { id: "settings", label: "설정" },
 ];
 
-export const USAGE_ANALYSIS_ITEMS: { id: string; value: string; label: string }[] = [
-  { id: "1", value: "0", label: "내 질문 보관함 문항 수" },
-  { id: "2", value: "0", label: "이번 주 연습 세션" },
-  { id: "3", value: "0", label: "최근 평균 답변 시간" },
+/** 대시보드 이용 현황 카드 라벨 (값은 API 순서: 북마크 수 → 세션 수 → 평균) */
+export const USAGE_ANALYSIS_LABELS: { id: string; label: string }[] = [
+  { id: "1", label: "내 질문 보관함 문항 수" },
+  { id: "2", label: "이번 주 연습 세션" },
+  { id: "3", label: "최근 평균 답변 시간" },
 ];
 
 export const EVALUATION_ITEMS: {

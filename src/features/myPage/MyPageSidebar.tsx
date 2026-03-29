@@ -1,13 +1,14 @@
 import { useAuth } from "@/contexts/AuthContext";
 import ChevronRight from "@/assets/icons/chevron_right.svg?react";
-import * as S from "./MyPageSidebar.styles";
+import * as S from "@/features/myPage/MyPageSidebar.styles";
 import { MY_PAGE_TABS } from "@/constants/myPage";
 import type { MyPageTabId } from "@/constants/myPage";
+import { useMyPageDashboard } from "@/api/myPage/useMyPageDashboard";
 
-function formatJoinDate(dateStr: string | undefined): string {
-  if (!dateStr) return "-";
-  const date = new Date(dateStr);
-  return `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, "0")}.${String(date.getDate()).padStart(2, "0")}`;
+/** API registDate: YYYYMMDD → YYYY.MM.DD */
+function formatRegistDateDot(yyyymmdd: string | undefined): string {
+  if (!yyyymmdd || yyyymmdd.length !== 8) return "-";
+  return `${yyyymmdd.slice(0, 4)}.${yyyymmdd.slice(4, 6)}.${yyyymmdd.slice(6, 8)}`;
 }
 
 type MyPageSidebarProps = {
@@ -16,8 +17,8 @@ type MyPageSidebarProps = {
 };
 
 export default function MyPageSidebar({ activeTab, onTabChange }: MyPageSidebarProps) {
-  const { user, logout } = useAuth();
-  const joinDate = user?.createdAt;
+  const { logout } = useAuth();
+  const { data: dashboard, isLoading: isDashboardLoading } = useMyPageDashboard();
 
   const handleWithdraw = () => {
     // TODO: 회원 탈퇴 구현
@@ -29,8 +30,17 @@ export default function MyPageSidebar({ activeTab, onTabChange }: MyPageSidebarP
         <S.SidebarUserRow>
           <S.SidebarUserAvatar />
           <S.SidebarUserInfo>
-            <S.SidebarUserName>{user?.name ? `${user.name} 님` : "-"}</S.SidebarUserName>
-            <S.SidebarUserJoinDate>가입일: {formatJoinDate(joinDate)}</S.SidebarUserJoinDate>
+            <S.SidebarUserName>
+              {isDashboardLoading
+                ? "…"
+                : dashboard?.userName
+                  ? `${dashboard.userName} 님`
+                  : "-"}
+            </S.SidebarUserName>
+            <S.SidebarUserJoinDate>
+              가입일:{" "}
+              {isDashboardLoading ? "…" : formatRegistDateDot(dashboard?.registDate)}
+            </S.SidebarUserJoinDate>
           </S.SidebarUserInfo>
         </S.SidebarUserRow>
       </S.SidebarUserSection>

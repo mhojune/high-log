@@ -11,6 +11,7 @@ export const DashboardUserName = styled.p`
   color: ${({ theme }) => theme.colors.grayScale["00"]};
   margin-top: 19px;
   margin-left: 10px;
+  margin-bottom: 0;
 `;
 
 export const UsageAnalysisSection = styled.section`
