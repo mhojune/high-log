@@ -5,6 +5,8 @@ import ListFilter from "@/components/filter/ListFilter";
 import Pagination from "@/components/common/pagination/Pagination";
 import { useToggleBookmarkFromStorage } from "@/api/bookmark/useBookmarkApi";
 import type { BookmarkItem } from "@/api/bookmark/bookmarkTypes";
+import { useRecordList } from "@/api/record/useRecordListApi";
+import { useAuth } from "@/contexts/AuthContext";
 
 const PAGE_SIZE = 6;
 
@@ -46,6 +48,14 @@ export default function SaveQuestionsList({ bookmarks }: SaveQuestionsListProps)
   const [filterText, setFilterText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const toggleBookmark = useToggleBookmarkFromStorage();
+  const { isAuthenticated } = useAuth();
+  const { data: recordListData } = useRecordList({
+    enabled: isAuthenticated,
+  });
+  const recordTitleOptions = useMemo(
+    () => recordListData?.records.map((r) => r.title) ?? [],
+    [recordListData]
+  );
 
   const filteredBookmarks = useMemo(() => {
     if (!filterText.trim()) return bookmarks;
@@ -76,6 +86,7 @@ export default function SaveQuestionsList({ bookmarks }: SaveQuestionsListProps)
           setText={setFilterText}
           placeholder="생기부를 선택해 주세요"
           onClick={() => {}}
+          data={recordTitleOptions}
         />
       </S.HeaderBar>
       <S.QuestionList>
