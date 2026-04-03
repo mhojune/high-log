@@ -48,6 +48,16 @@ export const AccountFieldInput = styled.input`
   }
 `;
 
+export const AccountEmailInput = styled(AccountFieldInput)`
+  background-color: ${({ theme }) => theme.colors.grayScale["08"]};
+  color: ${({ theme }) => theme.colors.grayScale["00"]};
+  cursor: default;
+
+  &:read-only {
+    cursor: default;
+  }
+`;
+
 export const AccountButtonGroup = styled.div`
   display: flex;
   gap: 10px;

@@ -14,11 +14,6 @@ export interface AccountInfoResponse {
   email: string;
 }
 
-/** GET /api/users/me/setting */
-export interface SettingResponse {
-  responseAutoSave: boolean;
-}
-
 /** PATCH /api/users/me/password */
 export interface ChangePasswordRequest {
   currentPassword: string;

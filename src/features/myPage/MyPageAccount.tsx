@@ -29,11 +29,13 @@ export default function MyPageAccount({ onNavigateToPasswordChange }: MyPageAcco
           </S.AccountField>
           <S.AccountField>
             <S.AccountFieldLabel htmlFor="account-email">이메일</S.AccountFieldLabel>
-            <S.AccountFieldInput
+            <S.AccountEmailInput
               key={`email-${fieldsKey}`}
               id="account-email"
               type="email"
-              placeholder="이메일을 입력해주세요"
+              readOnly
+              autoComplete="email"
+              aria-readonly="true"
               defaultValue={data?.email ?? ""}
             />
           </S.AccountField>

@@ -1,6 +1,6 @@
 import { useMemo } from "react";
 import * as S from "@/features/myPage/MyPageDashboard.styles";
-import { USAGE_ANALYSIS_LABELS, EVALUATION_ITEMS } from "@/constants/myPage";
+import { USAGE_ANALYSIS_LABELS } from "@/constants/myPage";
 import { useMyPageDashboard } from "@/api/myPage/useMyPageDashboard";
 
 export default function MyPageDashboard() {
@@ -36,19 +36,6 @@ export default function MyPageDashboard() {
           ))}
         </S.UsageAnalysisGrid>
       </S.UsageAnalysisSection>
-      <S.EvaluationSection>
-        <S.EvaluationList>
-          {EVALUATION_ITEMS.map((item) => (
-            <S.EvaluationCard key={item.id}>
-              <S.EvaluationCardTextWrapper>
-                <S.EvaluationCardTitle>{item.title}</S.EvaluationCardTitle>
-                <S.EvaluationCardDescription>{item.description}</S.EvaluationCardDescription>
-              </S.EvaluationCardTextWrapper>
-              <S.EvaluationCardStatus>{item.status}</S.EvaluationCardStatus>
-            </S.EvaluationCard>
-          ))}
-        </S.EvaluationList>
-      </S.EvaluationSection>
     </S.DashboardContent>
   );
 }

@@ -4,7 +4,6 @@ import type {
   ChangePasswordRequest,
   ChangePasswordResponse,
   DashboardResponse,
-  SettingResponse,
   WithdrawAccountRequest,
   WithdrawAccountResponse,
 } from "@/api/myPage/myPageTypes";
@@ -23,14 +22,7 @@ export async function getAccountInfo(): Promise<AccountInfoResponse> {
   });
 }
 
-/** 7-3. 설정 */
-export async function getSetting(): Promise<SettingResponse> {
-  return apiClient<SettingResponse>("/api/users/me/setting", {
-    method: "GET",
-  });
-}
-
-/** 7-4. 비밀번호 변경 */
+/** 7-3. 비밀번호 변경 */
 export async function changePassword(
   body: ChangePasswordRequest
 ): Promise<ChangePasswordResponse> {
@@ -40,7 +32,7 @@ export async function changePassword(
   });
 }
 
-/** 7-5. 회원탈퇴 */
+/** 7-4. 회원탈퇴 */
 export async function withdrawAccount(
   body: WithdrawAccountRequest
 ): Promise<WithdrawAccountResponse> {

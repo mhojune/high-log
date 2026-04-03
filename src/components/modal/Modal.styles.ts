@@ -31,23 +31,40 @@ export const Content = styled.div`
 `;
 
 export const TitleWrapper = styled.div`
-  padding: 80px 0 72px 0;
+  padding: 80px 40px 72px 40px;
   display: flex;
   flex-direction: column;
   gap: 8px;
   align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+  min-width: 0;
 `;
 
 export const MainTitle = styled.h2`
   ${({ theme }) => theme.typography.head.H3}
   color: ${({ theme }) => theme.colors.grayScale["00"]};
   margin: 0;
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 `;
 
 export const SubTitle = styled.p`
   ${({ theme }) => theme.typography.body.XL}
   color: ${({ theme }) => theme.colors.grayScale["02"]};
   margin: 0;
+  width: 100%;
+  max-width: 100%;
+  text-align: center;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+  max-height: min(40vh, 220px);
+  overflow-y: auto;
+  padding: 0 4px;
+  box-sizing: border-box;
 `;
 
 export const ButtonContainer = styled.div`

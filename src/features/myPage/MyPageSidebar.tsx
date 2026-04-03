@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import ChevronRight from "@/assets/icons/chevron_right.svg?react";
 import * as S from "@/features/myPage/MyPageSidebar.styles";
@@ -17,11 +18,12 @@ type MyPageSidebarProps = {
 };
 
 export default function MyPageSidebar({ activeTab, onTabChange }: MyPageSidebarProps) {
+  const navigate = useNavigate();
   const { logout } = useAuth();
   const { data: dashboard, isLoading: isDashboardLoading } = useMyPageDashboard();
 
   const handleWithdraw = () => {
-    // TODO: 회원 탈퇴 구현
+    navigate("/mypage/withdraw");
   };
 
   return (
