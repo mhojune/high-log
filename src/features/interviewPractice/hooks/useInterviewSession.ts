@@ -112,6 +112,7 @@ export default function useInterviewSession({
             id: 1,
             sender: "AI",
             text: data.next_question || INITIAL_QUESTION,
+            state: "success",
           },
         ]);
         setIsInterviewFinished(data.is_finished);
@@ -132,10 +133,37 @@ export default function useInterviewSession({
   const { mutate: mutateChat, isPending: isChatPending } = useChatInterviewText(
     {
       onSuccess: (data) => {
-        setMessages((prev) => [
-          ...prev,
-          { id: prev.length + 1, sender: "AI", text: data.next_question },
-        ]);
+        setMessages((prev) => {
+          const lastIndex = prev.length - 1;
+          const nextQuestionText = data.next_question || "";
+
+          if (
+            lastIndex >= 0 &&
+            prev[lastIndex].sender === "AI" &&
+            prev[lastIndex].state === "pending"
+          ) {
+            const newMessages = [...prev];
+            // 기존 pending 메시지를 실제 데이터와 'typing' 상태로 업데이트
+            newMessages[lastIndex] = {
+              ...newMessages[lastIndex],
+              text: nextQuestionText,
+              state: data.is_finished ? "success" : "typing", // If finished, no typing indicator
+            };
+            return newMessages;
+          }
+
+         
+          return [
+            ...prev,
+            {
+              id: prev.length + 1,
+              sender: "AI",
+              text: nextQuestionText,
+              state: data.is_finished ? "success" : "typing",
+            },
+          ];
+        });
+
         setIsInterviewFinished(data.is_finished);
 
         if (data.is_finished) {
@@ -147,11 +175,11 @@ export default function useInterviewSession({
         startTimer();
       },
       onError: (error) => {
+        setMessages((prev) => prev.filter((m) => m.state !== "pending"));
         handleInterviewError(error, "면접 진행 중 오류가 발생했습니다.");
       },
     },
   );
-
   useEffect(() => {
     if (!enabled || hasInitializedRef.current) {
       return;
@@ -179,9 +207,19 @@ export default function useInterviewSession({
       id: messages.length + 1,
       sender: "User",
       text,
+      state: "success",
     };
 
-    setMessages((prev) => [...prev, userMessage]);
+    setMessages((prev) => [
+      ...prev,
+      userMessage,
+      {
+        id: prev.length + 2, 
+        sender: "AI",
+        text: "", 
+        state: "pending",
+      },
+    ]);
     setText("");
     stopTimer();
 
@@ -206,8 +244,9 @@ export default function useInterviewSession({
     messages,
     isInterviewFinished,
     responseTimer,
+    isPending: isChatPending,
+    isInitializing: isInitializePending,
     isSessionReady: !!sessionId,
-    isPending: isInitializePending || isChatPending,
     isModalOpen,
     modalMessage,
     closeModal: () => setIsModalOpen(false),

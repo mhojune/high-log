@@ -1,4 +1,9 @@
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
+const bounce = keyframes`
+  0%, 80%, 100% { transform: scale(0); }
+  40% { transform: scale(1); }
+`;
 
 export const PageContainer = styled.div`
   display: flex;
@@ -73,9 +78,32 @@ export const AIChatBox = styled.div`
   max-width: 80%;
 `;
 
-export const AIChatText = styled.p`
+export const AIChatText = styled.div`
   ${({ theme }) => theme.typography.body.L1};
   color: ${({ theme }) => theme.colors.grayScale["00"]};
+`;
+
+export const TypingIndicator = styled.div`
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  height: 24px;
+
+  span {
+    width: 6px;
+    height: 6px;
+    background-color: ${({ theme }) => theme.colors.grayScale["05"]};
+    border-radius: 50%;
+    display: inline-block;
+    animation: ${bounce} 1.4s infinite ease-in-out both;
+
+    &:nth-child(1) {
+      animation-delay: -0.32s;
+    }
+    &:nth-child(2) {
+      animation-delay: -0.16s;
+    }
+  }
 `;
 
 export const UserChatBox = styled.div`
@@ -89,7 +117,7 @@ export const UserChatBox = styled.div`
   max-width: 80%;
 `;
 
-export const UserChatText = styled.p`
+export const UserChatText = styled.div`
   ${({ theme }) => theme.typography.body.L0};
   color: ${({ theme }) => theme.colors.grayScale["11"]};
 `;

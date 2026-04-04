@@ -39,7 +39,9 @@ export default function PracticeStep2AnswerInput({
       <DefaultButton
         width={100}
         type={isSendDisabled ? "disabled" : "primary"}
-        text={isPending ? "전송 중..." : isSessionReady ? "전송" : "준비 중..."}
+        text={
+          isPending ? "전송 중..." : !isSessionReady ? "준비 중..." : "전송"
+        }
         onClick={isSendDisabled ? undefined : onSend}
       />
     </S.AnswerButtonBox>
