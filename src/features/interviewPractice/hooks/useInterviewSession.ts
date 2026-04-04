@@ -239,6 +239,7 @@ export default function useInterviewSession({
   };
 
   return {
+    sessionId,
     text,
     setText,
     messages,

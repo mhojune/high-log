@@ -1,5 +1,6 @@
 import { apiClient } from "@/api/client";
 import type {
+  InterviewAnalyzeResponse,
   InterviewChatRequest,
   InterviewChatResponse,
   InterviewInitializeRequest,
@@ -23,6 +24,17 @@ export async function chatInterviewText(
     {
       method: "POST",
       body: JSON.stringify(request),
+    },
+  );
+}
+
+export async function getInterviewAnalyze(
+  session_id: string,
+): Promise<InterviewAnalyzeResponse> {
+  return apiClient<InterviewAnalyzeResponse>(
+    `/ai/interview/analyze/${session_id}`,
+    {
+      method: "GET",
     },
   );
 }

@@ -15,6 +15,7 @@ export default function InterviewPractice() {
   const [selectedMode, setSelectedMode] = useState<"text" | "voice" | null>(
     null,
   );
+  const [sessionId, setSessionId] = useState<string>("");
 
   const handleSettingsComplete = (
     recordId: number,
@@ -31,13 +32,18 @@ export default function InterviewPractice() {
     setStep(2);
   };
 
+  const handlePracticeComplete = (id: string) => {
+    setSessionId(id);
+    setStep(3);
+  };
+
   return (
     <S.InterviewPracticeContainer>
       {step === 1 ? (
         <PracticeStep1 onSettingsComplete={handleSettingsComplete} />
       ) : step === 2 ? (
         <PracticeStep2
-          onNext={() => setStep(3)}
+          onNext={handlePracticeComplete}
           recordId={selectedRecordId}
           difficulty={selectedDifficulty}
           univ={selectedUniv}
@@ -45,7 +51,7 @@ export default function InterviewPractice() {
           mode={selectedMode}
         />
       ) : (
-        <PracticeStep3 />
+        <PracticeStep3 sessionId={sessionId} />
       )}
     </S.InterviewPracticeContainer>
   );

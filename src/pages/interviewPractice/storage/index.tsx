@@ -3,29 +3,33 @@ import ListFilter from "@/components/filter/ListFilter";
 import DateFilter from "@/components/filter/DateFilter";
 import Title from "@/components/title/Title";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import * as S from "@/pages/interviewPractice/storage/InterviewStorage.styles";
 
 const MOCK_DATA = [
   {
     id: 1,
+    sessionId: "dummy_session_id_1",
     date: "오늘 10:20",
-    realDate: new Date(),
+    realDate: new Date(), // Today
     count: 5,
     tags: ["동아리", "세특"],
     duration: "9:45",
   },
   {
     id: 2,
+    sessionId: "dummy_session_id_2",
     date: "어제 22:05",
-    realDate: new Date(new Date().setDate(new Date().getDate() - 1)),
+    realDate: new Date(new Date().setDate(new Date().getDate() - 1)), // Yesterday
     count: 3,
     tags: ["세특", "동아리"],
     duration: "12:20",
   },
   {
     id: 3,
+    sessionId: "dummy_session_id_3",
     date: "3일 전 19:40",
-    realDate: new Date(new Date().setDate(new Date().getDate() - 3)),
+    realDate: new Date(new Date().setDate(new Date().getDate() - 3)), // 3 days ago
     count: 4,
     tags: ["세특", "진로"],
     duration: "15:00",
@@ -35,6 +39,7 @@ const MOCK_DATA = [
 const ITEM_OPTIONS = ["전체", "세특", "동아리", "진로"];
 
 export default function InterviewStorage() {
+  const navigate = useNavigate();
   const [itemFilterText, setItemFilterText] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
@@ -147,7 +152,7 @@ export default function InterviewStorage() {
                         width={100}
                         type="secondary"
                         text="결과 보기"
-                        onClick={() => {}}
+                        onClick={() => navigate(`/interview/result/${item.sessionId}`)}
                       />
                     </S.TableContentBox>
                   ))}

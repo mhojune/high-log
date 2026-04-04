@@ -85,7 +85,7 @@ const router = createBrowserRouter([
         ),
       },
       {
-        path: "interview/result",
+        path: "interview/result/:sessionId",
         element: <InterviewResult />,
       },
       {
