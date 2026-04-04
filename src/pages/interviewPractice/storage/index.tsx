@@ -1,19 +1,15 @@
 import { DefaultButton } from "@/components/button/Button";
 import ListFilter from "@/components/filter/ListFilter";
+import DateFilter from "@/components/filter/DateFilter";
 import Title from "@/components/title/Title";
 import { useState } from "react";
-// import EmptyState from "@/components/common/emptyState/EmptyState";
-// import FILE_NONE from "@/assets/icons/file_x.svg?react";
-// 필요한 아이콘들을 임포트해주세요 (예시 이름)
-// import FILTER_ICON from "@/assets/icons/filter.svg?react";
-// import CHEVRON_DOWN from "@/assets/icons/chevron_down.svg?react";
 import * as S from "@/pages/interviewPractice/storage/InterviewStorage.styles";
 
-// 📌 테스트용 더미 데이터 (나중에 백엔드 API 데이터로 교체하시면 됩니다)
 const MOCK_DATA = [
   {
     id: 1,
     date: "오늘 10:20",
+    realDate: new Date(),
     count: 5,
     tags: ["동아리", "세특"],
     duration: "9:45",
@@ -21,6 +17,7 @@ const MOCK_DATA = [
   {
     id: 2,
     date: "어제 22:05",
+    realDate: new Date(new Date().setDate(new Date().getDate() - 1)),
     count: 3,
     tags: ["세특", "동아리"],
     duration: "12:20",
@@ -28,6 +25,7 @@ const MOCK_DATA = [
   {
     id: 3,
     date: "3일 전 19:40",
+    realDate: new Date(new Date().setDate(new Date().getDate() - 3)),
     count: 4,
     tags: ["세특", "진로"],
     duration: "15:00",
@@ -35,34 +33,39 @@ const MOCK_DATA = [
 ];
 
 const ITEM_OPTIONS = ["전체", "세특", "동아리", "진로"];
-const DATE_OPTIONS = ["전체", "오늘", "어제", "3일 전", "1주 이내"];
 
 export default function InterviewStorage() {
   const [itemFilterText, setItemFilterText] = useState<string>("");
-  const [dateFilterText, setDateFilterText] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
   const handleResetFilters = () => {
     setItemFilterText("");
-    setDateFilterText("");
+    setSelectedDate(null);
   };
 
   const filteredData = MOCK_DATA.filter((item) => {
     const selectedItem = itemFilterText.trim();
-    const selectedDate = dateFilterText.trim();
 
     const matchItem =
       !selectedItem ||
       selectedItem === "전체" ||
       item.tags.includes(selectedItem);
 
-    const matchDate =
-      !selectedDate ||
-      selectedDate === "전체" ||
-      (selectedDate === "1주 이내" &&
-        ["오늘", "어제", "3일"].some((keyword) =>
-          item.date.startsWith(keyword),
-        )) ||
-      (selectedDate !== "1주 이내" && item.date.startsWith(selectedDate));
+    let matchDate = true;
+    if (selectedDate) {
+      const itemYear = item.realDate.getFullYear();
+      const itemMonth = item.realDate.getMonth();
+      const itemDay = item.realDate.getDate();
+
+      const selectedYear = selectedDate.getFullYear();
+      const selectedMonth = selectedDate.getMonth();
+      const selectedDay = selectedDate.getDate();
+
+      matchDate =
+        itemYear === selectedYear &&
+        itemMonth === selectedMonth &&
+        itemDay === selectedDay;
+    }
 
     return matchItem && matchDate;
   });
@@ -91,15 +94,10 @@ export default function InterviewStorage() {
 
                 <S.FilterItem>
                   <S.FilterLabel>날짜</S.FilterLabel>
-                  <ListFilter
-                    text={dateFilterText}
-                    setText={setDateFilterText}
-                    placeholder="날짜"
-                    onClick={() => {}}
-                    data={DATE_OPTIONS}
-                    width={200}
-                    listWidth={154}
-                    listHeight={198}
+                  <DateFilter
+                    selectedDate={selectedDate}
+                    onSelect={setSelectedDate}
+                    placeholder="날짜 선택"
                   />
                 </S.FilterItem>
               </S.FilterGroup>
@@ -119,29 +117,42 @@ export default function InterviewStorage() {
                 <S.HeaderText>소요 시간</S.HeaderText>
                 <S.HeaderText>상세</S.HeaderText>
               </S.TableHeader>
-              {filteredData.map((item) => (
-                <S.TableContentBox key={item.id}>
-                  <S.DayCountBox>
-                    <S.DayText>{item.date}</S.DayText>
-                    <S.CountText>{item.count}문항</S.CountText>
-                  </S.DayCountBox>
+              {filteredData.length === 0 ? (
+                <S.EmptyState>
+                  <S.EmptyStateText>
+                    조건에 맞는 데이터가 없어요
+                  </S.EmptyStateText>
+                  <S.EmptyStateSubText>
+                    선택한 항목을 확인하고 검색어를 정정해주세요
+                  </S.EmptyStateSubText>
+                </S.EmptyState>
+              ) : (
+                <>
+                  {filteredData.map((item) => (
+                    <S.TableContentBox key={item.id}>
+                      <S.DayCountBox>
+                        <S.DayText>{item.date}</S.DayText>
+                        <S.CountText>{item.count}문항</S.CountText>
+                      </S.DayCountBox>
 
-                  <S.TagGroup>
-                    {item.tags.map((tag, idx) => (
-                      <S.Tag key={idx}>{tag}</S.Tag>
-                    ))}
-                  </S.TagGroup>
+                      <S.TagGroup>
+                        {item.tags.map((tag, idx) => (
+                          <S.Tag key={idx}>{tag}</S.Tag>
+                        ))}
+                      </S.TagGroup>
 
-                  <S.DurationBadge>{item.duration}</S.DurationBadge>
+                      <S.DurationBadge>{item.duration}</S.DurationBadge>
 
-                  <DefaultButton
-                    width={100}
-                    type="secondary"
-                    text="결과 보기"
-                    onClick={() => {}}
-                  />
-                </S.TableContentBox>
-              ))}
+                      <DefaultButton
+                        width={100}
+                        type="secondary"
+                        text="결과 보기"
+                        onClick={() => {}}
+                      />
+                    </S.TableContentBox>
+                  ))}
+                </>
+              )}
             </S.TableContainer>
           </S.StorageBox>
         </S.ContentWrapper>
