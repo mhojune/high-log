@@ -4,7 +4,7 @@ export const SidebarBox = styled.aside`
   min-width: 330px;
   width: 330px;
   flex-shrink: 0;
-  min-height: 418px;
+  min-height: 358px;
   display: flex;
   flex-direction: column;
   background-color: ${({ theme }) => theme.colors.grayScale["11"]};
@@ -62,8 +62,7 @@ export const SidebarDivider = styled.div`
 `;
 
 export const SidebarNavSection = styled.div`
-  flex: 1;
-  margin: 0 25px 0;
+  margin: 0 25px 10px;
   display: flex;
   flex-direction: column;
   gap: 10px;

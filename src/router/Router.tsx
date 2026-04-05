@@ -12,6 +12,7 @@ import SaveQuestions from "@/pages/interviewQuestions/saveQuestions";
 import InterviewPractice from "@/pages/interviewPractice";
 import InterviewStorage from "@/pages/interviewPractice/storage";
 import MyPage from "@/pages/myPage";
+import WithdrawAccountPage from "@/pages/myPage/withdraw";
 import Support from "@/pages/support";
 import Privacy from "@/pages/privacy";
 import Term from "@/pages/term";
@@ -121,6 +122,14 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <MyPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: "mypage/withdraw",
+        element: (
+          <ProtectedRoute>
+            <WithdrawAccountPage />
           </ProtectedRoute>
         ),
       },
