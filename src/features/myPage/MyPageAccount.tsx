@@ -6,7 +6,9 @@ type MyPageAccountProps = {
   onNavigateToPasswordChange: () => void;
 };
 
-export default function MyPageAccount({ onNavigateToPasswordChange }: MyPageAccountProps) {
+export default function MyPageAccount({
+  onNavigateToPasswordChange,
+}: MyPageAccountProps) {
   const { data, isLoading } = useMyPageAccountInfo();
 
   const displayName = isLoading ? "…" : data?.userName ? `${data.userName} 님` : "-";

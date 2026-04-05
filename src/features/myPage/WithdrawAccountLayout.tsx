@@ -36,15 +36,15 @@ export default function WithdrawAccountLayout() {
         <Title text={WITHDRAW_ACCOUNT_PAGE_TITLE} />
       </W.WithdrawTitleSection>
       <S.ContentWrapper>
-        <W.WithdrawMainArea aria-label="회원 탈퇴">
+        <W.WithdrawMainArea>
           <W.WithdrawHeading>{WITHDRAW_ACCOUNT_HEADING}</W.WithdrawHeading>
           <W.WithdrawDescriptionList>
             {WITHDRAW_ACCOUNT_DESCRIPTION_ITEMS.map((line, index) => (
               <W.WithdrawDescriptionLine key={index}>{line}</W.WithdrawDescriptionLine>
             ))}
           </W.WithdrawDescriptionList>
-          <W.WithdrawReasonSection aria-labelledby="withdraw-reason-heading">
-            <W.WithdrawReasonHeading id="withdraw-reason-heading">
+          <W.WithdrawReasonSection>
+            <W.WithdrawReasonHeading>
               {WITHDRAW_ACCOUNT_REASON_HEADING}
             </W.WithdrawReasonHeading>
             <W.WithdrawReasonTextarea

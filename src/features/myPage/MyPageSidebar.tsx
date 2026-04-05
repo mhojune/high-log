@@ -7,8 +7,8 @@ import type { MyPageTabId } from "@/constants/myPage";
 import { useMyPageDashboard } from "@/api/myPage/useMyPageDashboard";
 
 /** API registDate: YYYYMMDD → YYYY.MM.DD */
-function formatRegistDateDot(yyyymmdd: string | undefined): string {
-  if (!yyyymmdd || yyyymmdd.length !== 8) return "-";
+function formatRegistDateDot(yyyymmdd: string): string {
+  if (yyyymmdd.length !== 8) return "-";
   return `${yyyymmdd.slice(0, 4)}.${yyyymmdd.slice(4, 6)}.${yyyymmdd.slice(6, 8)}`;
 }
 
@@ -41,7 +41,7 @@ export default function MyPageSidebar({ activeTab, onTabChange }: MyPageSidebarP
             </S.SidebarUserName>
             <S.SidebarUserJoinDate>
               가입일:{" "}
-              {isDashboardLoading ? "…" : formatRegistDateDot(dashboard?.registDate)}
+              {isDashboardLoading ? "…" : formatRegistDateDot(dashboard?.registDate ?? "")}
             </S.SidebarUserJoinDate>
           </S.SidebarUserInfo>
         </S.SidebarUserRow>
