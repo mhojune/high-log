@@ -46,3 +46,15 @@ export interface InterviewAnalyzeResponse {
   weakness_tags: string[];
   detailed_analysis: DetailedAnalysis[];
 }
+
+export interface InterviewListItem {
+  session_id: number | string;
+  question_count: number;
+  total_duration: number;
+  sub_topics: string[];
+  created_at: string;
+}
+
+export interface InterviewListResponse {
+  interviews: InterviewListItem[];
+}

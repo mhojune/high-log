@@ -5,62 +5,69 @@ import Title from "@/components/title/Title";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import * as S from "@/pages/interviewPractice/storage/InterviewStorage.styles";
+import { useInterviewList } from "@/api/interview/useInterviewApi";
 
-const MOCK_DATA = [
-  {
-    id: 1,
-    sessionId: "dummy_session_id_1",
-    date: "오늘 10:20",
-    realDate: new Date(), // Today
-    count: 5,
-    tags: ["동아리", "세특"],
-    duration: "9:45",
-  },
-  {
-    id: 2,
-    sessionId: "dummy_session_id_2",
-    date: "어제 22:05",
-    realDate: new Date(new Date().setDate(new Date().getDate() - 1)), // Yesterday
-    count: 3,
-    tags: ["세특", "동아리"],
-    duration: "12:20",
-  },
-  {
-    id: 3,
-    sessionId: "dummy_session_id_3",
-    date: "3일 전 19:40",
-    realDate: new Date(new Date().setDate(new Date().getDate() - 3)), // 3 days ago
-    count: 4,
-    tags: ["세특", "진로"],
-    duration: "15:00",
-  },
+const ITEM_OPTIONS = [
+  "전체",
+  "출결",
+  "세특",
+  "동아리",
+  "진로",
+  "리더십",
+  "기타",
 ];
 
-const ITEM_OPTIONS = ["전체", "세특", "동아리", "진로"];
+const formatDateText = (dateString: string) => {
+  const date = new Date(dateString);
+
+  const hours = date.getHours().toString().padStart(2, "0");
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const timeText = `${hours}:${minutes}`;
+
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  const day = date.getDate().toString().padStart(2, "0");
+  return `${year}.${month}.${day} ${timeText}`;
+};
+
+const formatDuration = (seconds: number) => {
+  const m = Math.floor(seconds / 60);
+  const s = seconds % 60;
+  return `${m}:${s.toString().padStart(2, "0")}`;
+};
 
 export default function InterviewStorage() {
   const navigate = useNavigate();
   const [itemFilterText, setItemFilterText] = useState<string>("");
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
+  const { data: listData, isLoading } = useInterviewList();
+
   const handleResetFilters = () => {
     setItemFilterText("");
     setSelectedDate(null);
   };
 
-  const filteredData = MOCK_DATA.filter((item) => {
+  if (isLoading) {
+    return <></>;
+  }
+
+  const interviews = listData?.interviews || [];
+
+  const filteredData = interviews.filter((item) => {
     const selectedItem = itemFilterText.trim();
+    const itemDate = new Date(item.created_at);
 
     const matchItem =
       !selectedItem ||
       selectedItem === "전체" ||
-      item.tags.includes(selectedItem);
+      item.sub_topics.includes(selectedItem);
 
     let matchDate = true;
     if (selectedDate) {
-      const itemYear = item.realDate.getFullYear();
-      const itemMonth = item.realDate.getMonth();
-      const itemDay = item.realDate.getDate();
+      const itemYear = itemDate.getFullYear();
+      const itemMonth = itemDate.getMonth();
+      const itemDay = itemDate.getDate();
 
       const selectedYear = selectedDate.getFullYear();
       const selectedMonth = selectedDate.getMonth();
@@ -132,31 +139,35 @@ export default function InterviewStorage() {
                   </S.EmptyStateSubText>
                 </S.EmptyState>
               ) : (
-                <>
+                <S.TableBody>
                   {filteredData.map((item) => (
-                    <S.TableContentBox key={item.id}>
+                    <S.TableContentBox key={item.session_id}>
                       <S.DayCountBox>
-                        <S.DayText>{item.date}</S.DayText>
-                        <S.CountText>{item.count}문항</S.CountText>
+                        <S.DayText>{formatDateText(item.created_at)}</S.DayText>
+                        <S.CountText>{item.question_count}문항</S.CountText>
                       </S.DayCountBox>
 
                       <S.TagGroup>
-                        {item.tags.map((tag, idx) => (
+                        {item.sub_topics.map((tag, idx) => (
                           <S.Tag key={idx}>{tag}</S.Tag>
                         ))}
                       </S.TagGroup>
 
-                      <S.DurationBadge>{item.duration}</S.DurationBadge>
+                      <S.DurationBadge>
+                        {formatDuration(item.total_duration)}
+                      </S.DurationBadge>
 
                       <DefaultButton
                         width={100}
                         type="secondary"
                         text="결과 보기"
-                        onClick={() => navigate(`/interview/result/${item.sessionId}`)}
+                        onClick={() =>
+                          navigate(`/interview/result/${item.session_id}`)
+                        }
                       />
                     </S.TableContentBox>
                   ))}
-                </>
+                </S.TableBody>
               )}
             </S.TableContainer>
           </S.StorageBox>
