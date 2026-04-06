@@ -1,15 +1,19 @@
 import * as S from "@/features/support/detail/SupportContent.styles";
 import { useParams } from "react-router-dom";
-import { DUMMY_SUPPORT } from "@/features/support/SupportData";
+import { useNoticeDetail } from "@/api/notice/useNoticeApi";
 
 export default function SupportContent() {
   const { id } = useParams<{ id: string }>();
+  const { data: detailData, isLoading, isError } = useNoticeDetail(Number(id));
 
-  const detailData = DUMMY_SUPPORT.find((item) => item.id === Number(id));
-  if (!detailData) {
+  if (isLoading) {
+    return <S.SupportContentContainer>로딩 중...</S.SupportContentContainer>;
+  }
+
+  if (isError || !detailData) {
     return (
       <S.SupportContentContainer>
-        존재하지 않는 게시글입니다.
+        존재하지 않는 게시글이거나 불러올 수 없습니다.
       </S.SupportContentContainer>
     );
   }
@@ -20,7 +24,7 @@ export default function SupportContent() {
           <S.HeaderTitle>{detailData.title}</S.HeaderTitle>
           <S.HeaderDateBox>
             <S.HeaderDateText>작성일</S.HeaderDateText>
-            <S.HeaderDateText>{detailData.createdAt}</S.HeaderDateText>
+            <S.HeaderDateText>{detailData.createdAt.split('T')[0]}</S.HeaderDateText>
           </S.HeaderDateBox>
         </S.TextBox>
       </S.Header>

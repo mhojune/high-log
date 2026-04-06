@@ -18,6 +18,7 @@ export interface RecordUploadResponse {
 
 export interface CreateRecordRequest {
   title: string;
+  filename: string;
   s3Key: string;
 }
 
@@ -36,6 +37,7 @@ export interface RecordDetail {
   id: number;
   title: string;
   status: "READY" | "PROCESSING" | "FAILED";
+  filename: string;
   createdAt: string;
   questionSets: QuestionSet[];
 }

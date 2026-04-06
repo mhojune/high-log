@@ -42,6 +42,7 @@ export default function RecordUpload() {
       await uploadMutation.mutateAsync({
         file,
         title: text,
+        filename: file?.name,
         onProgress: setVectorizeProgress,
       });
       navigate("/record_management", { state: { upload_complete: true } });

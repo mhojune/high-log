@@ -134,3 +134,83 @@ export async function apiClient<T>(
 
   return handleResponse<T>(response);
 }
+
+export async function apiClientStream(
+  endpoint: string,
+  options: RequestInit & { accessToken?: string } = {},
+): Promise<Response> {
+  const { accessToken: explicitToken, ...init } = options;
+  const accessToken = explicitToken ?? tokenStorage.getAccessToken();
+
+  const headers: HeadersInit = {
+    "Content-Type": "application/json",
+    ...(init.headers as Record<string, string>),
+  };
+
+  if (accessToken) {
+    (headers as Record<string, string>)["Authorization"] =
+      `Bearer ${accessToken}`;
+  }
+
+  let response = await fetch(`${BASE_URL}${endpoint}`, {
+    ...init,
+    headers,
+  });
+
+  const shouldRefresh =
+    response.status === 401 &&
+    endpoint !== "/api/auth/refresh" &&
+    endpoint !== "/api/auth/login" &&
+    endpoint !== "/api/auth/signup" &&
+    endpoint !== "/api/auth/logout";
+
+  if (shouldRefresh) {
+    const refreshToken = tokenStorage.getRefreshToken();
+    if (!refreshToken) {
+      invokeAuthFailure();
+      throw new ApiErrorException("UNAUTHORIZED", "다시 로그인해 주세요.", 401);
+    }
+
+    const refreshRes = await fetch(`${BASE_URL}/api/auth/refresh`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ refreshToken }),
+    });
+
+    if (!refreshRes.ok) {
+      tokenStorage.clear();
+      invokeAuthFailure();
+      const data = await refreshRes.json().catch(() => ({}));
+      throw new ApiErrorException(
+        (data as { code?: string }).code ?? "UNAUTHORIZED",
+        (data as { message?: string }).message ?? "다시 로그인해 주세요.",
+        401,
+      );
+    }
+
+    const refreshData = (await refreshRes.json()) as {
+      accessToken: string;
+      refreshToken: string;
+    };
+    tokenStorage.updateTokens(refreshData.accessToken, refreshData.refreshToken);
+
+    const newHeaders = new Headers(init.headers);
+    newHeaders.set("Authorization", `Bearer ${refreshData.accessToken}`);
+
+    response = await fetch(`${BASE_URL}${endpoint}`, {
+      ...init,
+      headers: newHeaders,
+    });
+  }
+
+  if (!response.ok) {
+    const data = await response.json().catch(() => ({}));
+    const code = (data as { code?: string }).code ?? "UNKNOWN_ERROR";
+    const message =
+      (data as { message?: string }).message ??
+      "요청 처리 중 오류가 발생했습니다.";
+    throw new ApiErrorException(code, message, response.status);
+  }
+
+  return response;
+}

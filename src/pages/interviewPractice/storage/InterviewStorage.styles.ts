@@ -143,3 +143,22 @@ export const DurationBadge = styled.div`
   ${({ theme }) => theme.typography.body.S1};
   color: ${({ theme }) => theme.colors.grayScale["00"]};
 `;
+
+export const EmptyState = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 213px;
+  background-color: ${({ theme }) => theme.colors.grayScale["11"]};
+`;
+
+export const EmptyStateText = styled.span`
+  ${({ theme }) => theme.typography.body.L1};
+  color: ${({ theme }) => theme.colors.grayScale["00"]};
+`;
+
+export const EmptyStateSubText = styled.span`
+  ${({ theme }) => theme.typography.body.M0};
+  color: ${({ theme }) => theme.colors.grayScale["00"]};
+`;
