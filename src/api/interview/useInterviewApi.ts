@@ -7,13 +7,11 @@ import {
   type UseQueryResult,
 } from "@tanstack/react-query";
 import {
-  chatInterviewText,
   getInterviewAnalyze,
   initializeInterviewText,
 } from "@/api/interview/interviewApi";
 import type {
   InterviewAnalyzeResponse,
-  InterviewChatRequest,
   InterviewChatResponse,
   InterviewInitializeRequest,
 } from "@/api/interview/interviewTypes";
@@ -27,24 +25,6 @@ export function useInitializeInterviewText(
 ): UseMutationResult<InterviewChatResponse, Error, InterviewInitializeRequest> {
   return useMutation({
     mutationFn: initializeInterviewText,
-    ...options,
-  });
-}
-
-export function useChatInterviewText(
-  options?: UseMutationOptions<
-    InterviewChatResponse,
-    Error,
-    { sessionId: string; request: InterviewChatRequest }
-  >,
-): UseMutationResult<
-  InterviewChatResponse,
-  Error,
-  { sessionId: string; request: InterviewChatRequest }
-> {
-  return useMutation({
-    mutationFn: ({ sessionId, request }) =>
-      chatInterviewText(sessionId, request),
     ...options,
   });
 }

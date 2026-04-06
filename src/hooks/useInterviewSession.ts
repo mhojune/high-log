@@ -206,6 +206,15 @@ export default function useInterviewSession({
               return newMessages;
             });
           } else if (d.status === "finished") {
+            setMessages((prev) => [
+              ...prev,
+              {
+                id: prev.length + 1,
+                sender: "AI",
+                text: "고생하셨습니다.",
+                state: "success",
+              },
+            ]);
             setIsInterviewFinished(true);
             currentIsFinished = true;
             stopTimer();

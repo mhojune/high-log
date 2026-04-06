@@ -5,7 +5,7 @@ import Modal from "@/components/modal/Modal";
 import PracticeStep2Timer from "@/features/interviewPractice/PracticeStep2Timer";
 import PracticeStep2ChatList from "@/features/interviewPractice/PracticeStep2ChatList";
 import PracticeStep2AnswerInput from "@/features/interviewPractice/PracticeStep2AnswerInput";
-import useInterviewSession from "@/features/interviewPractice/hooks/useInterviewSession";
+import useInterviewSession from "@/hooks/useInterviewSession";
 import { useEffect } from "react";
 
 interface PracticeStep2Props {
@@ -55,7 +55,7 @@ export default function PracticeStep2({
     if (isInterviewFinished) {
       const timer = setTimeout(() => {
         onNext(sessionId ?? "");
-      }, 3000);
+      }, 2000);
       return () => clearTimeout(timer);
     }
   }, [isInterviewFinished, onNext, sessionId]);
