@@ -34,7 +34,11 @@ const FEEDBACK_LIST: FeedbackItem[] = [
   },
 ];
 
-export default function PracticeStep3() {
+interface PracticeStep3Props {
+  sessionId?: string;
+}
+
+export default function PracticeStep3({ sessionId }: PracticeStep3Props) {
   const navigate = useNavigate();
   const [checkedItems, setCheckedItems] = useState<number[]>([]);
 
@@ -55,7 +59,7 @@ export default function PracticeStep3() {
             type="primary"
             text="저장"
             onClick={() => {
-              navigate("/interview/result");
+              navigate(`/interview/result/${sessionId || 'dummy_session_id'}`);
             }}
           />
         </S.TitleBox>

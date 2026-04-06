@@ -5,10 +5,11 @@ import Modal from "@/components/modal/Modal";
 import PracticeStep2Timer from "@/features/interviewPractice/PracticeStep2Timer";
 import PracticeStep2ChatList from "@/features/interviewPractice/PracticeStep2ChatList";
 import PracticeStep2AnswerInput from "@/features/interviewPractice/PracticeStep2AnswerInput";
-import useInterviewSession from "@/features/interviewPractice/hooks/useInterviewSession";
+import useInterviewSession from "@/hooks/useInterviewSession";
+import { useEffect } from "react";
 
 interface PracticeStep2Props {
-  onNext: () => void;
+  onNext: (sessionId: string) => void;
   recordId: number | null;
   difficulty: "Easy" | "Normal" | "Hard" | null;
   univ: string;
@@ -28,6 +29,7 @@ export default function PracticeStep2({
     !!recordId && !!difficulty && !!mode && !!univ && !!department;
 
   const {
+    sessionId,
     text,
     setText,
     messages,
@@ -49,6 +51,15 @@ export default function PracticeStep2({
     enabled: isInterviewConfigReady,
   });
 
+  useEffect(() => {
+    if (isInterviewFinished) {
+      const timer = setTimeout(() => {
+        onNext(sessionId ?? "");
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isInterviewFinished, onNext, sessionId]);
+
   if (!isInterviewConfigReady) {
     return (
       <S.PageContainer>
@@ -59,7 +70,7 @@ export default function PracticeStep2({
             width={78}
             type="primary"
             text="돌아가기"
-            onClick={onNext}
+            onClick={() => onNext("")}
           />
         </S.PracticeStep2Container>
       </S.PageContainer>
@@ -86,12 +97,6 @@ export default function PracticeStep2({
             onSend={handleSendMessage}
           />
         </S.PracticeWrapper>
-        <DefaultButton
-          width={78}
-          type={!isInterviewFinished ? "disabled" : "primary"}
-          text="완료"
-          onClick={!isInterviewFinished ? undefined : onNext}
-        />
       </S.PracticeStep2Container>
       {isModalOpen && (
         <Modal
