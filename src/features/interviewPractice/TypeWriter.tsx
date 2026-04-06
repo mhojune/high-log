@@ -1,34 +1,90 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 
 interface TypewriterProps {
   text: string;
-  onComplete?: () => void;
   speed?: number;
+  onComplete?: () => void;
 }
 
-export default function TypeWriter({ text, speed = 30 }: TypewriterProps) {
+export default function TypeWriter({
+  text,
+  speed = 30,
+  onComplete,
+}: TypewriterProps) {
   const [displayedText, setDisplayedText] = useState("");
+  const [isFinished, setIsFinished] = useState(false);
+  const [prevText, setPrevText] = useState(text);
+
+  // 렌더링 중 안전하게 비교하기 위해 현재 출력된 길이를 상태로 관리
+  const [currentLength, setCurrentLength] = useState(0);
+
+  const currentIndexRef = useRef(0);
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  if (text !== prevText) {
+    setPrevText(text);
+    // ref 대신 state(currentLength)를 사용하여 렌더링 중 비교
+    if (isFinished && currentLength < text.length) {
+      setIsFinished(false);
+    }
+  }
 
   useEffect(() => {
-    // 텍스트가 없거나 빈 문자열이면 실행 중지
-    if (!text) {
-      setDisplayedText("");
-      return;
-    }
+    const tick = () => {
+      const fullText = text;
+      const remaining = fullText.length - currentIndexRef.current;
 
-    let i = 0;
-    const timer = setInterval(() => {
-      setDisplayedText((prev) => prev + (text[i] || ""));
-      i++;
+      if (remaining > 0) {
+        // 자연스러운 연출을 위해 한 번에 1~3글자씩 랜덤하게 출력 (청크 단위)
+        const chunk = remaining > 5 ? Math.floor(Math.random() * 3) + 1 : 1;
+        const nextSlice = fullText.slice(
+          currentIndexRef.current,
+          currentIndexRef.current + chunk,
+        );
 
-      if (i >= text.length) clearInterval(timer);
-    }, speed);
+        setDisplayedText((prev) => prev + nextSlice);
+        currentIndexRef.current += nextSlice.length;
 
-    return () => clearInterval(timer);
-  }, [text, speed]);
+        // 렌더링 단계에서 안전하게 쓰기 위해 상태 업데이트
+        setCurrentLength(currentIndexRef.current);
 
-  // text가 없을 때는 아무것도 렌더링하지 않거나 기본 메시지 출력
-  if (!text) return null;
+        // 약간의 랜덤 딜레이를 주어 기계적인 느낌 제거
+        const dynamicSpeed = speed + Math.random() * 20;
+        timerRef.current = setTimeout(tick, dynamicSpeed);
+      } else {
+        setIsFinished(true);
+        if (onComplete) onComplete();
+      }
+    };
 
-  return <>{displayedText}</>;
+    timerRef.current = setTimeout(tick, speed);
+
+    return () => {
+      if (timerRef.current) clearTimeout(timerRef.current);
+    };
+  }, [text, speed, onComplete, isFinished]);
+
+  return (
+    <>
+      {displayedText}
+      {!isFinished && (
+        <span
+          style={{
+            display: "inline-block",
+            width: "2px",
+            height: "1em",
+            backgroundColor: "currentColor",
+            marginLeft: "2px",
+            verticalAlign: "middle",
+            animation: "blink 1s step-end infinite",
+          }}
+        >
+          |
+        </span>
+      )}
+      <style>{`
+        @keyframes blink { from, to { opacity: 1; } 50% { opacity: 0; } }
+      `}</style>
+    </>
+  );
 }

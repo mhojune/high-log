@@ -1,8 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  useChatInterviewText,
-  useInitializeInterviewText,
-} from "@/api/interview/useInterviewApi";
+import { useInitializeInterviewText } from "@/api/interview/useInterviewApi";
+import { chatInterviewTextStream } from "@/api/interview/interviewApi";
 import type { Message } from "@/features/interviewPractice/PracticeStep2.types";
 
 const INITIAL_QUESTION = "자기소개 해주세요.";
@@ -60,6 +58,7 @@ export default function useInterviewSession({
     useState<boolean>(false);
   const [responseTimer, setResponseTimer] = useState<number>(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChatPending, setIsChatPending] = useState(false);
   const [modalMessage, setModalMessage] = useState<ModalMessage>({
     mainTitle: "",
     subTitle: "",
@@ -130,56 +129,6 @@ export default function useInterviewSession({
       },
     });
 
-  const { mutate: mutateChat, isPending: isChatPending } = useChatInterviewText(
-    {
-      onSuccess: (data) => {
-        setMessages((prev) => {
-          const lastIndex = prev.length - 1;
-          const nextQuestionText = data.next_question || "";
-
-          if (
-            lastIndex >= 0 &&
-            prev[lastIndex].sender === "AI" &&
-            prev[lastIndex].state === "pending"
-          ) {
-            const newMessages = [...prev];
-            // 기존 pending 메시지를 실제 데이터와 'typing' 상태로 업데이트
-            newMessages[lastIndex] = {
-              ...newMessages[lastIndex],
-              text: nextQuestionText,
-              state: data.is_finished ? "success" : "typing", // If finished, no typing indicator
-            };
-            return newMessages;
-          }
-
-         
-          return [
-            ...prev,
-            {
-              id: prev.length + 1,
-              sender: "AI",
-              text: nextQuestionText,
-              state: data.is_finished ? "success" : "typing",
-            },
-          ];
-        });
-
-        setIsInterviewFinished(data.is_finished);
-
-        if (data.is_finished) {
-          stopTimer();
-          return;
-        }
-
-        setResponseTimer(0);
-        startTimer();
-      },
-      onError: (error) => {
-        setMessages((prev) => prev.filter((m) => m.state !== "pending"));
-        handleInterviewError(error, "면접 진행 중 오류가 발생했습니다.");
-      },
-    },
-  );
   useEffect(() => {
     if (!enabled || hasInitializedRef.current) {
       return;
@@ -198,7 +147,7 @@ export default function useInterviewSession({
     return stopTimer;
   }, [stopTimer]);
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!text.trim() || isInterviewFinished || !sessionId) {
       return;
     }
@@ -214,22 +163,79 @@ export default function useInterviewSession({
       ...prev,
       userMessage,
       {
-        id: prev.length + 2, 
+        id: prev.length + 2,
         sender: "AI",
-        text: "", 
+        text: "",
         state: "pending",
       },
     ]);
     setText("");
     stopTimer();
+    setIsChatPending(true);
 
-    mutateChat({
-      sessionId,
-      request: {
-        answer: userMessage.text,
-        response_time: responseTimer,
-      },
-    });
+    let currentIsFinished = false;
+
+    try {
+      await chatInterviewTextStream(
+        sessionId,
+        {
+          answer: userMessage.text,
+          response_time: responseTimer,
+        },
+        (data: unknown) => {
+          const d = data as { status?: string; token?: string; message?: string };
+          if (d.status === "generating") {
+            setMessages((prev) => {
+              const lastIndex = prev.length - 1;
+              const newMessages = [...prev];
+              newMessages[lastIndex] = {
+                ...newMessages[lastIndex],
+                text: newMessages[lastIndex].text + (d.token || ""),
+                state: "typing",
+              };
+              return newMessages;
+            });
+          } else if (d.status === "completed") {
+            setMessages((prev) => {
+              const lastIndex = prev.length - 1;
+              const newMessages = [...prev];
+              newMessages[lastIndex] = {
+                ...newMessages[lastIndex],
+                state: "success",
+              };
+              return newMessages;
+            });
+          } else if (d.status === "finished") {
+            setIsInterviewFinished(true);
+            currentIsFinished = true;
+            stopTimer();
+          } else if (d.status === "error") {
+            setMessages((prev) =>
+              prev.filter((m) => m.state !== "pending" && m.state !== "typing")
+            );
+            handleInterviewError(
+              new Error(d.message || "오류가 발생했습니다."),
+              "질문 생성 중 오류가 발생했습니다."
+            );
+          }
+        },
+        (error) => {
+          setMessages((prev) =>
+            prev.filter((m) => m.state !== "pending" && m.state !== "typing")
+          );
+          handleInterviewError(error, "면접 진행 중 오류가 발생했습니다.");
+        }
+      );
+
+      if (!currentIsFinished) {
+        setResponseTimer(0);
+        startTimer();
+      }
+    } catch {
+      // Error is already handled via onError callback
+    } finally {
+      setIsChatPending(false);
+    }
   };
 
   const formatTime = (seconds: number) => {

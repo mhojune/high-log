@@ -1,3 +1,3 @@
-export * from "./noticeApi";
-export * from "./noticeTypes";
-export * from "./useNoticeApi";
+export * from "@/api/notice/noticeApi";
+export * from "@/api/notice/noticeTypes";
+export * from "@/api/notice/useNoticeApi";

@@ -36,10 +36,8 @@ export default function PracticeStep2ChatList({
                   <span />
                   <span />
                 </S.TypingIndicator>
-              ) : msg.state === "typing" ? (
-                <TypeWriter text={msg.text} />
               ) : (
-                msg.text
+                <TypeWriter text={msg.text} />
               )}
             </S.AIChatText>
           </S.AIChatBox>
