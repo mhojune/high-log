@@ -45,6 +45,10 @@ export interface InterviewAnalyzeResponse {
   strength_tags: string[];
   weakness_tags: string[];
   detailed_analysis: DetailedAnalysis[];
+  target_university: string;
+  target_department: string;
+  mode: string;
+  difficulty: string;
 }
 
 export interface InterviewListItem {
