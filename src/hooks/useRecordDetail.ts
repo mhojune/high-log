@@ -52,6 +52,7 @@ export function useRecordDetail(initialRecord: RecordDetail) {
       await uploadRecordAsync({
         file: newFile,
         title: text,
+        filename: newFile.name,
       });
 
       await deleteRecordAsync(recordId);

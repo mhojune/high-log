@@ -1,6 +1,5 @@
 import MyPageDashboard from "./MyPageDashboard";
 import MyPageAccount from "./MyPageAccount";
-import MyPageSettings from "./MyPageSettings";
 import MyPagePasswordChange from "./MyPagePasswordChange";
 import * as S from "./MyPageMain.styles";
 import type { MyPageTabId } from "@/constants/myPage";
@@ -27,10 +26,7 @@ export default function MyPageMain({
       ) : activeTab === "account" ? (
         <MyPageAccount onNavigateToPasswordChange={onNavigateToPasswordChange} />
       ) : (
-        <>
-          {activeTab === "dashboard" && <MyPageDashboard />}
-          {activeTab === "settings" && <MyPageSettings />}
-        </>
+        <MyPageDashboard />
       )}
     </S.MainBox>
   );

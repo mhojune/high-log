@@ -90,7 +90,7 @@ function RecordDetailContent({ record }: { record: RecordDetailType }) {
               text="이곳에 파일을 업로드해주세요"
               subText="HTML, PDF 파일만 업로드 할 수 있어요"
               status={initialQuestion > 0 ? "disabled" : fileStatus}
-              fileName={uploadedFileName}
+              fileName={record.filename || uploadedFileName}
               onRemove={handleFileRemove}
               onFileSelect={handleFileSelect}
             />
