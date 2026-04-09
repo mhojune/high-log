@@ -189,9 +189,8 @@ export const SetBox = styled.div`
 export const QuestionBox = styled.div`
   display: flex;
   width: 1056px;
-  height: 78px;
+  min-height: 78px;
   padding: 16px 32px;
-  justify-content: space-between;
   align-items: center;
   align-self: stretch;
 `;
@@ -199,11 +198,13 @@ export const QuestionBox = styled.div`
 export const QuestionText = styled.p`
   ${({ theme }) => theme.typography.body.L2};
   color: ${({ theme }) => theme.colors.grayScale["00"]};
+  width: 640px;
 `;
 
 export const Time = styled.p`
   ${({ theme }) => theme.typography.body.L0};
   color: ${({ theme }) => theme.colors.grayScale["00"]};
+  margin-left: 30px;
 `;
 
 export const PointBox = styled.div`
@@ -227,6 +228,7 @@ export const ImproveBox = styled.div`
 export const BlueText = styled.p`
   ${({ theme }) => theme.typography.body.S2};
   color: ${({ theme }) => theme.colors.primary["00"]};
+  white-space: nowrap;
 `;
 
 export const SuggestText = styled.p`

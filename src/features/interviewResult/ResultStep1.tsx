@@ -26,7 +26,7 @@ export default function ResultStep1() {
   });
   useEffect(() => {
     console.log(data);
-  }, []);
+  }, [data]);
   const displayData = data;
 
   const specifyScores = [
