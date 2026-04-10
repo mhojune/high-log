@@ -1,6 +1,8 @@
 import { apiClient } from "@/api/client";
 import type {
   AccountInfoResponse,
+  ChangeNameRequest,
+  ChangeNameResponse,
   ChangePasswordRequest,
   ChangePasswordResponse,
   DashboardResponse,
@@ -22,7 +24,7 @@ export async function getAccountInfo(): Promise<AccountInfoResponse> {
   });
 }
 
-/** 7-3. 비밀번호 변경 */
+/** 7-4. 비밀번호 변경 */
 export async function changePassword(
   body: ChangePasswordRequest
 ): Promise<ChangePasswordResponse> {
@@ -32,7 +34,15 @@ export async function changePassword(
   });
 }
 
-/** 7-4. 회원탈퇴 */
+/** 7-5. 이름 변경 */
+export async function changeName(body: ChangeNameRequest): Promise<ChangeNameResponse> {
+  return apiClient<ChangeNameResponse>("/api/users/me/name", {
+    method: "PATCH",
+    body: JSON.stringify(body),
+  });
+}
+
+/** 7-6. 회원탈퇴 */
 export async function withdrawAccount(
   body: WithdrawAccountRequest
 ): Promise<WithdrawAccountResponse> {

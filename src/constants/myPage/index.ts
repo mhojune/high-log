@@ -12,6 +12,10 @@ export const WITHDRAW_ACCOUNT_CONFIRM_LABEL =
 export const WITHDRAW_ACCOUNT_CANCEL_BUTTON_TEXT = "취소";
 export const WITHDRAW_ACCOUNT_SUBMIT_BUTTON_TEXT = "회원탈퇴 하기";
 
+/** 회원탈퇴 화면: 비밀번호 미입력·불일치·서버 오류 등 비밀번호 관련 모달 공통 문구 */
+export const WITHDRAW_PASSWORD_MODAL_MAIN = "비밀번호를 다시 확인해 주세요";
+export const WITHDRAW_PASSWORD_MODAL_SUB = "올바르게 다시 입력해 주세요.";
+
 export const WITHDRAW_ACCOUNT_DESCRIPTION_ITEMS: string[] = [
   "회원 탈퇴 시 모든 계정 정보와 데이터는 즉시 삭제됩니다.",
   "작성한 생기부, 면접 질문 및 연습 기록은 복구할 수 없습니다.",
