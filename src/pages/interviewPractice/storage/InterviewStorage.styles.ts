@@ -20,7 +20,7 @@ export const Wrapper = styled.div`
 
 export const ContentWrapper = styled.div`
   width: 100%;
-  height: 464px;
+  min-height: 464px;
   border-radius: 12px;
   border: 1px solid ${({ theme }) => theme.colors.secondary["07"]};
   background-color: ${({ theme }) => theme.colors.grayScale["11"]};
@@ -79,6 +79,24 @@ export const TableHeader = styled.div`
 export const HeaderText = styled.span`
   ${({ theme }) => theme.typography.body.L1};
   color: ${({ theme }) => theme.colors.grayScale["00"]};
+`;
+
+export const TableBody = styled.div`
+  display: flex;
+  flex-direction: column;
+  max-height: 220px;
+  overflow-y: auto;
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  &::-webkit-scrollbar-thumb {
+    background: ${({ theme }) => theme.colors.secondary["05"]};
+    border-radius: 4px;
+  }
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
 `;
 
 export const TableContentBox = styled.div`

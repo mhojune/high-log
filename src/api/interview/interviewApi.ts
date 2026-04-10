@@ -4,6 +4,7 @@ import type {
   InterviewChatRequest,
   InterviewChatResponse,
   InterviewInitializeRequest,
+  InterviewListResponse,
 } from "@/api/interview/interviewTypes";
 
 export async function initializeInterviewText(
@@ -83,4 +84,10 @@ export async function getInterviewAnalyze(
       method: "GET",
     },
   );
+}
+
+export async function getInterviewList(): Promise<InterviewListResponse> {
+  return apiClient<InterviewListResponse>("/ai/interview/list", {
+    method: "GET",
+  });
 }

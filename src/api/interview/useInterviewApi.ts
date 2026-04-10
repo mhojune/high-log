@@ -8,12 +8,14 @@ import {
 } from "@tanstack/react-query";
 import {
   getInterviewAnalyze,
+  getInterviewList,
   initializeInterviewText,
 } from "@/api/interview/interviewApi";
 import type {
   InterviewAnalyzeResponse,
   InterviewChatResponse,
   InterviewInitializeRequest,
+  InterviewListResponse,
 } from "@/api/interview/interviewTypes";
 
 export function useInitializeInterviewText(
@@ -40,6 +42,19 @@ export function useInterviewAnalyze(
     queryKey: ["interviewAnalyze", sessionId],
     queryFn: () => getInterviewAnalyze(sessionId),
     enabled: !!sessionId,
+    ...options,
+  });
+}
+
+export function useInterviewList(
+  options?: Omit<
+    UseQueryOptions<InterviewListResponse, Error>,
+    "queryKey" | "queryFn"
+  >,
+): UseQueryResult<InterviewListResponse, Error> {
+  return useQuery({
+    queryKey: ["interviewList"],
+    queryFn: getInterviewList,
     ...options,
   });
 }
