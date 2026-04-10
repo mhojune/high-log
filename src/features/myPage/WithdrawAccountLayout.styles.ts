@@ -76,6 +76,14 @@ export const WithdrawConfirmLabel = styled.span`
   margin: 0;
 `;
 
+export const WithdrawPasswordSection = styled.div`
+  margin-top: 48px;
+`;
+
+export const WithdrawPasswordFieldWrapper = styled.div`
+  width: calc(100% / 3);
+`;
+
 export const WithdrawButtonGroup = styled.div`
   display: flex;
   gap: 10px;

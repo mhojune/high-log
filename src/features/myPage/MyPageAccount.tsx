@@ -1,6 +1,10 @@
+import { useEffect, useState } from "react";
 import { DefaultButton } from "@/components/button/Button";
 import * as S from "@/features/myPage/MyPageAccount.styles";
 import { useMyPageAccountInfo } from "@/api/myPage/useMyPageAccountInfo";
+import { useChangeName } from "@/api/myPage/useChangeName";
+
+const MAX_NAME_LENGTH = 50;
 
 type MyPageAccountProps = {
   onNavigateToPasswordChange: () => void;
@@ -10,9 +14,27 @@ export default function MyPageAccount({
   onNavigateToPasswordChange,
 }: MyPageAccountProps) {
   const { data, isLoading } = useMyPageAccountInfo();
+  const { mutateAsync: submitNameChange, isPending } = useChangeName();
+
+  const [name, setName] = useState("");
+
+  useEffect(() => {
+    if (data?.userName !== undefined) {
+      setName(data.userName);
+    }
+  }, [data?.userName]);
 
   const displayName = isLoading ? "…" : data?.userName ? `${data.userName} 님` : "-";
   const fieldsKey = data ? `${data.userName}-${data.email}` : "loading";
+
+  const handleSaveName = async () => {
+    const trimmed = name.trim();
+    if (!trimmed || trimmed.length > MAX_NAME_LENGTH) return;
+    if (trimmed === (data?.userName ?? "")) return;
+    try {
+      await submitNameChange({ newName: trimmed });
+    } catch {}
+  };
 
   return (
     <S.AccountContent>
@@ -26,7 +48,11 @@ export default function MyPageAccount({
               id="account-name"
               type="text"
               placeholder="이름을 입력해주세요"
-              defaultValue={data?.userName ?? ""}
+              maxLength={MAX_NAME_LENGTH}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              disabled={isLoading}
+              autoComplete="name"
             />
           </S.AccountField>
           <S.AccountField>
@@ -37,14 +63,18 @@ export default function MyPageAccount({
               type="email"
               readOnly
               autoComplete="email"
-              aria-readonly="true"
               defaultValue={data?.email ?? ""}
             />
           </S.AccountField>
         </S.AccountFieldRow>
       </S.AccountFormSection>
       <S.AccountButtonGroup>
-        <DefaultButton width={60} type="primary" text="저장" onClick={() => {}} />
+        <DefaultButton
+          width={60}
+          type={isPending ? "disabled" : "primary"}
+          text="저장"
+          onClick={() => void handleSaveName()}
+        />
         <DefaultButton
           width={120}
           type="secondary"
