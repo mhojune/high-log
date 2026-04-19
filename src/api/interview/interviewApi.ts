@@ -5,6 +5,7 @@ import type {
   InterviewChatResponse,
   InterviewInitializeRequest,
   InterviewListResponse,
+  InterviewChatAudioResponse,
 } from "@/api/interview/interviewTypes";
 
 export async function initializeInterviewText(
@@ -13,6 +14,23 @@ export async function initializeInterviewText(
   return apiClient<InterviewChatResponse>("/ai/interview/start", {
     method: "POST",
     body: JSON.stringify(request),
+  });
+}
+
+export async function chatInterviewAudio(
+  session_id: string,
+  audioBlob: Blob,
+  responseTime: number,
+): Promise<InterviewChatAudioResponse> {
+  const formData = new FormData();
+  formData.append("audio", audioBlob, "audio.webm");
+  formData.append("response_time", responseTime.toString());
+
+  return apiClient<InterviewChatAudioResponse>(`/ai/interview/chat/audio/${session_id}`, {
+    method: "POST",
+    body: formData,
+    // Note: Do not set Content-Type header manually when using FormData,
+    // the browser will automatically set it to multipart/form-data with the correct boundary.
   });
 }
 

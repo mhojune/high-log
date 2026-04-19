@@ -1,6 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useInitializeInterviewText } from "@/api/interview/useInterviewApi";
-import { chatInterviewTextStream } from "@/api/interview/interviewApi";
+import {
+  chatInterviewTextStream,
+  chatInterviewAudio,
+} from "@/api/interview/interviewApi";
 import type { Message } from "@/features/interviewPractice/PracticeStep2.types";
 
 const INITIAL_QUESTION = "자기소개 해주세요.";
@@ -11,6 +14,7 @@ interface UseInterviewSessionParams {
   univ: string;
   department: string;
   enabled: boolean;
+  mode?: "text" | "voice";
 }
 
 interface ModalMessage {
@@ -50,6 +54,7 @@ export default function useInterviewSession({
   univ,
   department,
   enabled,
+  mode = "text",
 }: UseInterviewSessionParams) {
   const [text, setText] = useState<string>("");
   const [messages, setMessages] = useState<Message[]>([]);
@@ -114,6 +119,32 @@ export default function useInterviewSession({
             state: "success",
           },
         ]);
+        
+        if (data.audio_url) {
+          const audio = new Audio(data.audio_url);
+          audio.play().catch(e => console.error("Audio playback failed:", e));
+        } else if (mode === "voice") {
+          const utterance = new SpeechSynthesisUtterance(data.next_question || INITIAL_QUESTION);
+          utterance.lang = "ko-KR";
+          
+          const voices = window.speechSynthesis.getVoices();
+          const koreanVoices = voices.filter(voice => voice.lang.startsWith("ko"));
+          const maleVoice = koreanVoices.find(voice => 
+            voice.name.toLowerCase().includes("male") || 
+            voice.name.includes("남성") || 
+            voice.name.includes("In-Guk")
+          );
+          
+          if (maleVoice) {
+            utterance.voice = maleVoice;
+          } else if (koreanVoices.length > 0) {
+            utterance.voice = koreanVoices[0];
+          }
+          utterance.pitch = 0.8;
+          
+          window.speechSynthesis.speak(utterance);
+        }
+
         setIsInterviewFinished(data.is_finished);
 
         if (data.is_finished) {
@@ -140,12 +171,101 @@ export default function useInterviewSession({
       difficulty,
       target_university: univ,
       target_department: department,
+      mode,
     });
-  }, [department, difficulty, enabled, mutateInitialize, recordId, univ]);
+  }, [department, difficulty, enabled, mode, mutateInitialize, recordId, univ]);
 
   useEffect(() => {
     return stopTimer;
   }, [stopTimer]);
+
+  const handleSendAudioMessage = async (audioBlob: Blob) => {
+    if (isInterviewFinished || !sessionId) {
+      return;
+    }
+
+    const userMessage: Message = {
+      id: messages.length + 1,
+      sender: "User",
+      text: "...",
+      state: "pending",
+    };
+
+    setMessages((prev) => [
+      ...prev,
+      userMessage,
+      {
+        id: prev.length + 2,
+        sender: "AI",
+        text: "",
+        state: "pending",
+      },
+    ]);
+
+    stopTimer();
+    setIsChatPending(true);
+
+    try {
+      const response = await chatInterviewAudio(sessionId, audioBlob, responseTimer);
+      
+      if (response.audio_url) {
+        const audio = new Audio(response.audio_url);
+        audio.play().catch(e => console.error("Audio playback failed:", e));
+      }
+      
+      setMessages((prev) => {
+        const newMessages = [...prev];
+        const userMsgIndex = newMessages.findIndex(
+          (m) => m.id === userMessage.id,
+        );
+        if (userMsgIndex !== -1) {
+          newMessages[userMsgIndex] = {
+            ...newMessages[userMsgIndex],
+            text: response.transcript || "음성 인식 실패",
+            state: "success",
+          };
+        }
+
+        const aiMsgIndex = newMessages.length - 1;
+        newMessages[aiMsgIndex] = {
+          ...newMessages[aiMsgIndex],
+          text: response.next_question,
+          state: "success",
+        };
+
+        if (response.is_finished) {
+          return [
+            ...newMessages,
+            {
+              id: newMessages.length + 1,
+              sender: "AI",
+              text: "고생하셨습니다.",
+              state: "success",
+            },
+          ];
+        }
+
+        return newMessages;
+      });
+
+      if (response.is_finished) {
+        setIsInterviewFinished(true);
+        stopTimer();
+      } else {
+        setResponseTimer(0);
+        startTimer();
+      }
+    } catch (error) {
+      setMessages((prev) =>
+        prev.filter((m) => m.state !== "pending" && m.state !== "typing"),
+      );
+      handleInterviewError(error, "면접 진행 중 오류가 발생했습니다.");
+      setResponseTimer(0);
+      startTimer();
+    } finally {
+      setIsChatPending(false);
+    }
+  };
 
   const handleSendMessage = async () => {
     if (!text.trim() || isInterviewFinished || !sessionId) {
@@ -183,7 +303,11 @@ export default function useInterviewSession({
           response_time: responseTimer,
         },
         (data: unknown) => {
-          const d = data as { status?: string; token?: string; message?: string };
+          const d = data as {
+            status?: string;
+            token?: string;
+            message?: string;
+          };
           if (d.status === "generating") {
             setMessages((prev) => {
               const lastIndex = prev.length - 1;
@@ -220,20 +344,20 @@ export default function useInterviewSession({
             stopTimer();
           } else if (d.status === "error") {
             setMessages((prev) =>
-              prev.filter((m) => m.state !== "pending" && m.state !== "typing")
+              prev.filter((m) => m.state !== "pending" && m.state !== "typing"),
             );
             handleInterviewError(
               new Error(d.message || "오류가 발생했습니다."),
-              "질문 생성 중 오류가 발생했습니다."
+              "질문 생성 중 오류가 발생했습니다.",
             );
           }
         },
         (error) => {
           setMessages((prev) =>
-            prev.filter((m) => m.state !== "pending" && m.state !== "typing")
+            prev.filter((m) => m.state !== "pending" && m.state !== "typing"),
           );
           handleInterviewError(error, "면접 진행 중 오류가 발생했습니다.");
-        }
+        },
       );
 
       if (!currentIsFinished) {
@@ -241,7 +365,7 @@ export default function useInterviewSession({
         startTimer();
       }
     } catch {
-      // Error is already handled via onError callback
+      //
     } finally {
       setIsChatPending(false);
     }
@@ -267,6 +391,7 @@ export default function useInterviewSession({
     modalMessage,
     closeModal: () => setIsModalOpen(false),
     handleSendMessage,
+    handleSendAudioMessage,
     resetTimer: () => setResponseTimer(0),
     formatTime,
   };

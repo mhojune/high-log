@@ -5,8 +5,10 @@ import Modal from "@/components/modal/Modal";
 import PracticeStep2Timer from "@/features/interviewPractice/PracticeStep2Timer";
 import PracticeStep2ChatList from "@/features/interviewPractice/PracticeStep2ChatList";
 import PracticeStep2AnswerInput from "@/features/interviewPractice/PracticeStep2AnswerInput";
+import PracticeStep2AudioInput from "@/features/interviewPractice/PracticeStep2AudioInput";
 import useInterviewSession from "@/hooks/useInterviewSession";
 import { useEffect } from "react";
+import beaberIcon from "@/assets/icons/beaber.svg";
 
 interface PracticeStep2Props {
   onNext: (sessionId: string) => void;
@@ -41,6 +43,7 @@ export default function PracticeStep2({
     modalMessage,
     closeModal,
     handleSendMessage,
+    handleSendAudioMessage,
     resetTimer,
     formatTime,
   } = useInterviewSession({
@@ -49,6 +52,7 @@ export default function PracticeStep2({
     univ,
     department,
     enabled: isInterviewConfigReady,
+    mode: mode ?? "text",
   });
 
   useEffect(() => {
@@ -87,15 +91,38 @@ export default function PracticeStep2({
             formatTime={formatTime}
             onReset={resetTimer}
           />
-          <PracticeStep2ChatList messages={messages} />
-          <PracticeStep2AnswerInput
-            text={text}
-            setText={setText}
-            isPending={isPending}
-            isSessionReady={isSessionReady}
-            isInterviewFinished={isInterviewFinished}
-            onSend={handleSendMessage}
-          />
+          {mode === "voice" ? (
+            <S.ChattingWrapper style={{ justifyContent: "center", alignItems: "center" }}>
+              <img
+                src={beaberIcon}
+                alt="beaber"
+                style={{
+                  width: "200px",
+                  height: "200px",
+                }}
+              />
+            </S.ChattingWrapper>
+          ) : (
+            <PracticeStep2ChatList messages={messages} />
+          )}
+          
+          {mode === "voice" ? (
+            <PracticeStep2AudioInput
+              isPending={isPending}
+              isSessionReady={isSessionReady}
+              isInterviewFinished={isInterviewFinished}
+              onSendAudio={handleSendAudioMessage}
+            />
+          ) : (
+            <PracticeStep2AnswerInput
+              text={text}
+              setText={setText}
+              isPending={isPending}
+              isSessionReady={isSessionReady}
+              isInterviewFinished={isInterviewFinished}
+              onSend={handleSendMessage}
+            />
+          )}
         </S.PracticeWrapper>
       </S.PracticeStep2Container>
       {isModalOpen && (
