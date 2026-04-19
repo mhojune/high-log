@@ -29,8 +29,6 @@ export async function chatInterviewAudio(
   return apiClient<InterviewChatAudioResponse>(`/ai/interview/chat/audio/${session_id}`, {
     method: "POST",
     body: formData,
-    // Note: Do not set Content-Type header manually when using FormData,
-    // the browser will automatically set it to multipart/form-data with the correct boundary.
   });
 }
 
