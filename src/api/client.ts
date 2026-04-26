@@ -105,14 +105,17 @@ export async function apiClient<T>(
   const { accessToken: explicitToken, ...init } = options;
   const accessToken = explicitToken ?? tokenStorage.getAccessToken();
 
-  const headers: HeadersInit = {
+  const headers: Record<string, string> = {
     "Content-Type": "application/json",
-    ...(init.headers as Record<string, string>),
+    ...(init.headers as Record<string, string> || {}),
   };
 
+  if (init.body instanceof FormData) {
+    delete headers["Content-Type"];
+  }
+
   if (accessToken) {
-    (headers as Record<string, string>)["Authorization"] =
-      `Bearer ${accessToken}`;
+    headers["Authorization"] = `Bearer ${accessToken}`;
   }
 
   const response = await fetch(`${BASE_URL}${endpoint}`, {

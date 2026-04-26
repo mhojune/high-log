@@ -3,6 +3,7 @@ export interface InterviewInitializeRequest {
   difficulty: "Easy" | "Normal" | "Hard";
   target_university: string;
   target_department: string;
+  mode: "text" | "voice";
 }
 
 export interface InterviewChatRequest {
@@ -14,6 +15,16 @@ export interface InterviewChatResponse {
   next_question: string;
   is_finished: boolean;
   session_id: string;
+  audio_url?: string;
+}
+
+export interface InterviewChatAudioResponse {
+  transcript: string;
+  next_question: string;
+  audio_url: string;
+  sub_topic: string;
+  remaining_time: number;
+  is_finished: boolean;
 }
 
 export interface InterviewLog {

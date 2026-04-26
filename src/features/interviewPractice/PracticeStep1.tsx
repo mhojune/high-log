@@ -61,13 +61,13 @@ export default function PracticeStep1({
   ];
   const modeOptions = [
     { label: "텍스트", value: "text" },
-    { label: "음성", value: "audio" },
+    { label: "음성", value: "voice" },
   ];
 
   const handleStart = () => {
     const selectedReport = reportOptions.find((opt) => opt.label === report);
     const selectedLevel = levelOptions.find((opt) => opt.label === level);
-    const selectedMode = modeOptions.find((opt) => opt.label === mode); // Should always be "텍스트"
+    const selectedMode = modeOptions.find((opt) => opt.label === mode);
 
     if (
       !selectedReport ||
@@ -89,7 +89,6 @@ export default function PracticeStep1({
       selectedLevel.value as "Easy" | "Normal" | "Hard",
       univ,
       department,
-
       selectedMode.value as "text" | "voice",
     );
   };
@@ -98,7 +97,6 @@ export default function PracticeStep1({
     setIsModalOpen(false);
   };
 
-  // Handle record list loading/error states
   if (isRecordListLoading) {
     return (
       <S.Practice1Container>
