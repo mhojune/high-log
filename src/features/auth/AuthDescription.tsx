@@ -1,10 +1,8 @@
-import { DefaultButton } from "@/components/button/Button";
 import { AUTH_DESCRIPTION, AUTH_FEATURE_BLOCKS } from "@/constants/auth";
 import * as S from "@/features/auth/AuthDescription.styles";
 import FileQuestionIcon from "@/assets/icons/file-question-01.svg?react";
 import MessageChatIcon from "@/assets/icons/message-chat-01.svg?react";
 import Book04Icon from "@/assets/icons/book-04.svg?react";
-import { useNavigate } from "react-router-dom";
 
 const AUTH_FEATURE_ICONS = [
   FileQuestionIcon,
@@ -13,12 +11,6 @@ const AUTH_FEATURE_ICONS = [
 ] as const;
 
 export default function AuthDescription() {
-  const navigate = useNavigate();
-
-  const handleSampleResultClick = () => {
-    navigate("/onboard");
-  };
-
   return (
     <S.Wrapper>
       <S.TextBlock>
@@ -41,14 +33,6 @@ export default function AuthDescription() {
           );
         })}
       </S.FeatureBlocksWrapper>
-      <S.ButtonWrapper>
-        <DefaultButton
-          width={174}
-          type="secondary"
-          text={AUTH_DESCRIPTION.sampleButtonText}
-          onClick={handleSampleResultClick}
-        />
-      </S.ButtonWrapper>
     </S.Wrapper>
   );
 }

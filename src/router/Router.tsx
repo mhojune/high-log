@@ -97,7 +97,7 @@ const router = createBrowserRouter([
       {
         path: "record_management",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute redirectPath="/onboard">
             <RecordManagement />
           </ProtectedRoute>
         ),
@@ -105,7 +105,7 @@ const router = createBrowserRouter([
       {
         path: "record_management/upload",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute redirectPath="/onboard">
             <RecordUpload />
           </ProtectedRoute>
         ),
@@ -113,7 +113,7 @@ const router = createBrowserRouter([
       {
         path: "record_management/:id",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute redirectPath="/onboard">
             <RecordDetail />
           </ProtectedRoute>
         ),
