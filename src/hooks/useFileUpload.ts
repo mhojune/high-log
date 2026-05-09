@@ -13,6 +13,21 @@ export function useFileUpload() {
     setProgress(0);
   }, []);
 
+  const setUploadingProgress = useCallback((nextProgress: number) => {
+    setStatus("uploading");
+    setProgress(nextProgress);
+  }, []);
+
+  const markUploadCompleted = useCallback(() => {
+    setStatus("completed");
+    setProgress(100);
+  }, []);
+
+  const markUploadFailed = useCallback(() => {
+    setStatus("idle");
+    setProgress(0);
+  }, []);
+
   const handleRemoveFile = useCallback(() => {
     setFile(null);
     setStatus("idle");
@@ -25,5 +40,8 @@ export function useFileUpload() {
     progress,
     handleFileSelect,
     handleRemoveFile,
+    setUploadingProgress,
+    markUploadCompleted,
+    markUploadFailed,
   };
 }

@@ -1,12 +1,12 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import * as OB from "@/features/onboard/step5-questions/OnboardShowQuestions.styles";
 import SignUpPrompt from "@/features/onboard/step5-questions/SignUpPrompt";
 import OnboardBlurredQuestionCard from "@/features/onboard/step5-questions/OnboardBlurredQuestionCard";
 import QuestionCard, { type QuestionCardProps } from "@/components/card/QuestionCard";
-import {
-  ONBOARD_STUB_QUESTIONS,
-  type OnboardStubQuestion,
-} from "@/constants/onboard/onboardStubQuestions";
+import LoadingCard from "@/components/card/LoadingCard";
+import { parseApiError } from "@/api/client";
+import { getGuestQuestions } from "@/api/guest/guestApi";
+import type { GuestQuestion } from "@/api/guest/guestTypes";
 
 const TAB_CONFIG = [
   { category: "성적" as const, label: "교과 성적" },
@@ -18,13 +18,16 @@ const TAB_CONFIG = [
 
 type TabConfig = (typeof TAB_CONFIG)[number];
 
+const TARGET_CATEGORY = "세특";
+const MAX_VISIBLE_QUESTIONS = 3;
+
 const DIFFICULTY_TO_LABEL: Record<string, QuestionCardProps["labelType"]> = {
   기본: "basic",
   심화: "intermediate",
   압박: "advanced",
 };
 
-function mapStubToCardProps(q: OnboardStubQuestion): QuestionCardProps {
+function mapQuestionToCardProps(q: GuestQuestion): QuestionCardProps {
   const labelType = DIFFICULTY_TO_LABEL[q.difficulty] ?? "basic";
   return {
     labelType,
@@ -33,20 +36,43 @@ function mapStubToCardProps(q: OnboardStubQuestion): QuestionCardProps {
     answerPointText: q.answerPoints,
     answerText: q.modelAnswer,
     answerCriteriaText: q.evaluationCriteria,
+    // 게스트 질문은 임시 ID이며 북마크 저장 API가 없어 보기 전용으로 처리합니다.
     favoriteType: "default",
   };
 }
 
-/** 온보딩 최종 단계 — 세특 탭만 스텁 명시 카드 노출, 그 외 탭은 블러 예시만 */
 export default function OnboardShowQuestions() {
   const [activeTab, setActiveTab] = useState<TabConfig>(TAB_CONFIG[1]);
-  const isDetailTab = activeTab.category === "세특";
+  const [questions, setQuestions] = useState<GuestQuestion[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [errorMessage, setErrorMessage] = useState("");
 
-  const filtered = useMemo(
-    () => ONBOARD_STUB_QUESTIONS.filter((q) => q.category === activeTab.category),
-    [activeTab.category],
-  );
-  const cardPropsList = useMemo(() => filtered.map(mapStubToCardProps), [filtered]);
+  useEffect(() => {
+    if (activeTab.category !== TARGET_CATEGORY) {
+      setQuestions([]);
+      setErrorMessage("");
+      setIsLoading(false);
+      return;
+    }
+
+    const fetchQuestions = async () => {
+      try {
+        setIsLoading(true);
+        setErrorMessage("");
+        const result = await getGuestQuestions({ category: TARGET_CATEGORY });
+        setQuestions(result.slice(0, MAX_VISIBLE_QUESTIONS));
+      } catch (error) {
+        const { message } = parseApiError(error);
+        setQuestions([]);
+        setErrorMessage(message || "질문을 불러오지 못했습니다.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    void fetchQuestions();
+  }, [activeTab.category]);
+
+  const cardPropsList = useMemo(() => questions.map(mapQuestionToCardProps), [questions]);
 
   return (
     <>
@@ -69,30 +95,36 @@ export default function OnboardShowQuestions() {
             </OB.TabItem>
           ))}
         </OB.OnboardTabContainer>
-        {isDetailTab ? (
-          <OB.QuestionList key={`${activeTab.category}-clear`}>
-            {cardPropsList.map((props, i) => {
-              const q = filtered[i];
+        <OB.QuestionList key={`${activeTab.category}-clear`}>
+          {isLoading ? (
+            <>
+              <OB.QuestionCardWrapper>
+                <LoadingCard />
+              </OB.QuestionCardWrapper>
+              <OB.QuestionCardWrapper>
+                <LoadingCard />
+              </OB.QuestionCardWrapper>
+              <OB.QuestionCardWrapper>
+                <LoadingCard />
+              </OB.QuestionCardWrapper>
+            </>
+          ) : (
+            cardPropsList.map((props, i) => {
+              const q = questions[i];
               return (
-                <OB.QuestionCardWrapper key={q ? `${q.questionId}-${i}` : `stub-${i}`}>
+                <OB.QuestionCardWrapper key={q ? `${q.questionId}-${i}` : `guest-${i}`}>
                   <QuestionCard {...props} onFavoriteClick={() => {}} />
                 </OB.QuestionCardWrapper>
               );
-            })}
-          </OB.QuestionList>
-        ) : null}
+            })
+          )}
+        </OB.QuestionList>
+        {errorMessage ? <OB.Subtitle>{errorMessage}</OB.Subtitle> : null}
         <SignUpPrompt />
         <OB.BlurQuestionList key={`${activeTab.category}-blur`}>
-          {isDetailTab && filtered.length > 0 ? (
-            <OB.QuestionCardWrapper key="onboard-unified-blur-teaser">
-              <OnboardBlurredQuestionCard onFavoriteClick={() => {}} />
-            </OB.QuestionCardWrapper>
-          ) : null}
-          {!isDetailTab ? (
-            <OB.QuestionCardWrapper key="onboard-blur-preview-only">
-              <OnboardBlurredQuestionCard onFavoriteClick={() => {}} />
-            </OB.QuestionCardWrapper>
-          ) : null}
+          <OB.QuestionCardWrapper key="onboard-blur-preview-only">
+            <OnboardBlurredQuestionCard onFavoriteClick={() => {}} />
+          </OB.QuestionCardWrapper>
         </OB.BlurQuestionList>
       </OB.QuestionResultBlock>
     </>

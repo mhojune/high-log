@@ -38,6 +38,7 @@ export async function confirmEmail(
 export async function signUp(body: SignUpRequest): Promise<SignUpResponse> {
   return apiClient<SignUpResponse>("/api/auth/signup", {
     method: "POST",
+    credentials: "include",
     body: JSON.stringify(body),
   });
 }

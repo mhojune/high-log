@@ -13,15 +13,23 @@ const ONBOARD_STUB_PROGRESS_STEP = 20;
 interface OnboardQuestionGeneratingProps {
   /** 스텝 완료(100%) 직후 온보딩 마지막 단계로 전환 등 — API 도입 후에는 성공 핸들러로 교체하면 됩니다. */
   onLoadingComplete?: () => void;
+  progress?: number;
+  isComplete?: boolean;
 }
 
 export default function OnboardQuestionGenerating({
   onLoadingComplete,
+  progress,
+  isComplete,
 }: OnboardQuestionGeneratingProps) {
   const [stubPercent, setStubPercent] = useState(0);
   const [stubComplete, setStubComplete] = useState(false);
+  const isControlled = typeof progress === "number" && typeof isComplete === "boolean";
+  const displayPercent = isControlled ? progress : stubPercent;
+  const displayComplete = isControlled ? isComplete : stubComplete;
 
   useEffect(() => {
+    if (isControlled) return;
     setStubPercent(0);
     setStubComplete(false);
 
@@ -37,16 +45,16 @@ export default function OnboardQuestionGenerating({
     }, ONBOARD_STUB_PROGRESS_TICK_MS);
 
     return () => window.clearInterval(intervalId);
-  }, []);
+  }, [isControlled]);
 
   useEffect(() => {
-    if (!stubComplete || !onLoadingComplete) return;
+    if (!displayComplete || !onLoadingComplete) return;
     onLoadingComplete();
-  }, [stubComplete, onLoadingComplete]);
+  }, [displayComplete, onLoadingComplete]);
 
   return (
     <LoadingQuestionsLayout.ContentWrapper>
-      <QuestionGeneratingLoading percent={stubPercent} isComplete={stubComplete} />
+      <QuestionGeneratingLoading percent={displayPercent} isComplete={displayComplete} />
       <LoadingQuestionsLayout.LoadingCardsWrapper>
         <LoadingCard />
         <LoadingCard />
