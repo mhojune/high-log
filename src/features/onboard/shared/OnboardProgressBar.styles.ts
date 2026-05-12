@@ -4,10 +4,10 @@ export const Wrapper = styled.div`
   width: 100%;
 `;
 
-export const Segments = styled.div`
+export const Segments = styled.div<{ $totalSteps: number }>`
   width: 100%;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: ${({ $totalSteps }) => `repeat(${$totalSteps}, minmax(0, 1fr))`};
   gap: 0;
 `;
 

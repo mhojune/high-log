@@ -8,15 +8,21 @@ type UploadApi = ReturnType<typeof useFileUpload>;
 interface OnboardSchoolRecordUploadProps {
   upload: UploadApi;
   onStartQuestionLoading: () => void;
+  isSubmitting?: boolean;
+  isReadyToProceed?: boolean;
+  actionButtonText?: string;
 }
 
 export default function OnboardSchoolRecordUpload({
   upload,
   onStartQuestionLoading,
+  isSubmitting = false,
+  isReadyToProceed = false,
+  actionButtonText = "지원 정보 입력하기",
 }: OnboardSchoolRecordUploadProps) {
   const { file, status, progress, handleFileSelect, handleRemoveFile } = upload;
 
-  const showQuestionsButton = status === "completed" && file;
+  const showQuestionsButton = isReadyToProceed && status === "completed" && file;
 
   return (
     <S.Wrapper>
@@ -36,9 +42,9 @@ export default function OnboardSchoolRecordUpload({
         {showQuestionsButton && (
           <S.ActionRow>
             <DefaultButton
-              width={151}
+              width={197}
               type="primary"
-              text="내 질문 보기"
+              text={isSubmitting ? "생기부 분석 중..." : actionButtonText}
               onClick={onStartQuestionLoading}
             />
           </S.ActionRow>

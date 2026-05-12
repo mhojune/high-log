@@ -11,7 +11,7 @@ export default function OnboardProgressBar({
 }: OnboardProgressBarProps) {
   return (
     <S.Wrapper>
-      <S.Segments>
+      <S.Segments $totalSteps={totalSteps}>
         {Array.from({ length: totalSteps }, (_, index) => {
           const step = index + 1;
           const isActive = step <= currentStep;

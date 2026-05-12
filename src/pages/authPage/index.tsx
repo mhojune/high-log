@@ -9,6 +9,7 @@ import { useRequestEmailVerify, useConfirmEmail, useSignUp } from "@/api/auth/us
 import { useAuth } from "@/contexts/AuthContext";
 import { parseApiError, ApiErrorException } from "@/api/client";
 import { isValidPassword } from "@/constants/auth";
+import { migrateGuestWork } from "@/api/guest/guestApi";
 
 type AuthMode = "login" | "signup";
 
@@ -140,12 +141,24 @@ export default function AuthPage() {
     }
 
     try {
-      await signUp({
+      const signUpResponse = await signUp({
         email: data.email,
         password: data.password,
         name: data.name,
         marketingAgreement: false,
       });
+
+      const guestOnboarded = sessionStorage.getItem("guest_onboarded") === "true";
+      if (guestOnboarded) {
+        try {
+          await migrateGuestWork({ userId: signUpResponse.userId });
+          sessionStorage.removeItem("guest_onboarded");
+          sessionStorage.removeItem("guest_record_parsed");
+        } catch (migrationError) {
+          console.error("[Guest Migrate Error]", migrationError);
+        }
+      }
+
       setSwitchToLoginOnClose(true);
       showModal(
         "회원가입이 완료되었습니다.",
