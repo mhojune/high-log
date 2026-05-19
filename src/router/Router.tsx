@@ -23,8 +23,13 @@ import InterviewResult from "@/pages/interviewPractice/interviewResult";
 import QuestionsList from "@/pages/recordManagement/detail/questionsList";
 import SupportDetail from "@/pages/support/detail";
 import Faq from "@/pages/faq";
+import Onboard from "@/pages/onboard";
 
 const router = createBrowserRouter([
+  {
+    path: "/onboard",
+    element: <Onboard />,
+  },
   {
     path: "/",
     element: <App />,
@@ -92,7 +97,7 @@ const router = createBrowserRouter([
       {
         path: "record_management",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute redirectPath="/onboard">
             <RecordManagement />
           </ProtectedRoute>
         ),
@@ -100,7 +105,7 @@ const router = createBrowserRouter([
       {
         path: "record_management/upload",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute redirectPath="/onboard">
             <RecordUpload />
           </ProtectedRoute>
         ),
@@ -108,7 +113,7 @@ const router = createBrowserRouter([
       {
         path: "record_management/:id",
         element: (
-          <ProtectedRoute>
+          <ProtectedRoute redirectPath="/onboard">
             <RecordDetail />
           </ProtectedRoute>
         ),

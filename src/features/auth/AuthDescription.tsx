@@ -1,4 +1,3 @@
-import { DefaultButton } from "@/components/button/Button";
 import { AUTH_DESCRIPTION, AUTH_FEATURE_BLOCKS } from "@/constants/auth";
 import * as S from "@/features/auth/AuthDescription.styles";
 import FileQuestionIcon from "@/assets/icons/file-question-01.svg?react";
@@ -34,13 +33,6 @@ export default function AuthDescription() {
           );
         })}
       </S.FeatureBlocksWrapper>
-      <S.ButtonWrapper>
-        <DefaultButton
-          width={174}
-          type="secondary"
-          text={AUTH_DESCRIPTION.sampleButtonText}
-        />
-      </S.ButtonWrapper>
     </S.Wrapper>
   );
 }
