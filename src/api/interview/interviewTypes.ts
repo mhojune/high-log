@@ -70,6 +70,14 @@ export interface InterviewListItem {
   created_at: string;
 }
 
+export interface AzureSpeechTokenResponse {
+  token: string;
+  region: string;
+  expires_in: number;
+  speech_synthesis_language: string;
+  speech_synthesis_voice_name: string;
+}
+
 export interface InterviewListResponse {
   interviews: InterviewListItem[];
 }

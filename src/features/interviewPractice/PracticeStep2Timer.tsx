@@ -1,4 +1,5 @@
 import { DefaultButton } from "@/components/button/Button";
+import timerIcon from "@/assets/icons/timer.svg";
 import * as S from "@/features/interviewPractice/PracticeStep2.styles";
 
 interface PracticeStep2TimerProps {
@@ -15,7 +16,8 @@ export default function PracticeStep2Timer({
   return (
     <S.TimerResetBox>
       <S.TimerBox>
-        <S.Timer>타이머 : {formatTime(responseTimer)}</S.Timer>
+        <img src={timerIcon} alt="timer" width={24} height={24} />
+        <S.Timer>{formatTime(responseTimer)}</S.Timer>
       </S.TimerBox>
       <DefaultButton
         width={78}

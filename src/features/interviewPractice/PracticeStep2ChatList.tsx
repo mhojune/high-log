@@ -25,7 +25,7 @@ export default function PracticeStep2ChatList({
   }, [messages]);
 
   return (
-    <S.ChattingWrapper ref={chatContainerRef}>
+    <S.TextChatWrapper ref={chatContainerRef}>
       {messages.map((msg) =>
         msg.sender === "AI" ? (
           <S.AIChatBox key={msg.id}>
@@ -47,6 +47,6 @@ export default function PracticeStep2ChatList({
           </S.UserChatBox>
         ),
       )}
-    </S.ChattingWrapper>
+    </S.TextChatWrapper>
   );
 }
