@@ -6,6 +6,7 @@ import type {
   InterviewInitializeRequest,
   InterviewListResponse,
   InterviewChatAudioResponse,
+  AzureSpeechTokenResponse,
 } from "@/api/interview/interviewTypes";
 
 export async function initializeInterviewText(
@@ -29,6 +30,12 @@ export async function chatInterviewAudio(
   return apiClient<InterviewChatAudioResponse>(`/ai/interview/chat/audio/${session_id}`, {
     method: "POST",
     body: formData,
+  });
+}
+
+export async function getAzureSpeechToken(): Promise<AzureSpeechTokenResponse> {
+  return apiClient<AzureSpeechTokenResponse>("/ai/interview/speech/token", {
+    method: "POST",
   });
 }
 

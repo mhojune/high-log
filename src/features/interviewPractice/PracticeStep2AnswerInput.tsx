@@ -24,7 +24,7 @@ export default function PracticeStep2AnswerInput({
   return (
     <S.AnswerButtonBox>
       <S.AnswerBox>
-        <S.AnswerInput
+        <S.AnswerTextInput
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder={

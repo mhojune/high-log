@@ -3,10 +3,13 @@ import { useInitializeInterviewText } from "@/api/interview/useInterviewApi";
 import {
   chatInterviewTextStream,
   chatInterviewAudio,
+  getAzureSpeechToken,
 } from "@/api/interview/interviewApi";
 import type { Message } from "@/features/interviewPractice/PracticeStep2.types";
+import * as SpeechSDK from "microsoft-cognitiveservices-speech-sdk";
 
 const INITIAL_QUESTION = "자기소개 해주세요.";
+const VISEME_TIME_SCALE = 1.2;
 
 interface UseInterviewSessionParams {
   recordId: number;
@@ -68,8 +71,22 @@ export default function useInterviewSession({
     mainTitle: "",
     subTitle: "",
   });
+  const [visemeId, setVisemeId] = useState<number>(0);
 
   const timerIntervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const visemeTimeoutRefs = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const visemeResetTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(
+    null,
+  );
+  const visemeBaseOffsetRef = useRef<number | null>(null);
+  const visemePlaybackRunRef = useRef(0);
+  const VISEME_BUCKET_COUNT = 7;
+  const MIN_VISEME_UPDATE_MS = 90;
+  const VISEME_AMPLITUDE = 0.9; // 0..1, higher = larger mouth movements
+  const lastVisemeUpdateRef = useRef<number>(0);
+  const lastVisemeBucketRef = useRef<number | null>(null);
+  const VISEME_SMOOTH_WINDOW = 4;
+  const visemeBufferRef = useRef<number[]>([]);
   const hasInitializedRef = useRef(false);
 
   const stopTimer = useCallback(() => {
@@ -85,6 +102,16 @@ export default function useInterviewSession({
     }, 1000);
   }, [stopTimer]);
 
+  const clearVisemeTimers = useCallback(() => {
+    visemeTimeoutRefs.current.forEach((timeoutId) => clearTimeout(timeoutId));
+    visemeTimeoutRefs.current = [];
+    if (visemeResetTimeoutRef.current) {
+      clearTimeout(visemeResetTimeoutRef.current);
+      visemeResetTimeoutRef.current = null;
+    }
+    visemeBaseOffsetRef.current = null;
+  }, []);
+
   const handleInterviewError = (error: unknown, defaultMessage: string) => {
     console.error(defaultMessage, error);
     const message = getErrorMessage(error);
@@ -95,6 +122,180 @@ export default function useInterviewSession({
     });
     setIsModalOpen(true);
     stopTimer();
+  };
+
+  const playQuestionAudio = async (questionText: string, audioUrl?: string) => {
+    clearVisemeTimers();
+
+    if (mode === "voice") {
+      console.log("[interview] start Azure TTS", { questionText });
+      await playAzureTTS(questionText);
+      return;
+    }
+
+    if (audioUrl) {
+      const audio = new Audio(audioUrl);
+      audio.play().catch((e) => console.error("Audio playback failed:", e));
+    }
+  };
+
+  const playAzureTTS = async (ttsText: string) => {
+    if (!ttsText) return;
+    try {
+      const playbackRunId = ++visemePlaybackRunRef.current;
+      const tokenData = await getAzureSpeechToken();
+      const speechConfig = SpeechSDK.SpeechConfig.fromAuthorizationToken(
+        tokenData.token,
+        tokenData.region,
+      );
+      speechConfig.speechSynthesisLanguage =
+        tokenData.speech_synthesis_language;
+      speechConfig.speechSynthesisVoiceName =
+        tokenData.speech_synthesis_voice_name;
+
+      const audioConfig = SpeechSDK.AudioConfig.fromDefaultSpeakerOutput();
+      const synthesizer = new SpeechSDK.SpeechSynthesizer(
+        speechConfig,
+        audioConfig,
+      );
+
+      // Fallback: show a small mouth immediately while waiting for viseme events
+      try {
+        setVisemeId(1);
+        if (visemeResetTimeoutRef.current) {
+          clearTimeout(visemeResetTimeoutRef.current);
+        }
+        visemeResetTimeoutRef.current = setTimeout(() => {
+          setVisemeId(0);
+          visemeResetTimeoutRef.current = null;
+        }, 500);
+      } catch {
+        // swallow in non-reactive contexts
+      }
+
+      synthesizer.visemeReceived = function (_s, e) {
+        const id = typeof e.visemeId === "number" ? e.visemeId : 0;
+        const audioOffset =
+          typeof e.audioOffset === "number" ? e.audioOffset : 0;
+        const baseOffset =
+          visemeBaseOffsetRef.current ??
+          (visemeBaseOffsetRef.current = audioOffset);
+        const scheduledDelayMs = Math.max(
+          0,
+          ((audioOffset - baseOffset) / 10000) * VISEME_TIME_SCALE,
+        );
+        console.log("[interview] visemeReceived", {
+          visemeId: id,
+          audioOffset,
+          scheduledDelayMs,
+        });
+
+        const timeoutId = setTimeout(() => {
+          if (visemePlaybackRunRef.current !== playbackRunId) {
+            return;
+          }
+
+          console.log("[interview] scheduled viseme fire", {
+            scheduledDelayMs,
+            rawViseme: id,
+          });
+
+          // Map raw viseme (0..21) into fewer buckets to reduce jitter
+          const rawMax = 21;
+          const bucket = Math.round((id / rawMax) * (VISEME_BUCKET_COUNT - 1));
+          const normalized = bucket / (VISEME_BUCKET_COUNT - 1);
+          const center = rawMax / 2;
+          let repVisemeId = Math.round(
+            (normalized * rawMax - center) * VISEME_AMPLITUDE + center,
+          );
+          repVisemeId = Math.max(0, Math.min(rawMax, repVisemeId));
+
+          const now = Date.now();
+          const lastUpdate = lastVisemeUpdateRef.current || 0;
+
+          // Throttle rapid updates: if updates come faster than MIN_VISEME_UPDATE_MS, ignore
+          if (
+            lastVisemeBucketRef.current === bucket &&
+            now - lastUpdate < MIN_VISEME_UPDATE_MS
+          ) {
+            return;
+          }
+
+          if (
+            now - lastUpdate < MIN_VISEME_UPDATE_MS &&
+            lastVisemeBucketRef.current !== bucket
+          ) {
+            return;
+          }
+
+          lastVisemeBucketRef.current = bucket;
+          lastVisemeUpdateRef.current = now;
+
+          // smoothing: keep recent repVisemeId values and pick the mode
+          visemeBufferRef.current.push(repVisemeId);
+          if (visemeBufferRef.current.length > VISEME_SMOOTH_WINDOW) {
+            visemeBufferRef.current.shift();
+          }
+
+          const counts: Record<number, number> = {};
+          visemeBufferRef.current.forEach(
+            (v) => (counts[v] = (counts[v] || 0) + 1),
+          );
+          let best =
+            visemeBufferRef.current[visemeBufferRef.current.length - 1];
+          let bestCount = 0;
+          Object.entries(counts).forEach(([k, c]) => {
+            const key = Number(k);
+            if (c > bestCount) {
+              bestCount = c;
+              best = key;
+            }
+          });
+
+          setVisemeId(best);
+        }, scheduledDelayMs);
+
+        visemeTimeoutRefs.current.push(timeoutId);
+
+        if (visemeResetTimeoutRef.current) {
+          clearTimeout(visemeResetTimeoutRef.current);
+        }
+
+        visemeResetTimeoutRef.current = setTimeout(() => {
+          if (visemePlaybackRunRef.current !== playbackRunId) {
+            return;
+          }
+          setVisemeId(0);
+        }, scheduledDelayMs + 150);
+      };
+
+      synthesizer.speakTextAsync(
+        ttsText,
+        function (result) {
+          if (
+            result.reason === SpeechSDK.ResultReason.SynthesizingAudioCompleted
+          ) {
+            console.log("TTS synthesis finished.");
+            // Do not clear viseme timers here; allow scheduled viseme timeouts
+            // (based on audioOffset) to run until the audio playback actually ends.
+          } else {
+            console.error("Speech synthesis canceled:", result.errorDetails);
+            clearVisemeTimers();
+            setVisemeId(0);
+          }
+          synthesizer.close();
+        },
+        function (err) {
+          console.trace("TTS error:", err);
+          clearVisemeTimers();
+          setVisemeId(0);
+          synthesizer.close();
+        },
+      );
+    } catch (error) {
+      console.error("Failed to play Azure TTS:", error);
+      clearVisemeTimers();
+    }
   };
 
   const { mutate: mutateInitialize, isPending: isInitializePending } =
@@ -119,31 +320,11 @@ export default function useInterviewSession({
             state: "success",
           },
         ]);
-        
-        if (data.audio_url) {
-          const audio = new Audio(data.audio_url);
-          audio.play().catch(e => console.error("Audio playback failed:", e));
-        } else if (mode === "voice") {
-          const utterance = new SpeechSynthesisUtterance(data.next_question || INITIAL_QUESTION);
-          utterance.lang = "ko-KR";
-          
-          const voices = window.speechSynthesis.getVoices();
-          const koreanVoices = voices.filter(voice => voice.lang.startsWith("ko"));
-          const maleVoice = koreanVoices.find(voice => 
-            voice.name.toLowerCase().includes("male") || 
-            voice.name.includes("남성") || 
-            voice.name.includes("In-Guk")
-          );
-          
-          if (maleVoice) {
-            utterance.voice = maleVoice;
-          } else if (koreanVoices.length > 0) {
-            utterance.voice = koreanVoices[0];
-          }
-          utterance.pitch = 0.8;
-          
-          window.speechSynthesis.speak(utterance);
-        }
+
+        void playQuestionAudio(
+          data.next_question || INITIAL_QUESTION,
+          data.audio_url,
+        );
 
         setIsInterviewFinished(data.is_finished);
 
@@ -179,6 +360,13 @@ export default function useInterviewSession({
     return stopTimer;
   }, [stopTimer]);
 
+  useEffect(() => {
+    return () => {
+      clearVisemeTimers();
+      visemePlaybackRunRef.current += 1;
+    };
+  }, [clearVisemeTimers]);
+
   const handleSendAudioMessage = async (audioBlob: Blob) => {
     if (isInterviewFinished || !sessionId) {
       return;
@@ -206,13 +394,14 @@ export default function useInterviewSession({
     setIsChatPending(true);
 
     try {
-      const response = await chatInterviewAudio(sessionId, audioBlob, responseTimer);
-      
-      if (response.audio_url) {
-        const audio = new Audio(response.audio_url);
-        audio.play().catch(e => console.error("Audio playback failed:", e));
-      }
-      
+      const response = await chatInterviewAudio(
+        sessionId,
+        audioBlob,
+        responseTimer,
+      );
+
+      void playQuestionAudio(response.next_question, response.audio_url);
+
       setMessages((prev) => {
         const newMessages = [...prev];
         const userMsgIndex = newMessages.findIndex(
@@ -394,5 +583,6 @@ export default function useInterviewSession({
     handleSendAudioMessage,
     resetTimer: () => setResponseTimer(0),
     formatTime,
+    visemeId,
   };
 }

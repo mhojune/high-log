@@ -18,6 +18,7 @@
   },
   "dependencies": {
     "@tanstack/react-query": "^5.90.21",
+    "microsoft-cognitiveservices-speech-sdk": "^1.50.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-router-dom": "^7.12.0",
@@ -39,7 +40,7 @@
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
     "vite": "^7.2.4",
-    "xlsx": "^0.18.5",
-    "vite-plugin-svgr": "^4.5.0"
+    "vite-plugin-svgr": "^4.5.0",
+    "xlsx": "^0.18.5"
   }
 }
