@@ -9,6 +9,7 @@ import PracticeStep2AudioInput from "@/features/interviewPractice/PracticeStep2A
 import useInterviewSession from "@/hooks/useInterviewSession";
 import { useEffect, useState, useRef } from "react";
 import baseImg from "@/assets/images/기본.png";
+<<<<<<< HEAD
 import m0 from "@/assets/images/0.png";
 import m1 from "@/assets/images/1.png";
 import m2 from "@/assets/images/2.png";
@@ -31,6 +32,30 @@ import m18 from "@/assets/images/18.png";
 import m19 from "@/assets/images/19.png";
 import m20 from "@/assets/images/20.png";
 import m21 from "@/assets/images/21.png";
+=======
+import m0 from "@/assets/images/0.svg";
+import m1 from "@/assets/images/1.svg";
+import m2 from "@/assets/images/2.svg";
+import m3 from "@/assets/images/3.svg";
+import m4 from "@/assets/images/4.svg";
+import m5 from "@/assets/images/5.svg";
+import m6 from "@/assets/images/6.svg";
+import m7 from "@/assets/images/7.svg";
+import m8 from "@/assets/images/8.svg";
+import m9 from "@/assets/images/9.svg";
+import m10 from "@/assets/images/10.svg";
+import m11 from "@/assets/images/11.svg";
+import m12 from "@/assets/images/12.svg";
+import m13 from "@/assets/images/13.svg";
+import m14 from "@/assets/images/14.svg";
+import m15 from "@/assets/images/15.svg";
+import m16 from "@/assets/images/16.svg";
+import m17 from "@/assets/images/17.svg";
+import m18 from "@/assets/images/18.svg";
+import m19 from "@/assets/images/19.svg";
+import m20 from "@/assets/images/20.svg";
+import m21 from "@/assets/images/21.svg";
+>>>>>>> main
 
 const MOUTH_IMAGES = [
   m0,
