@@ -9,7 +9,7 @@ import type { Message } from "@/features/interviewPractice/PracticeStep2.types";
 import * as SpeechSDK from "microsoft-cognitiveservices-speech-sdk";
 
 const INITIAL_QUESTION = "자기소개 해주세요.";
-const VISEME_TIME_SCALE = 1.2;
+const VISEME_TIME_SCALE = 0.9;
 
 interface UseInterviewSessionParams {
   recordId: number;
@@ -124,8 +124,46 @@ export default function useInterviewSession({
     stopTimer();
   };
 
-  const playQuestionAudio = async (questionText: string, audioUrl?: string) => {
+  const playQuestionAudio = async (
+    questionText: string,
+    audioUrl?: string,
+    visemes?: { offset: number; id: number }[],
+  ) => {
+    console.log("[interview] playQuestionAudio called with:", {
+      audioUrl,
+      visemesCount: visemes?.length,
+    });
     clearVisemeTimers();
+
+    if (visemes && visemes.length > 0 && audioUrl) {
+      console.log("[interview] playing audio with backend visemes", {
+        audioUrl,
+        visemeCount: visemes.length,
+      });
+
+      const audio = new Audio(audioUrl);
+      audio.play().catch((e) => console.error("Audio playback failed:", e));
+
+      const playbackRunId = ++visemePlaybackRunRef.current;
+
+      visemes.forEach((v) => {
+        const timeoutId = setTimeout(() => {
+          if (visemePlaybackRunRef.current !== playbackRunId) return;
+
+          setVisemeId(v.id);
+
+          if (visemeResetTimeoutRef.current) {
+            clearTimeout(visemeResetTimeoutRef.current);
+          }
+          visemeResetTimeoutRef.current = setTimeout(() => {
+            if (visemePlaybackRunRef.current !== playbackRunId) return;
+            setVisemeId(0);
+          }, 150);
+        }, v.offset);
+        visemeTimeoutRefs.current.push(timeoutId);
+      });
+      return;
+    }
 
     if (mode === "voice") {
       console.log("[interview] start Azure TTS", { questionText });
@@ -324,6 +362,7 @@ export default function useInterviewSession({
         void playQuestionAudio(
           data.next_question || INITIAL_QUESTION,
           data.audio_url,
+          data.visemes,
         );
 
         setIsInterviewFinished(data.is_finished);
@@ -400,7 +439,11 @@ export default function useInterviewSession({
         responseTimer,
       );
 
-      void playQuestionAudio(response.next_question, response.audio_url);
+      void playQuestionAudio(
+        response.next_question,
+        response.audio_url,
+        response.visemes,
+      );
 
       setMessages((prev) => {
         const newMessages = [...prev];

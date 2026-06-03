@@ -9,28 +9,28 @@ import PracticeStep2AudioInput from "@/features/interviewPractice/PracticeStep2A
 import useInterviewSession from "@/hooks/useInterviewSession";
 import { useEffect, useState, useRef } from "react";
 import baseImg from "@/assets/images/기본.png";
-import m0 from "@/assets/images/0.svg";
-import m1 from "@/assets/images/1.svg";
-import m2 from "@/assets/images/2.svg";
-import m3 from "@/assets/images/3.svg";
-import m4 from "@/assets/images/4.svg";
-import m5 from "@/assets/images/5.svg";
-import m6 from "@/assets/images/6.svg";
-import m7 from "@/assets/images/7.svg";
-import m8 from "@/assets/images/8.svg";
-import m9 from "@/assets/images/9.svg";
-import m10 from "@/assets/images/10.svg";
-import m11 from "@/assets/images/11.svg";
-import m12 from "@/assets/images/12.svg";
-import m13 from "@/assets/images/13.svg";
-import m14 from "@/assets/images/14.svg";
-import m15 from "@/assets/images/15.svg";
-import m16 from "@/assets/images/16.svg";
-import m17 from "@/assets/images/17.svg";
-import m18 from "@/assets/images/18.svg";
-import m19 from "@/assets/images/19.svg";
-import m20 from "@/assets/images/20.svg";
-import m21 from "@/assets/images/21.svg";
+import m0 from "@/assets/images/0.png";
+import m1 from "@/assets/images/1.png";
+import m2 from "@/assets/images/2.png";
+import m3 from "@/assets/images/3.png";
+import m4 from "@/assets/images/4.png";
+import m5 from "@/assets/images/5.png";
+import m6 from "@/assets/images/6.png";
+import m7 from "@/assets/images/7.png";
+import m8 from "@/assets/images/8.png";
+import m9 from "@/assets/images/9.png";
+import m10 from "@/assets/images/10.png";
+import m11 from "@/assets/images/11.png";
+import m12 from "@/assets/images/12.png";
+import m13 from "@/assets/images/13.png";
+import m14 from "@/assets/images/14.png";
+import m15 from "@/assets/images/15.png";
+import m16 from "@/assets/images/16.png";
+import m17 from "@/assets/images/17.png";
+import m18 from "@/assets/images/18.png";
+import m19 from "@/assets/images/19.png";
+import m20 from "@/assets/images/20.png";
+import m21 from "@/assets/images/21.png";
 
 const MOUTH_IMAGES = [
   m0,
@@ -200,9 +200,9 @@ export default function PracticeStep2({
                     style={{
                       position: "absolute",
                       left: "50%",
-                      top: "58%",
+                      top: "55%",
                       transform: "translate(-50%, -50%)",
-                      width: "83px",
+                      width: "40px",
                       zIndex: 1,
                       pointerEvents: "none",
                       opacity: 1,
@@ -216,9 +216,9 @@ export default function PracticeStep2({
                   style={{
                     position: "absolute",
                     left: "50%",
-                    top: "58%",
+                    top: "55%",
                     transform: "translate(-50%, -50%)",
-                    width: "83px",
+                    width: "40px",
                     zIndex: 2,
                     pointerEvents: "none",
                     opacity: prevViseme !== null ? 0 : 1,

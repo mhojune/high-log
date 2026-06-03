@@ -16,6 +16,12 @@ export interface InterviewChatResponse {
   is_finished: boolean;
   session_id: string;
   audio_url?: string;
+  visemes?: Viseme[];
+}
+
+export interface Viseme {
+  offset: number;
+  id: number;
 }
 
 export interface InterviewChatAudioResponse {
@@ -25,6 +31,7 @@ export interface InterviewChatAudioResponse {
   sub_topic: string;
   remaining_time: number;
   is_finished: boolean;
+  visemes?: Viseme[];
 }
 
 export interface InterviewLog {

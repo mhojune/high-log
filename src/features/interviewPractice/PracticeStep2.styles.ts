@@ -249,6 +249,7 @@ export const VoiceStatusDots = styled.div`
   gap: 6px;
   align-items: center;
   height: 24px;
+  margin-left: 80px;
 
   span {
     width: 8px;
