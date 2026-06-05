@@ -1,5 +1,5 @@
 import * as S from "@/components/common/Footer.styles";
-import Vector from "@/assets/icons/Vector.svg?react";
+import FooterLogo from "@/assets/images/FooterLogo.svg?react";
 import Blog from "@/assets/icons/Blog.svg?react";
 import Youtube from "@/assets/icons/Youtube.svg?react";
 import Insta from "@/assets/icons/Insta.svg?react";
@@ -10,7 +10,7 @@ export default function Footer() {
       <S.FooterContent>
         <S.LeftSection>
           <S.LogoWrapper>
-            <Vector />
+            <FooterLogo />
           </S.LogoWrapper>
           <S.TextParagraph>(주) 고트헤이븐</S.TextParagraph>
           <S.TextParagraph>

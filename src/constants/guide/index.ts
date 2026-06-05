@@ -1,4 +1,4 @@
-export const GUIDE_TITLE = "한 눈에 보는 하이로그";
+export const GUIDE_TITLE = "한 눈에 보는 하이면접";
 
 export const GUIDE_SUBTITLE = [
   "학교 생활 기록부를 업로드 하면 대입 5개 영역 맞춤 질문을 확인할 수 있어요.",

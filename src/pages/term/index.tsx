@@ -6,7 +6,7 @@ export default function Term() {
         <S.TermContainer>
             <S.TermWrapper>
                 <S.TitleBox>
-                    <S.MainTitle>하이로그 서비스 이용약관</S.MainTitle>
+                    <S.MainTitle>하이면접 서비스 이용약관</S.MainTitle>
                     <S.Line />
                 </S.TitleBox>
                 <S.InfoBox>
