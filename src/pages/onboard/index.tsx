@@ -1,6 +1,6 @@
 import * as S from "@/pages/onboard/Onboard.styles";
 import OnboardProgressBar from "@/features/onboard/shared/OnboardProgressBar";
-import Logo from "@/assets/images/logo.svg?react";
+import Logo from "@/assets/images/NavLogo.svg?react";
 import ChevronLeft from "@/assets/icons/chevron_left.svg?react";
 import SchoolSelect from "@/features/onboard/step1-school/SchoolSelect";
 import DepartmentSelect from "@/features/onboard/step2-department/DepartmentSelect";

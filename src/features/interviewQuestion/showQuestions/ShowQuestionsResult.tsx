@@ -136,7 +136,7 @@ export default function ShowQuestionsResult() {
           <Title text="질문 생성" />
         </S.TitleWrapper>
         <S.Description>
-          하이로그의 면접 예상 질문은 대입 전형용 생활기록부를 기반으로
+          하이면접의 면접 예상 질문은 대입 전형용 생활기록부를 기반으로
         </S.Description>
         <S.Description>
           총 5개 영역(성적, 세특, 창체, 행특, 기타)의 예상 질문을 받아볼 수 있어요

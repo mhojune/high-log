@@ -1,6 +1,6 @@
 import * as S from "@/features/home/DifferentSection.styles";
 import POLYGON from "@/assets/icons/polygon.svg?react";
-import HighLogLogo from "@/assets/images/logo.svg?react";
+import HighLogLogo from "@/assets/images/NavLogo.svg?react";
 import { BEFORE_CARDS, AFTER_CARDS } from "@/constants/home";
 
 export default function DifferentSection() {
@@ -9,7 +9,7 @@ export default function DifferentSection() {
       <S.MainTitle>
         {`다른 면접 준비와 뭐가 다른가요?
 `}
-        <S.MainTitleBlue>하이로그만</S.MainTitleBlue>의 특별함
+        <S.MainTitleBlue>하이면접만</S.MainTitleBlue>의 특별함
       </S.MainTitle>
       <S.DifferentWrapper>
         <S.BeforeBox>

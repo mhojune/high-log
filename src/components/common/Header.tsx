@@ -1,5 +1,5 @@
 import * as S from "@/components/common/Header.styles";
-import Logo from "@/assets/images/logo.svg?react";
+import Logo from "@/assets/images/NavLogo.svg?react";
 import ArrowRight from "@/assets/icons/arrow_right.svg?react";
 import CIRCLE_USER from "@/assets/icons/circle_user.svg?react";
 import { NAV_LIST } from "@/constants/header/NAV_LIST";
