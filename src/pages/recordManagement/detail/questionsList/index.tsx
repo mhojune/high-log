@@ -2,7 +2,8 @@ import { useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import * as S from "@/pages/recordManagement/detail/questionsList/questionsList.styles";
 import QuestionCard from "@/components/card/QuestionCard";
-import { RECORDS_DUMMY_DATA, type TabType } from "@/constants/records";
+import { type TabType } from "@/constants/records";
+import { useRecordQuestions, useRecordDetail } from "@/api/record";
 
 const TABS: TabType[] = [
   "출결 상황",
@@ -14,16 +15,20 @@ const TABS: TabType[] = [
 
 export default function QuestionsList() {
     const { id } = useParams<{ id: string }>();
+    const recordId = Number(id);
     const [activeTab, setActiveTab] = useState<TabType>("출결 상황");
 
-    const record = useMemo(() => {
-        return RECORDS_DUMMY_DATA.find((r) => r.id === Number(id));
-    }, [id]);
+    const { data: record, isLoading: isRecordLoading } = useRecordDetail(recordId);
+    const { data: questions, isLoading: isQuestionsLoading } = useRecordQuestions(recordId);
 
-    const questions = useMemo(() => {
-        if (!record) return [];
-        return record.questions.filter((q) => q.category === activeTab);
-    }, [record, activeTab]);
+    const filteredQuestions = useMemo(() => {
+        if (!questions) return [];
+        return questions.filter((q) => q.category === activeTab);
+    }, [questions, activeTab]);
+
+    if (isRecordLoading || isQuestionsLoading) {
+        return <S.EmptyState>로딩 중...</S.EmptyState>;
+    }
 
     if (!record) {
         return <S.EmptyState>생기부를 찾을 수 없습니다.</S.EmptyState>;
@@ -38,11 +43,11 @@ export default function QuestionsList() {
                         <S.UniversityBox>
                             <S.NameBox>
                                 <S.Subject>지원하는 학교</S.Subject>
-                                <S.Name>{record.targetSchool}</S.Name>
+                                <S.Name>-</S.Name>
                             </S.NameBox>
                             <S.NameBox>
                                 <S.Subject>지원 학과</S.Subject>
-                                <S.Name>{record.targetMajor}</S.Name>
+                                <S.Name>-</S.Name>
                             </S.NameBox>
                         </S.UniversityBox>
                         <S.TypeBox>
@@ -63,17 +68,17 @@ export default function QuestionsList() {
                     ))}
                 </S.TabContainer>
                 <S.QuestionList>
-                    {questions.length > 0 ? (
-                        questions.map((q) => (
-                        <S.QuestionCardWrapper key={q.id}>
+                    {filteredQuestions.length > 0 ? (
+                        filteredQuestions.map((q) => (
+                        <S.QuestionCardWrapper key={q.questionId}>
                             <QuestionCard 
-                                labelType={q.labelType}
-                                text={q.question}
-                                questionPurposeText={q.questionPurposeText}
-                                answerPointText={q.answerPointText}
-                                answerText={q.answerText}
-                                answerCriteriaText={q.answerCriteriaText}
-                                passage={q.passage}
+                                labelType={q.difficulty === "DEEP" ? "advanced" : "basic"}
+                                text={q.content}
+                                questionPurposeText="-" // API 응답에 목적/포인트/기준이 누락되어 우선 - 처리
+                                answerPointText="-"
+                                answerText={q.modelAnswer || undefined}
+                                answerCriteriaText="-"
+                                favoriteType={q.isBookmarked ? "select" : "default"}
                             />
                         </S.QuestionCardWrapper>
                         ))

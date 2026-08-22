@@ -500,10 +500,12 @@ export default function useInterviewSession({
   };
 
   const handleSendMessage = async () => {
+    // 빈 답변이거나, 면접이 종료됐거나, 세션 ID가 없다면 전송하지 않음
     if (!text.trim() || isInterviewFinished || !sessionId) {
       return;
     }
 
+    // 현재 입력값을 사용자 메시지 객체로 생성
     const userMessage: Message = {
       id: messages.length + 1,
       sender: "User",
@@ -513,7 +515,11 @@ export default function useInterviewSession({
 
     setMessages((prev) => [
       ...prev,
+
+      // 사용자가 입력한 답변을 대화 목록에 추가
       userMessage,
+
+      // AI 답변이 아직 도착하지 않았음을 표시하는 빈 메시지 추가
       {
         id: prev.length + 2,
         sender: "AI",
@@ -521,49 +527,81 @@ export default function useInterviewSession({
         state: "pending",
       },
     ]);
+
+    // 입력창 초기화
     setText("");
+
+    // 사용자의 답변 시간 측정 종료
     stopTimer();
+
+    // 메시지 전송 및 AI 응답 대기 상태로 변경
     setIsChatPending(true);
 
+    // 스트리밍 처리 후 면접이 종료되었는지 확인하기 위한 지역변수
     let currentIsFinished = false;
 
     try {
       await chatInterviewTextStream(
+        // 현재 면접 세션 식별자
         sessionId,
+
+        // 서버에 사용자의 답변과 답변 소요 시간 전송
         {
           answer: userMessage.text,
           response_time: responseTimer,
         },
+
+        // 스트리밍 데이터가 들어올 때마다 실행되는 콜백
         (data: unknown) => {
+          // 서버 응답 데이터의 형태 지정
           const d = data as {
             status?: string;
             token?: string;
             message?: string;
           };
+
+          // AI가 답변 또는 다음 질문을 생성하고 있는 상태
           if (d.status === "generating") {
             setMessages((prev) => {
+              // 마지막 메시지는 위에서 추가한 AI pending 메시지
               const lastIndex = prev.length - 1;
+
+              // React state를 직접 수정하지 않기 위해 배열 복사
               const newMessages = [...prev];
+
+              // 기존 AI 메시지 뒤에 새로 도착한 토큰을 이어 붙임
               newMessages[lastIndex] = {
                 ...newMessages[lastIndex],
                 text: newMessages[lastIndex].text + (d.token || ""),
                 state: "typing",
               };
+
               return newMessages;
             });
-          } else if (d.status === "completed") {
+          }
+
+          // 현재 AI 메시지 생성이 완료된 상태
+          else if (d.status === "completed") {
             setMessages((prev) => {
               const lastIndex = prev.length - 1;
               const newMessages = [...prev];
+
+              // 마지막 AI 메시지의 상태를 완료로 변경
               newMessages[lastIndex] = {
                 ...newMessages[lastIndex],
                 state: "success",
               };
+
               return newMessages;
             });
-          } else if (d.status === "finished") {
+          }
+
+          // 전체 면접이 종료된 상태
+          else if (d.status === "finished") {
             setMessages((prev) => [
               ...prev,
+
+              // 사용자에게 면접 종료 메시지 표시
               {
                 id: prev.length + 1,
                 sender: "AI",
@@ -571,34 +609,53 @@ export default function useInterviewSession({
                 state: "success",
               },
             ]);
+
+            // 면접 종료 상태를 화면에 반영
             setIsInterviewFinished(true);
+
+            // 스트리밍 종료 후 타이머가 다시 시작되지 않도록 표시
             currentIsFinished = true;
+
+            // 답변 시간 측정 종료
             stopTimer();
-          } else if (d.status === "error") {
+          }
+
+          // 서버가 스트리밍 도중 오류 상태를 전달한 경우
+          else if (d.status === "error") {
             setMessages((prev) =>
+              // 미완성된 AI 메시지를 대화 목록에서 제거
               prev.filter((m) => m.state !== "pending" && m.state !== "typing"),
             );
+
+            // 공통 오류 처리 함수 실행
             handleInterviewError(
               new Error(d.message || "오류가 발생했습니다."),
               "질문 생성 중 오류가 발생했습니다.",
             );
           }
         },
+
+        // 네트워크 오류 등 스트리밍 요청 자체가 실패했을 때 실행
         (error) => {
           setMessages((prev) =>
+            // 화면에 남아 있는 미완성 AI 메시지 제거
             prev.filter((m) => m.state !== "pending" && m.state !== "typing"),
           );
+
           handleInterviewError(error, "면접 진행 중 오류가 발생했습니다.");
         },
       );
 
+      // 면접이 끝나지 않았다면 다음 답변을 위한 타이머 시작
       if (!currentIsFinished) {
         setResponseTimer(0);
         startTimer();
       }
     } catch {
-      //
+      // chatInterviewTextStream 내부의 오류 콜백에서 이미 처리하고 있어
+      // 현재는 추가 동작을 하지 않음
     } finally {
+      // 성공, 실패와 관계없이 AI 응답 대기 상태 종료
       setIsChatPending(false);
     }
   };

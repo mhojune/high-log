@@ -13,7 +13,6 @@ export default function PracticeStep2ChatList({
   const chatContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
-    console.log("messages", messages);
     if (!chatContainerRef.current) {
       return;
     }

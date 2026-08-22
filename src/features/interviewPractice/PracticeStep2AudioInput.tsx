@@ -26,31 +26,32 @@ export default function PracticeStep2AudioInput({
 
   const startRecording = async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      streamRef.current = stream;
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true }); // 유저한테 audio 권한을 요청
+      streamRef.current = stream; // 나중에 stream을 끄기 위해 Ref에 저장
 
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
+      const mediaRecorder = new MediaRecorder(stream); // 마이크의 MediaStream을 녹음하고 Blob 데이터로 제공하는 브라우저 API
+      mediaRecorderRef.current = mediaRecorder; // 녹음을 종료하기 위해 Ref
       audioChunksRef.current = [];
 
       mediaRecorder.ondataavailable = (event) => {
         if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
+          audioChunksRef.current.push(event.data); // 새로운 음성 데이터가 들어올 때마다, audioChunks에 차례대로 저장
         }
       };
 
       mediaRecorder.onstop = () => {
         const audioBlob = new Blob(audioChunksRef.current, {
-          type: "audio/webm",
+          // 다른 함수에서 stop을 눌렀을 시, onstop() 실행
+          type: "audio/webm", // audio를 audio/webm으로 변환 후 Blob으로 저장
         });
-        onSendAudio(audioBlob);
+        onSendAudio(audioBlob); // onSendAudio로 서버로 Blob 파일을 전송
 
         if (streamRef.current) {
-          streamRef.current.getTracks().forEach((track) => track.stop());
+          streamRef.current.getTracks().forEach((track) => track.stop()); // 마이크 사용을 종료하고 자원 해제
         }
       };
 
-      mediaRecorder.start();
+      mediaRecorder.start(); // 녹음 시작
       setIsRecording(true);
     } catch (error) {
       console.error("Error accessing microphone:", error);
@@ -68,6 +69,7 @@ export default function PracticeStep2AudioInput({
   useEffect(() => {
     return () => {
       if (streamRef.current) {
+        // 사용자가 다른 페이지 이동으로 stop이 실행되지 않았을 때를 대비해, 언마운트 될 때 stop 실행
         streamRef.current.getTracks().forEach((track) => track.stop());
       }
     };

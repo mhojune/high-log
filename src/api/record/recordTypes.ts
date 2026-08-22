@@ -41,3 +41,12 @@ export interface RecordDetail {
   createdAt: string;
   questionSets: QuestionSet[];
 }
+
+export interface RecordQuestion {
+  questionId: number;
+  category: string;
+  content: string;
+  difficulty: "BASIC" | "DEEP";
+  isBookmarked: boolean;
+  modelAnswer: string | null;
+}
